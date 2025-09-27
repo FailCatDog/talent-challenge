@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hgy.infrastructure.persistent.dao.ProjectCategoryDao">
+
+    <resultMap id="BaseResultMap" type="cn.hgy.infrastructure.persistent.po.ProjectCategory">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="project_category_id" property="projectCategoryId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <result column="sort_order" property="sortOrder" jdbcType="INTEGER"/>
+        <result column="is_visible" property="isVisible" jdbcType="BOOLEAN"/>
+        <result column="is_active" property="isActive" jdbcType="BOOLEAN"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, project_category_id, name, parent_id, description, icon, sort_order,
+        is_visible, is_active, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.ProjectCategory">
+        INSERT INTO project_category (
+            project_category_id, name, parent_id, description, icon, sort_order,
+            is_visible, is_active, create_time, update_time
+        ) VALUES (
+            #{projectCategoryId}, #{name}, #{parentId}, #{description}, #{icon}, #{sortOrder},
+            #{isVisible}, #{isActive}, #{createTime}, #{updateTime}
+        )
+    </insert>
+
+    <update id="updateByCategoryId" parameterType="cn.hgy.infrastructure.persistent.po.ProjectCategory">
+        UPDATE project_category SET
+            name = #{name},
+            parent_id = #{parentId},
+            description = #{description},
+            icon = #{icon},
+            sort_order = #{sortOrder},
+            is_visible = #{isVisible},
+            is_active = #{isActive},
+            update_time = #{updateTime}
+        WHERE project_category_id = #{projectCategoryId}
+    </update>
+
+    <select id="selectByCategoryId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project_category
+        WHERE project_category_id = #{categoryId}
+    </select>
+
+    <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project_category
+        WHERE name = #{name}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project_category
+        ORDER BY sort_order ASC, create_time ASC
+    </select>
+
+    <select id="selectAllVisible" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project_category
+        WHERE is_visible = 1
+        ORDER BY sort_order ASC, create_time ASC
+    </select>
+
+    <select id="selectAllActive" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project_category
+        WHERE is_active = 1
+        ORDER BY sort_order ASC, create_time ASC
+    </select>
+
+    <select id="selectByParentId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project_category
+        WHERE parent_id = #{parentId}
+        ORDER BY sort_order ASC, create_time ASC
+    </select>
+
+    <select id="selectRootCategories" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project_category
+        WHERE parent_id IS NULL
+        ORDER BY sort_order ASC, create_time ASC
+    </select>
+
+    <select id="existsByCategoryId" parameterType="java.lang.String" resultType="int">
+        SELECT COUNT(1)
+        FROM project_category
+        WHERE project_category_id = #{categoryId}
+    </select>
+
+    <select id="existsByName" parameterType="java.lang.String" resultType="int">
+        SELECT COUNT(1)
+        FROM project_category
+        WHERE name = #{name}
+    </select>
+
+    <delete id="deleteByCategoryId" parameterType="java.lang.String">
+        DELETE FROM project_category WHERE project_category_id = #{categoryId}
+    </delete>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(1) FROM project_category
+    </select>
+
+    <select id="countActive" resultType="long">
+        SELECT COUNT(1) FROM project_category WHERE is_active = 1
+    </select>
+
+</mapper>

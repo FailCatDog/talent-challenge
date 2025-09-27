@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hgy.infrastructure.persistent.dao.UserDao">
+
+    <resultMap id="BaseResultMap" type="cn.hgy.infrastructure.persistent.po.User">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="TINYINT" />
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="avatar_url" property="avatarUrl" jdbcType="VARCHAR"/>
+        <result column="bio" property="bio" jdbcType="VARCHAR"/>
+        <result column="gender" property="gender" jdbcType="TINYINT"/>
+        <result column="birthday" property="birthday" jdbcType="DATE"/>
+        <result column="region_code" property="regionCode" jdbcType="VARCHAR"/>
+        <result column="industry" property="industry" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="is_active" property="isActive" jdbcType="BOOLEAN"/>
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, nickname, type, avatar_url, bio, gender, birthday, region_code,
+        industry, title, is_active, last_login_time, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.User">
+        INSERT INTO user (
+            user_id, nickname, type, avatar_url, bio, gender, birthday, region_code,
+            industry, title, is_active, last_login_time, create_time, update_time
+        ) VALUES (
+            #{userId}, #{nickname}, #{type}, #{avatarUrl}, #{bio}, #{gender}, #{birthday}, #{regionCode},
+            #{industry}, #{title}, #{isActive}, #{lastLoginTime}, #{createTime}, #{updateTime}
+        )
+    </insert>
+
+    <update id="updateByUserId" parameterType="cn.hgy.infrastructure.persistent.po.User">
+        UPDATE user SET
+            nickname = #{nickname},
+            avatar_url = #{avatarUrl},
+            bio = #{bio},
+            gender = #{gender},
+            birthday = #{birthday},
+            region_code = #{regionCode},
+            industry = #{industry},
+            title = #{title},
+            is_active = #{isActive},
+            last_login_time = #{lastLoginTime},
+            update_time = #{updateTime}
+        WHERE user_id = #{userId}
+    </update>
+
+    <select id="queryByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="selectByNickname" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM user
+        WHERE nickname LIKE CONCAT('%', #{nickname}, '%')
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="existsByUserId" parameterType="java.lang.String" resultType="int">
+        SELECT COUNT(1)
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+
+    <delete id="deleteByUserId" parameterType="java.lang.String">
+        DELETE FROM user WHERE user_id = #{userId}
+    </delete>
+
+    <select id="selectAllActive" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM user
+        WHERE is_active = 1
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM user
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(1) FROM user
+    </select>
+
+    <select id="countActive" resultType="long">
+        SELECT COUNT(1) FROM user WHERE is_active = 1
+    </select>
+
+    <update id="updateUserLastLoginTime">
+        UPDATE user SET last_login_time = #{lastLoginTime}
+        WHERE user_id = #{userId}
+    </update>
+
+</mapper>

@@ -1,0 +1,149 @@
+package cn.hgy.infrastructure.persistent.dao;
+
+import cn.hgy.infrastructure.persistent.po.Project;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * 项目Mapper接口
+ * 
+ * @author hgy
+ */
+@Mapper
+public interface ProjectDao {
+    
+    /**
+     * 插入项目
+     */
+    int insert(Project project);
+    
+    /**
+     * 根据项目ID更新项目
+     */
+    int updateByProjectId(Project project);
+    
+    /**
+     * 根据项目ID查找项目
+     */
+    Project selectByProjectId(@Param("projectId") String projectId);
+    
+    /**
+     * 根据流水号查找项目
+     */
+    Project selectBySerialNumber(@Param("serialNumber") String serialNumber);
+    
+    /**
+     * 根据发布者ID查找项目
+     */
+    List<Project> selectByPublisherId(@Param("publisherId") String publisherId);
+    
+    /**
+     * 根据状态查找项目
+     */
+    List<Project> selectByStatus(@Param("status") String status);
+    
+    /**
+     * 根据分类ID查找项目
+     */
+    List<Project> selectByCategoryId(@Param("categoryId") String categoryId);
+    
+    /**
+     * 查找已发布的项目
+     */
+    List<Project> selectPublishedProjects();
+    
+    /**
+     * 分页查询项目
+     */
+    List<Project> selectByPage(@Param("offset") int offset, @Param("limit") int limit);
+    
+    /**
+     * 根据状态分页查询项目
+     */
+    List<Project> selectByStatusAndPage(@Param("status") String status,
+                                        @Param("offset") int offset,
+                                        @Param("limit") int limit);
+    
+    /**
+     * 根据发布者ID分页查询项目
+     */
+    List<Project> selectByPublisherIdAndPage(@Param("publisherId") String publisherId,
+                                             @Param("offset") int offset,
+                                             @Param("limit") int limit);
+    
+    /**
+     * 搜索项目（根据标题和描述）
+     */
+    List<Project> searchByKeyword(@Param("keyword") String keyword,
+                                  @Param("offset") int offset,
+                                  @Param("limit") int limit);
+    
+    /**
+     * 根据标签搜索项目
+     */
+    List<Project> selectByTags(@Param("tags") List<String> tags,
+                               @Param("offset") int offset,
+                               @Param("limit") int limit);
+    
+    /**
+     * 检查项目ID是否存在
+     */
+    int existsByProjectId(@Param("projectId") String projectId);
+    
+    /**
+     * 检查流水号是否存在
+     */
+    int existsBySerialNumber(@Param("serialNumber") String serialNumber);
+    
+    /**
+     * 根据项目ID删除项目
+     */
+    int deleteByProjectId(@Param("projectId") String projectId);
+    
+    /**
+     * 统计项目总数
+     */
+    long count();
+    
+    /**
+     * 根据状态统计项目数
+     */
+    long countByStatus(@Param("status") String status);
+    
+    /**
+     * 根据发布者ID统计项目数
+     */
+    long countByPublisherId(@Param("publisherId") String publisherId);
+    
+    /**
+     * 统计热门项目（根据浏览量）
+     */
+    List<Project> selectPopularProjects(@Param("limit") int limit);
+    
+    /**
+     * 统计最新项目
+     */
+    List<Project> selectLatestProjects(@Param("limit") int limit);
+    
+    /**
+     * 增加浏览次数
+     */
+    int incrementViewCount(@Param("projectId") String projectId);
+    
+    /**
+     * 增加收藏次数
+     */
+    int incrementFavoriteCount(@Param("projectId") String projectId);
+    
+    /**
+     * 减少收藏次数
+     */
+    int decrementFavoriteCount(@Param("projectId") String projectId);
+    
+    /**
+     * 增加申请次数
+     */
+    int incrementApplicationCount(@Param("projectId") String projectId);
+}
