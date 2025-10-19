@@ -102,4 +102,13 @@ public class JWTServiceImpl implements IJWTService {
                 .signWith(secretKey)
                 .compact();
     }
+
+    public String parseToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return extractUserId(claims);
+    }
 }

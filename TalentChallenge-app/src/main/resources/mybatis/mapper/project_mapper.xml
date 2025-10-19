@@ -205,21 +205,25 @@
         SELECT COUNT(1) FROM project WHERE publisher_id = #{publisherId}
     </select>
 
-    <select id="selectPopularProjects" parameterType="int" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/>
-        FROM project
-        WHERE status = 'published'
-        ORDER BY view_count DESC, favorite_count DESC
-        LIMIT #{limit}
+    <select id="countByPublisherIdAndStatus" resultType="long">
+        SELECT COUNT(1) FROM project 
+        WHERE publisher_id = #{publisherId} AND status = #{status}
     </select>
 
-    <select id="selectLatestProjects" parameterType="int" resultMap="BaseResultMap">
+    <select id="selectByPublisherIdAndStatus" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>
         FROM project
-        WHERE status = 'published'
-        ORDER BY published_at DESC
-        LIMIT #{limit}
+        WHERE publisher_id = #{publisherId} AND status = #{status}
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{limit}
     </select>
+
+    <update id="updateStatus">
+        UPDATE project SET
+            status = #{status},
+            update_time = NOW()
+        WHERE project_id = #{projectId}
+    </update>
 
     <update id="incrementViewCount" parameterType="java.lang.String">
         UPDATE project SET
@@ -245,6 +249,98 @@
     <update id="incrementApplicationCount" parameterType="java.lang.String">
         UPDATE project SET
             application_count = application_count + 1,
+            update_time = NOW()
+        WHERE project_id = #{projectId}
+    </update>
+
+    <select id="selectPublishedByPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project
+        WHERE status = 'published'
+        ORDER BY published_at DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="selectPublishedByCategoryId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project
+        WHERE status = 'published' AND category_id = #{categoryId}
+        ORDER BY published_at DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countPublished" resultType="long">
+        SELECT COUNT(1) FROM project WHERE status = 'published'
+    </select>
+
+    <select id="countPublishedByCategoryId" resultType="long">
+        SELECT COUNT(1) FROM project WHERE status = 'published' AND category_id = #{categoryId}
+    </select>
+
+    <select id="searchProjects" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project
+        WHERE status = 'published'
+        <if test="keyword != null and keyword != ''">
+            AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="categoryId != null and categoryId != ''">
+            AND category_id = #{categoryId}
+        </if>
+        <if test="skillLevel != null and skillLevel != ''">
+            AND skill_level = #{skillLevel}
+        </if>
+        <if test="budgetMin != null">
+            AND budget_amount &gt;= #{budgetMin}
+        </if>
+        <if test="budgetMax != null">
+            AND budget_amount &lt;= #{budgetMax}
+        </if>
+        ORDER BY published_at DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countSearchResults" resultType="long">
+        SELECT COUNT(1)
+        FROM project
+        WHERE status = 'published'
+        <if test="keyword != null and keyword != ''">
+            AND (title LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="categoryId != null and categoryId != ''">
+            AND category_id = #{categoryId}
+        </if>
+        <if test="skillLevel != null and skillLevel != ''">
+            AND skill_level = #{skillLevel}
+        </if>
+        <if test="budgetMin != null">
+            AND budget_amount &gt;= #{budgetMin}
+        </if>
+        <if test="budgetMax != null">
+            AND budget_amount &lt;= #{budgetMax}
+        </if>
+    </select>
+
+    <select id="selectPopularProjects" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project
+        WHERE status = 'published'
+        ORDER BY view_count DESC, application_count DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="selectLatestProjects" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project
+        WHERE status = 'published'
+        ORDER BY published_at DESC
+        LIMIT #{limit}
+    </select>
+
+    <update id="updateStatusAndReason">
+        UPDATE project SET
+            status = #{status},
+            reject_reason = #{rejectReason},
             update_time = NOW()
         WHERE project_id = #{projectId}
     </update>

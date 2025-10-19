@@ -116,6 +116,26 @@ public interface ProjectDao {
      * 根据发布者ID统计项目数
      */
     long countByPublisherId(@Param("publisherId") String publisherId);
+
+    /**
+     * 根据发布者ID和状态统计项目数
+     */
+    long countByPublisherIdAndStatus(@Param("publisherId") String publisherId,
+                                     @Param("status") String status);
+
+    /**
+     * 根据发布者ID和状态分页查询项目
+     */
+    List<Project> selectByPublisherIdAndStatus(@Param("publisherId") String publisherId,
+                                               @Param("status") String status,
+                                               @Param("offset") int offset,
+                                               @Param("limit") int limit);
+
+    /**
+     * 更新项目状态
+     */
+    int updateStatus(@Param("projectId") String projectId,
+                    @Param("status") String status);
     
     /**
      * 统计热门项目（根据浏览量）
@@ -146,4 +166,54 @@ public interface ProjectDao {
      * 增加申请次数
      */
     int incrementApplicationCount(@Param("projectId") String projectId);
+
+    /**
+     * 分页查询已发布项目
+     */
+    List<Project> selectPublishedByPage(@Param("offset") int offset,
+                                        @Param("limit") int limit);
+
+    /**
+     * 根据分类ID分页查询已发布项目
+     */
+    List<Project> selectPublishedByCategoryId(@Param("categoryId") String categoryId,
+                                              @Param("offset") int offset,
+                                              @Param("limit") int limit);
+
+    /**
+     * 统计已发布项目数量
+     */
+    long countPublished();
+
+    /**
+     * 根据分类ID统计已发布项目数量
+     */
+    long countPublishedByCategoryId(@Param("categoryId") String categoryId);
+
+    /**
+     * 搜索项目
+     */
+    List<Project> searchProjects(@Param("keyword") String keyword,
+                                 @Param("categoryId") String categoryId,
+                                 @Param("skillLevel") String skillLevel,
+                                 @Param("budgetMin") java.math.BigDecimal budgetMin,
+                                 @Param("budgetMax") java.math.BigDecimal budgetMax,
+                                 @Param("offset") int offset,
+                                 @Param("limit") int limit);
+
+    /**
+     * 统计搜索结果数量
+     */
+    long countSearchResults(@Param("keyword") String keyword,
+                           @Param("categoryId") String categoryId,
+                           @Param("skillLevel") String skillLevel,
+                           @Param("budgetMin") java.math.BigDecimal budgetMin,
+                           @Param("budgetMax") java.math.BigDecimal budgetMax);
+
+    /**
+     * 更新项目状态和拒绝原因
+     */
+    int updateStatusAndReason(@Param("projectId") String projectId,
+                              @Param("status") String status,
+                              @Param("rejectReason") String rejectReason);
 }

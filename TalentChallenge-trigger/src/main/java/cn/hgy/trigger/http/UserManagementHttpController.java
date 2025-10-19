@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController()
 @RequestMapping(value = "/api/v1/user_management")
-public class UserManagementHttpService implements IUserManagementHttpService {
+public class UserManagementHttpController implements IUserManagementHttpService {
 
     private final IUserManagementService userManagementService;
 

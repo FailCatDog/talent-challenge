@@ -40,6 +40,10 @@
             <groupId>cn.hgy</groupId>
             <artifactId>TalentChallenge-domain</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.hgy</groupId>
+            <artifactId>TalentChallenge-infrastructure</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
