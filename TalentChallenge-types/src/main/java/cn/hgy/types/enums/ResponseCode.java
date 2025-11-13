@@ -19,6 +19,7 @@ public enum ResponseCode {
     USER_CREDENTIAL_NOT_TRUE("ERR_BIZ_004", "登录凭证不正确"),
     USER_IS_NOT_ACTIVE("ERR_BIZ_005", "用户账户为禁用状态"),
     USER_LOGIN_FAIL("ERR_BIZ_006", "用户登录失败"),
+    USER_TYPE_NOT_ALLOWED("ERR_BIZ_021", "不允许注册该类型账号"),
 
     PROJECT_CREATE_FAIL("ERR_BIZ_007", "项目创建失败"),
     PROJECT_TITLE_INVALID("ERR_BIZ_008", "项目标题长度不符合要求"),
@@ -29,7 +30,21 @@ public enum ResponseCode {
     PROJECT_NOT_FOUND("ERR_BIZ_013", "项目不存在"),
     PROJECT_UPDATE_FAIL("ERR_BIZ_014", "项目更新失败"),
     PROJECT_PERMISSION_DENIED("ERR_BIZ_015", "无权限操作该项目"),
-    PROJECT_STATUS_INVALID("ERR_BIZ_016", "项目状态不允许此操作")
+    PROJECT_STATUS_INVALID("ERR_BIZ_016", "项目状态不允许此操作"),
+
+    CATEGORY_NAME_EMPTY("ERR_BIZ_017", "分类名称不能为空"),
+    CATEGORY_NAME_EXISTS("ERR_BIZ_018", "分类名称已存在"),
+    PARENT_CATEGORY_NOT_FOUND("ERR_BIZ_019", "父分类不存在"),
+    CATEGORY_NOT_FOUND("ERR_BIZ_020", "分类不存在"),
+
+    BID_APPLY_FAIL("ERR_BIZ_030", "竞榜申请失败"),
+    BID_DUPLICATE("ERR_BIZ_031", "已竞榜该项目"),
+    BID_PROJECT_INVALID("ERR_BIZ_032", "项目不支持竞榜"),
+    BID_NOT_FOUND("ERR_BIZ_033", "竞榜记录不存在"),
+    BID_STATUS_INVALID("ERR_BIZ_034", "竞榜状态不允许此操作"),
+    BID_PERMISSION_DENIED("ERR_BIZ_035", "无权限操作该竞榜记录"),
+
+    ADMIN_PERMISSION_DENIED("ERR_AUTH_001", "需要管理员权限")
     ;
 
     private String code;

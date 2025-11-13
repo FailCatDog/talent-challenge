@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -19,6 +20,9 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserAuthCredentialEntity {
+    
+    private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+    
     /**
      * 用户认证唯一ID
      */
@@ -55,11 +59,20 @@ public class UserAuthCredentialEntity {
     private LocalDateTime verifyTime;
 
     /**
-     * 验证凭证是否正确
-     * @param credential 凭证
-     * @return 是否成功
+     * 加密密码
+     * @param rawPassword 原始密码
+     * @return 加密后的密码
      */
-    public Boolean verifyPassword(String credential) {
-        return credential.equals(this.credential);
+    public static String encryptPassword(String rawPassword) {
+        return PASSWORD_ENCODER.encode(rawPassword);
+    }
+
+    /**
+     * 验证密码是否正确
+     * @param rawPassword 原始密码
+     * @return 是否匹配
+     */
+    public Boolean verifyPassword(String rawPassword) {
+        return PASSWORD_ENCODER.matches(rawPassword, this.credential);
     }
 }

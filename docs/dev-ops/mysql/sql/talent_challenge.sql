@@ -20,8 +20,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for project
 -- ----------------------------
-DROP TABLE IF EXISTS `project`;
-CREATE TABLE `project`  (
+CREATE TABLE IF NOT EXISTS `project`  (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '项目唯一主键（内部使用）',
   `project_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '项目全局唯一标识符（对外暴露）',
   `serial_number` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '项目流水号，格式：PRJ{年月日}{6位随机数}，便于线下沟通',
@@ -68,8 +67,7 @@ CREATE TABLE `project`  (
 -- ----------------------------
 -- Table structure for project_category
 -- ----------------------------
-DROP TABLE IF EXISTS `project_category`;
-CREATE TABLE `project_category`  (
+CREATE TABLE IF NOT EXISTS `project_category`  (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增物理主键ID（内部使用）',
   `project_category_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '分类唯一编码（业务逻辑主键）',
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '分类名称',
@@ -89,10 +87,31 @@ CREATE TABLE `project_category`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '项目分类表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for bid
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `bid`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键，内部使用',
+  `bid_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '竞榜记录全局唯一标识',
+  `project_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '关联项目的全局唯一标识',
+  `student_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '申请人（学生）全局唯一标识',
+  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'applied' COMMENT '竞榜状态：applied, shortlisted, confirmed, rejected, cancelled, expired',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '申请说明/自荐内容',
+  `attachment_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '附件（作品集、简历）链接',
+  `remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '企业审核备注或拒绝理由',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `version` bigint NOT NULL DEFAULT 0 COMMENT '乐观锁版本号',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_bid_uuid`(`bid_id` ASC) USING BTREE,
+  UNIQUE INDEX `uk_bid_project_student`(`project_id` ASC, `student_id` ASC) USING BTREE,
+  INDEX `idx_bid_project_status`(`project_id` ASC, `status` ASC) USING BTREE,
+  INDEX `idx_bid_student_status`(`student_id` ASC, `status` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '项目竞榜申请表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for user
 -- ----------------------------
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user`  (
+CREATE TABLE IF NOT EXISTS `user`  (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键，内部使用',
   `user_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '全局唯一标识符，对外暴露，不可预测',
   `type` tinyint(1) NOT NULL COMMENT '用户类型',
@@ -118,8 +137,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Table structure for user_auth_credential
 -- ----------------------------
-DROP TABLE IF EXISTS `user_auth_credential`;
-CREATE TABLE `user_auth_credential`  (
+CREATE TABLE IF NOT EXISTS `user_auth_credential`  (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `user_auth_credential_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '认证记录全局唯一标识符',
   `user_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '关联用户的全局唯一标识符',

@@ -140,4 +140,57 @@ public interface IProjectRepository {
      * @return 项目数量
      */
     Long countProjectsByStatus(String status);
+
+    void incrementApplicationCount(String projectId);
+
+    /**
+     * 创建项目分类
+     * @param projectCategoryEntity 项目分类实体
+     */
+    void createProjectCategory(cn.hgy.domain.project.model.entity.ProjectCategoryEntity projectCategoryEntity);
+
+    /**
+     * 根据分类名称查询是否存在
+     * @param name 分类名称
+     * @return 是否存在
+     */
+    boolean existsCategoryByName(String name);
+
+    /**
+     * 根据分类ID查询是否存在
+     * @param categoryId 分类ID
+     * @return 是否存在
+     */
+    boolean existsCategoryById(String categoryId);
+
+    /**
+     * 更新项目分类
+     * @param projectCategoryEntity 项目分类实体
+     */
+    void updateProjectCategory(cn.hgy.domain.project.model.entity.ProjectCategoryEntity projectCategoryEntity);
+
+    /**
+     * 根据分类ID删除分类
+     * @param categoryId 分类ID
+     */
+    void deleteProjectCategory(String categoryId);
+
+    /**
+     * 查询所有项目分类
+     * @return 分类列表
+     */
+    java.util.List<cn.hgy.domain.project.model.entity.ProjectCategoryEntity> queryAllCategories();
+
+    /**
+     * 查询所有可见的项目分类
+     * @return 分类列表
+     */
+    java.util.List<cn.hgy.domain.project.model.entity.ProjectCategoryEntity> queryVisibleCategories();
+
+    /**
+     * 根据分类ID查询分类
+     * @param categoryId 分类ID
+     * @return 分类实体
+     */
+    cn.hgy.domain.project.model.entity.ProjectCategoryEntity queryCategoryById(String categoryId);
 }

@@ -111,4 +111,17 @@ public class JWTServiceImpl implements IJWTService {
                 .getBody();
         return extractUserId(claims);
     }
+
+    public Integer parseUserType(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        Object typeObj = claims.get("type");
+        if (typeObj != null) {
+            return Integer.parseInt(typeObj.toString());
+        }
+        return null;
+    }
 }

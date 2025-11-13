@@ -1,9 +1,12 @@
 package cn.hgy.infrastructure.persistent.repository;
 
+import cn.hgy.domain.project.model.entity.ProjectCategoryEntity;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
 import cn.hgy.domain.project.repository.IProjectRepository;
+import cn.hgy.infrastructure.persistent.dao.ProjectCategoryDao;
 import cn.hgy.infrastructure.persistent.dao.ProjectDao;
 import cn.hgy.infrastructure.persistent.po.Project;
+import cn.hgy.infrastructure.persistent.po.ProjectCategory;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,7 @@ import java.util.List;
 public class ProjectRepository implements IProjectRepository {
 
     private final ProjectDao projectDao;
+    private final ProjectCategoryDao projectCategoryDao;
 
     @Override
     public void createProject(ProjectEntity projectEntity) {
@@ -168,6 +172,11 @@ public class ProjectRepository implements IProjectRepository {
         return projectDao.countByStatus(status);
     }
 
+    @Override
+    public void incrementApplicationCount(String projectId) {
+        projectDao.incrementApplicationCount(projectId);
+    }
+
     private Project convertToProject(ProjectEntity projectEntity) {
         Project project = new Project();
         project.setProjectId(projectEntity.getProjectId());
@@ -198,6 +207,91 @@ public class ProjectRepository implements IProjectRepository {
         project.setFavoriteCount(projectEntity.getFavoriteCount());
         project.setVersion(projectEntity.getVersion());
         return project;
+    }
+
+    @Override
+    public void createProjectCategory(ProjectCategoryEntity projectCategoryEntity) {
+        ProjectCategory projectCategory = new ProjectCategory();
+        projectCategory.setProjectCategoryId(projectCategoryEntity.getProjectCategoryId());
+        projectCategory.setName(projectCategoryEntity.getName());
+        projectCategory.setParentId(projectCategoryEntity.getParentId());
+        projectCategory.setDescription(projectCategoryEntity.getDescription());
+        projectCategory.setIcon(projectCategoryEntity.getIcon());
+        projectCategory.setSortOrder(projectCategoryEntity.getSortOrder());
+        projectCategory.setIsVisible(projectCategoryEntity.getIsVisible());
+        projectCategory.setIsActive(projectCategoryEntity.getIsActive());
+        projectCategory.setCreateTime(LocalDateTime.now());
+        projectCategory.setUpdateTime(LocalDateTime.now());
+        projectCategoryDao.insert(projectCategory);
+    }
+
+    @Override
+    public boolean existsCategoryByName(String name) {
+        return projectCategoryDao.existsByName(name) > 0;
+    }
+
+    @Override
+    public boolean existsCategoryById(String categoryId) {
+        return projectCategoryDao.existsByCategoryId(categoryId) > 0;
+    }
+
+    @Override
+    public void updateProjectCategory(ProjectCategoryEntity projectCategoryEntity) {
+        ProjectCategory projectCategory = new ProjectCategory();
+        projectCategory.setProjectCategoryId(projectCategoryEntity.getProjectCategoryId());
+        projectCategory.setName(projectCategoryEntity.getName());
+        projectCategory.setParentId(projectCategoryEntity.getParentId());
+        projectCategory.setDescription(projectCategoryEntity.getDescription());
+        projectCategory.setIcon(projectCategoryEntity.getIcon());
+        projectCategory.setSortOrder(projectCategoryEntity.getSortOrder());
+        projectCategory.setIsVisible(projectCategoryEntity.getIsVisible());
+        projectCategory.setIsActive(projectCategoryEntity.getIsActive());
+        projectCategory.setUpdateTime(LocalDateTime.now());
+        projectCategoryDao.updateByCategoryId(projectCategory);
+    }
+
+    @Override
+    public void deleteProjectCategory(String categoryId) {
+        projectCategoryDao.deleteByCategoryId(categoryId);
+    }
+
+    @Override
+    public List<ProjectCategoryEntity> queryAllCategories() {
+        List<ProjectCategory> categories = projectCategoryDao.selectAll();
+        List<ProjectCategoryEntity> entities = new ArrayList<>();
+        for (ProjectCategory category : categories) {
+            entities.add(convertToCategoryEntity(category));
+        }
+        return entities;
+    }
+
+    @Override
+    public List<ProjectCategoryEntity> queryVisibleCategories() {
+        List<ProjectCategory> categories = projectCategoryDao.selectAllVisible();
+        List<ProjectCategoryEntity> entities = new ArrayList<>();
+        for (ProjectCategory category : categories) {
+            entities.add(convertToCategoryEntity(category));
+        }
+        return entities;
+    }
+
+    @Override
+    public ProjectCategoryEntity queryCategoryById(String categoryId) {
+        ProjectCategory category = projectCategoryDao.selectByCategoryId(categoryId);
+        return category == null ? null : convertToCategoryEntity(category);
+    }
+
+    private ProjectCategoryEntity convertToCategoryEntity(ProjectCategory category) {
+        return ProjectCategoryEntity.builder()
+                .projectCategoryId(category.getProjectCategoryId())
+                .name(category.getName())
+                .parentId(category.getParentId())
+                .description(category.getDescription())
+                .icon(category.getIcon())
+                .sortOrder(category.getSortOrder())
+                .isVisible(category.getIsVisible())
+                .isActive(category.getIsActive())
+                .build();
     }
 
     private ProjectEntity convertToEntity(Project project) {

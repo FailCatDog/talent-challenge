@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hgy.infrastructure.persistent.dao.BidDao">
+
+    <resultMap id="BidResultMap" type="cn.hgy.infrastructure.persistent.po.Bid">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="bid_id" property="bidId" jdbcType="VARCHAR"/>
+        <result column="project_id" property="projectId" jdbcType="VARCHAR"/>
+        <result column="student_id" property="studentId" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="LONGVARCHAR"/>
+        <result column="attachment_url" property="attachmentUrl" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="LONGVARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="version" property="version" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, bid_id, project_id, student_id, status, content, attachment_url, remark, create_time, update_time, version
+    </sql>
+
+    <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.Bid" useGeneratedKeys="true" keyProperty="id">
+        insert into bid (
+            bid_id, project_id, student_id, status, content, attachment_url, remark, create_time, update_time, version
+        ) values (
+            #{bidId}, #{projectId}, #{studentId}, #{status}, #{content}, #{attachmentUrl}, #{remark}, #{createTime}, #{updateTime}, #{version}
+        )
+    </insert>
+
+    <update id="update" parameterType="cn.hgy.infrastructure.persistent.po.Bid">
+        update bid
+        set project_id = #{projectId},
+            student_id = #{studentId},
+            status = #{status},
+            content = #{content},
+            attachment_url = #{attachmentUrl},
+            remark = #{remark},
+            update_time = #{updateTime},
+            version = #{version}
+        where bid_id = #{bidId}
+    </update>
+
+    <select id="selectByBidId" parameterType="java.lang.String" resultMap="BidResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bid
+        where bid_id = #{bidId}
+    </select>
+
+    <select id="selectByProjectId" resultMap="BidResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bid
+        where project_id = #{projectId}
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        order by create_time desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="countByProjectId" resultType="long">
+        select count(1)
+        from bid
+        where project_id = #{projectId}
+        <if test="status != null">
+            and status = #{status}
+        </if>
+    </select>
+
+    <select id="existsActiveBid" resultType="int">
+        select count(1)
+        from bid
+        where project_id = #{projectId}
+          and student_id = #{studentId}
+        <if test="statusList != null and statusList.size() > 0">
+            and status in
+            <foreach collection="statusList" item="status" open="(" separator="," close=")">
+                #{status}
+            </foreach>
+        </if>
+    </select>
+
+    <update id="updateStatus">
+        update bid
+        set status = #{status},
+            remark = #{remark},
+            update_time = now(),
+            version = version + 1
+        where bid_id = #{bidId}
+        <if test="version != null">
+            and version = #{version}
+        </if>
+    </update>
+</mapper>
+

@@ -1,13 +1,16 @@
 package cn.hgy.trigger.http;
 
 import cn.hgy.api.IUserManagementHttpService;
+import cn.hgy.api.dto.AdminCreateRequestDTO;
 import cn.hgy.api.dto.UserLoginRequestDTO;
 import cn.hgy.api.dto.UserLoginResponseDTO;
 import cn.hgy.api.dto.UserRegisterRequestDTO;
 import cn.hgy.api.response.Response;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
 import cn.hgy.domain.user.service.IUserManagementService;
+import cn.hgy.trigger.interceptor.UserContextDynamic;
 import cn.hgy.types.enums.ResponseCode;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,18 +35,17 @@ public class UserManagementHttpController implements IUserManagementHttpService 
     @PostMapping(value = "/user_register")
     @Override
     public Response<Boolean> userRegister(@Valid @RequestBody UserRegisterRequestDTO dto) {
-        log.info("用户进行注册 昵称:{} 用户类型:{} 用户唯一标识符:{} 用户凭证:{}", dto.getNickname(), dto.getIdentityType(), dto.getIdentifier(), dto.getCredential());
+        log.info("用户注册");
 
         boolean success = userManagementService.userRegister(dto.getNickname(), dto.getType(), dto.getIdentityType(), dto.getIdentifier(), dto.getCredential());
 
-        log.info("用户注册完成");
         return new Response<Boolean>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), success);
     }
 
     @PostMapping(value = "user_login")
     @Override
     public Response<UserLoginResponseDTO> userLogin(@Valid @RequestBody UserLoginRequestDTO dto) {
-        log.info("用户进行登录 用户类型:{} 用户唯一标识符:{} 用户凭证:{}", dto.getIdentityType(), dto.getIdentifier(), dto.getCredential());
+        log.info("用户登录");
 
         UserLoginEntity userLoginEntity = userManagementService.userLogin(dto.getIdentityType(), dto.getIdentifier(), dto.getCredential());
 
@@ -63,8 +65,19 @@ public class UserManagementHttpController implements IUserManagementHttpService 
         .authentication(userLoginEntity.getAuthentication())
         .build();
 
-        log.info("用户登录完成 userId:{}", userLoginEntity.getUserId());
+        log.info("用户登录完成 userId={} userType={}", userLoginEntity.getUserId(), userLoginEntity.getType());
 
         return new Response<UserLoginResponseDTO>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), loginResponseDTO);
+    }
+
+    @PostMapping(value = "/admin/create_admin")
+    @Override
+    public Response<Boolean> createAdminAccount(@Valid @RequestBody AdminCreateRequestDTO dto, HttpServletRequest request) {
+        String userId = UserContextDynamic.getUserContextDynamic();
+        log.info("管理员创建新管理员账号 操作者userId={}", userId);
+
+        boolean success = userManagementService.createAdminAccount(dto.getNickname(), dto.getIdentityType(), dto.getIdentifier(), dto.getCredential());
+
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), success);
     }
 }

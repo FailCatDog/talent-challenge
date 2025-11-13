@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Author: 黄光宇
  * @CreateTime: 2025-09-22
@@ -27,9 +30,10 @@ public class UserManagementServiceImpl implements IUserManagementService{
 
     @Override
     public Boolean userRegister(String nickname, String type, String identityType, String identifier, String credential) {
-        // TODO: 高并发场景下，检查和插入之间可能存在竞态条件，需要考虑使用分布式锁或数据库唯一约束来解决
+        if (UserTypeEnum.ADMIN.getType().equals(type)) {
+            throw new AppException(ResponseCode.USER_TYPE_NOT_ALLOWED.getCode(), ResponseCode.USER_TYPE_NOT_ALLOWED.getInfo());
+        }
 
-        // 验证是否已注册
         boolean userExists = repository.existsByIdentityTypeAndIdentifier(identityType, identifier);
         if (userExists) {
             throw new AppException(ResponseCode.USER_IS_EXIST.getCode(), ResponseCode.USER_IS_EXIST.getInfo());
@@ -43,7 +47,7 @@ public class UserManagementServiceImpl implements IUserManagementService{
 
         // todo 预验证机制，这里先默认已经验证
         UserAuthCredentialEntity userAuthCredentialEntity = UserAuthCredentialEntity.builder()
-                .credential(credential)
+                .credential(UserAuthCredentialEntity.encryptPassword(credential))
                 .identifier(identifier)
                 .identityType(identityType)
                 .isVerified(UserStatusEnum.IS_VALIFY.getStatusCode())
@@ -90,7 +94,9 @@ public class UserManagementServiceImpl implements IUserManagementService{
         }
 
         // 5. 组合实体
-        String authentication = jwtService.generateToken(userEntity.getUserId(), null);
+        Map<String, Object> additionalClaims = new HashMap<>();
+        additionalClaims.put("type", userEntity.getType());
+        String authentication = jwtService.generateToken(userEntity.getUserId(), additionalClaims);
         UserLoginEntity userLoginEntity = UserLoginEntity.builder()
                 .userId(userEntity.getUserId())
                 .type(UserTypeEnum.getTypeByCode(userEntity.getType()))
@@ -119,5 +125,29 @@ public class UserManagementServiceImpl implements IUserManagementService{
         }
 
         return userLoginEntity;
+    }
+
+    @Override
+    public Boolean createAdminAccount(String nickname, String identityType, String identifier, String credential) {
+        boolean userExists = repository.existsByIdentityTypeAndIdentifier(identityType, identifier);
+        if (userExists) {
+            throw new AppException(ResponseCode.USER_IS_EXIST.getCode(), ResponseCode.USER_IS_EXIST.getInfo());
+        }
+
+        UserEntity userEntity = UserEntity.builder()
+                .nickname(nickname)
+                .type(UserTypeEnum.ADMIN.getCode())
+                .isActive(UserStatusEnum.ACTIVE.getStatusCode())
+                .build();
+
+        UserAuthCredentialEntity userAuthCredentialEntity = UserAuthCredentialEntity.builder()
+                .credential(UserAuthCredentialEntity.encryptPassword(credential))
+                .identifier(identifier)
+                .identityType(identityType)
+                .isVerified(UserStatusEnum.IS_VALIFY.getStatusCode())
+                .build();
+
+        repository.insertNewUserAndUserAuthCredential(userEntity, userAuthCredentialEntity);
+        return true;
     }
 }

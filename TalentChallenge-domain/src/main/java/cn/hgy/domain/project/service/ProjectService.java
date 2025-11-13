@@ -1,5 +1,6 @@
 package cn.hgy.domain.project.service;
 
+import cn.hgy.domain.project.model.entity.ProjectCategoryEntity;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
 import cn.hgy.domain.project.model.valobj.ProjectStatusEnum;
 import cn.hgy.domain.project.repository.IProjectRepository;
@@ -7,6 +8,7 @@ import cn.hgy.types.common.ProjectComment;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.exception.AppException;
 import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -298,6 +300,99 @@ public class ProjectService implements IProjectService{
     @Override
     public Long countProjectsByStatus(String status) {
         return repository.countProjectsByStatus(status);
+    }
+
+    @Override
+    public boolean createProjectCategory(String name, String parentId, String description, String icon, Integer sortOrder) {
+        if (StrUtil.isBlank(name)) {
+            throw new AppException(ResponseCode.CATEGORY_NAME_EMPTY.getCode(), ResponseCode.CATEGORY_NAME_EMPTY.getInfo());
+        }
+
+        if (repository.existsCategoryByName(name)) {
+            throw new AppException(ResponseCode.CATEGORY_NAME_EXISTS.getCode(), ResponseCode.CATEGORY_NAME_EXISTS.getInfo());
+        }
+
+        if (StrUtil.isNotBlank(parentId) && !repository.existsCategoryById(parentId)) {
+            throw new AppException(ResponseCode.PARENT_CATEGORY_NOT_FOUND.getCode(), ResponseCode.PARENT_CATEGORY_NOT_FOUND.getInfo());
+        }
+
+        String categoryId = "CAT_" + snowflake.nextIdStr();
+
+        ProjectCategoryEntity projectCategoryEntity = ProjectCategoryEntity.builder()
+                .projectCategoryId(categoryId)
+                .name(name)
+                .parentId(parentId)
+                .description(description)
+                .icon(icon)
+                .sortOrder(sortOrder != null ? sortOrder : 0)
+                .isVisible(true)
+                .isActive(true)
+                .build();
+
+        repository.createProjectCategory(projectCategoryEntity);
+        return true;
+    }
+
+    @Override
+    public boolean updateProjectCategory(String categoryId, String name, String parentId, String description, String icon, Integer sortOrder, Boolean isVisible, Boolean isActive) {
+        if (StrUtil.isBlank(categoryId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+
+        if (!repository.existsCategoryById(categoryId)) {
+            throw new AppException(ResponseCode.CATEGORY_NOT_FOUND.getCode(), ResponseCode.CATEGORY_NOT_FOUND.getInfo());
+        }
+
+        if (StrUtil.isBlank(name)) {
+            throw new AppException(ResponseCode.CATEGORY_NAME_EMPTY.getCode(), ResponseCode.CATEGORY_NAME_EMPTY.getInfo());
+        }
+
+        if (StrUtil.isNotBlank(parentId) && !repository.existsCategoryById(parentId)) {
+            throw new AppException(ResponseCode.PARENT_CATEGORY_NOT_FOUND.getCode(), ResponseCode.PARENT_CATEGORY_NOT_FOUND.getInfo());
+        }
+
+        ProjectCategoryEntity projectCategoryEntity = ProjectCategoryEntity.builder()
+                .projectCategoryId(categoryId)
+                .name(name)
+                .parentId(parentId)
+                .description(description)
+                .icon(icon)
+                .sortOrder(sortOrder)
+                .isVisible(isVisible)
+                .isActive(isActive)
+                .build();
+
+        repository.updateProjectCategory(projectCategoryEntity);
+        return true;
+    }
+
+    @Override
+    public boolean deleteProjectCategory(String categoryId) {
+        if (!repository.existsCategoryById(categoryId)) {
+            throw new AppException(ResponseCode.CATEGORY_NOT_FOUND.getCode(), ResponseCode.CATEGORY_NOT_FOUND.getInfo());
+        }
+
+        repository.deleteProjectCategory(categoryId);
+        return true;
+    }
+
+    @Override
+    public List<ProjectCategoryEntity> getAllCategories() {
+        return repository.queryAllCategories();
+    }
+
+    @Override
+    public List<ProjectCategoryEntity> getVisibleCategories() {
+        return repository.queryVisibleCategories();
+    }
+
+    @Override
+    public ProjectCategoryEntity getCategoryById(String categoryId) {
+        ProjectCategoryEntity category = repository.queryCategoryById(categoryId);
+        if (category == null) {
+            throw new AppException(ResponseCode.CATEGORY_NOT_FOUND.getCode(), ResponseCode.CATEGORY_NOT_FOUND.getInfo());
+        }
+        return category;
     }
 
     private String generateSerialNumber() {

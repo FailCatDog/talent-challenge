@@ -160,4 +160,55 @@ public interface IProjectService {
      * @return 项目数量
      */
     Long countProjectsByStatus(String status);
+
+    /**
+     * 管理员创建项目分类
+     * @param name 分类名称
+     * @param parentId 父分类ID
+     * @param description 分类描述
+     * @param icon 分类图标
+     * @param sortOrder 排序序号
+     * @return 创建是否成功
+     */
+    boolean createProjectCategory(String name, String parentId, String description, String icon, Integer sortOrder);
+
+    /**
+     * 管理员更新项目分类
+     * @param categoryId 分类ID
+     * @param name 分类名称
+     * @param parentId 父分类ID
+     * @param description 分类描述
+     * @param icon 分类图标
+     * @param sortOrder 排序序号
+     * @param isVisible 是否可见
+     * @param isActive 是否启用
+     * @return 更新是否成功
+     */
+    boolean updateProjectCategory(String categoryId, String name, String parentId, String description, String icon, Integer sortOrder, Boolean isVisible, Boolean isActive);
+
+    /**
+     * 管理员删除项目分类
+     * @param categoryId 分类ID
+     * @return 删除是否成功
+     */
+    boolean deleteProjectCategory(String categoryId);
+
+    /**
+     * 查询所有项目分类
+     * @return 分类列表
+     */
+    List<cn.hgy.domain.project.model.entity.ProjectCategoryEntity> getAllCategories();
+
+    /**
+     * 查询所有可见的项目分类
+     * @return 分类列表
+     */
+    List<cn.hgy.domain.project.model.entity.ProjectCategoryEntity> getVisibleCategories();
+
+    /**
+     * 根据分类ID查询分类详情
+     * @param categoryId 分类ID
+     * @return 分类实体
+     */
+    cn.hgy.domain.project.model.entity.ProjectCategoryEntity getCategoryById(String categoryId);
 }

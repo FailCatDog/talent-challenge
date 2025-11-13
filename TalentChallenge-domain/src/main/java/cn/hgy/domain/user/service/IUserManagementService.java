@@ -25,4 +25,14 @@ public interface IUserManagementService {
      */
     UserLoginEntity userLogin(String identityType, String identifier, String credential);
 
+    /**
+     * 管理员创建新管理员账号
+     * @param nickname 昵称
+     * @param identityType 身份类型
+     * @param identifier 标识符
+     * @param credential 凭证
+     * @return 创建是否成功
+     */
+    Boolean createAdminAccount(String nickname, String identityType, String identifier, String credential);
+
 }
