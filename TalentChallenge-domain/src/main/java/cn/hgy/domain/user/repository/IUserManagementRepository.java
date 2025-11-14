@@ -49,4 +49,10 @@ public interface IUserManagementRepository {
      * @return 用户实体
      */
     UserEntity queryUserBaseByUserId(String userId);
+
+    /**
+     * 更新用户资料信息
+     * @param userEntity 用户实体
+     */
+    void updateUserProfile(UserEntity userEntity);
 }

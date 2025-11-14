@@ -34,6 +34,37 @@ thread:
 #  mapper-locations: classpath:/mybatis/mapper/*.xml
 #  config-location:  classpath:/mybatis/config/mybatis-config.xml
 
+# RabbitMQ配置
+spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq.prod.example.com}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:}
+    password: ${RABBITMQ_PASSWORD:}
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:/}
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+      retry:
+        enabled: true
+        initial-interval: 2000ms
+        max-attempts: 5
+        multiplier: 2
+        max-interval: 30000ms
+    listener:
+      simple:
+        acknowledge-mode: manual
+        concurrency: 5
+        max-concurrency: 20
+        prefetch: 20
+        retry:
+          enabled: true
+          initial-interval: 2000ms
+          max-attempts: 5
+          multiplier: 2
+          max-interval: 30000ms
+
 # 日志
 logging:
   level:

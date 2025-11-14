@@ -95,5 +95,19 @@
             and version = #{version}
         </if>
     </update>
+
+    <select id="findOtherActiveBidIds" resultType="java.lang.String">
+        select bid_id
+        from bid
+        where project_id = #{projectId}
+          and bid_id != #{excludeBidId}
+        <if test="statusList != null and statusList.size() > 0">
+            and status in
+            <foreach collection="statusList" item="status" open="(" separator="," close=")">
+                #{status}
+            </foreach>
+        </if>
+    </select>
+
 </mapper>
 

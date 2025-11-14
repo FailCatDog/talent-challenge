@@ -7,13 +7,25 @@ import lombok.Getter;
 @Getter
 public enum BidStatusEnum {
 
-    APPLIED("APPLIED"),
-    SHORTLISTED("SHORTLISTED"),
-    CONFIRMED("CONFIRMED"),
-    REJECTED("REJECTED"),
-    CANCELLED("CANCELLED"),
-    EXPIRED("EXPIRED");
+    APPLIED("applied"),
+    SHORTLISTED("shortlisted"),
+    CONFIRMED("confirmed"),
+    REJECTED("rejected"),
+    CANCELLED("cancelled"),
+    EXPIRED("expired");
 
     private final String code;
+
+    public static BidStatusEnum getByCode(String code) {
+        if (code == null) {
+            return null;
+        }
+        for (BidStatusEnum statusEnum : values()) {
+            if (statusEnum.getCode().equalsIgnoreCase(code)) {
+                return statusEnum;
+            }
+        }
+        return null;
+    }
 }
 

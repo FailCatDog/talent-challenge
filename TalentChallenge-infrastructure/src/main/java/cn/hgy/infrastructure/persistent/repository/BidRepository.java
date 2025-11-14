@@ -83,6 +83,25 @@ public class BidRepository implements IBidRepository {
         return bidDao.existsActiveBid(projectId, studentId, statusList) > 0;
     }
 
+    @Override
+    public List<String> findOtherActiveBidIds(String projectId, String excludeBidId) {
+        List<String> statusList = Arrays.asList(
+                BidStatusEnum.APPLIED.getCode(),
+                BidStatusEnum.SHORTLISTED.getCode()
+        );
+        return bidDao.findOtherActiveBidIds(projectId, excludeBidId, statusList);
+    }
+
+    @Override
+    public void batchUpdateStatus(List<String> bidIds, BidStatusEnum status) {
+        if (bidIds == null || bidIds.isEmpty()) {
+            return;
+        }
+        for (String bidId : bidIds) {
+            bidDao.updateStatus(bidId, status.getCode(), null, "其他申请已中标");
+        }
+    }
+
     private Bid convertToPo(BidEntity entity) {
         Bid bid = new Bid();
         bid.setBidId(entity.getBidId());
@@ -103,7 +122,7 @@ public class BidRepository implements IBidRepository {
                 .bidId(bid.getBidId())
                 .projectId(bid.getProjectId())
                 .studentId(bid.getStudentId())
-                .status(bid.getStatus() == null ? null : BidStatusEnum.valueOf(bid.getStatus()))
+                .status(bid.getStatus() == null ? null : BidStatusEnum.getByCode(bid.getStatus()))
                 .content(bid.getContent())
                 .attachmentUrl(bid.getAttachmentUrl())
                 .remark(bid.getRemark())

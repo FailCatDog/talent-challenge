@@ -4,12 +4,17 @@ import cn.hgy.api.IUserManagementHttpService;
 import cn.hgy.api.dto.AdminCreateRequestDTO;
 import cn.hgy.api.dto.UserLoginRequestDTO;
 import cn.hgy.api.dto.UserLoginResponseDTO;
+import cn.hgy.api.dto.UserProfileResponseDTO;
+import cn.hgy.api.dto.UserProfileUpdateRequestDTO;
 import cn.hgy.api.dto.UserRegisterRequestDTO;
 import cn.hgy.api.response.Response;
+import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
 import cn.hgy.domain.user.service.IUserManagementService;
 import cn.hgy.trigger.interceptor.UserContextDynamic;
 import cn.hgy.types.enums.ResponseCode;
+import cn.hgy.types.exception.AppException;
+import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -79,5 +84,42 @@ public class UserManagementHttpController implements IUserManagementHttpService 
         boolean success = userManagementService.createAdminAccount(dto.getNickname(), dto.getIdentityType(), dto.getIdentifier(), dto.getCredential());
 
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), success);
+    }
+
+    @PostMapping(value = "/update_profile")
+    @Override
+    public Response<UserProfileResponseDTO> updateUserProfile(@Valid @RequestBody UserProfileUpdateRequestDTO dto, HttpServletRequest request) {
+        String userId = UserContextDynamic.getUserContextDynamic();
+        if (StrUtil.isBlank(userId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        log.info("更新用户资料 userId={}", userId);
+
+        UserEntity userEntity = userManagementService.updateUserProfile(
+                userId,
+                dto.getNickname(),
+                dto.getAvatarUrl(),
+                dto.getBio(),
+                dto.getGender(),
+                dto.getBirthday(),
+                dto.getRegionCode(),
+                dto.getIndustry(),
+                dto.getTitle()
+        );
+
+        UserProfileResponseDTO responseDTO = UserProfileResponseDTO.builder()
+                .userId(userEntity.getUserId())
+                .nickname(userEntity.getNickname())
+                .avatarUrl(userEntity.getAvatarUrl())
+                .bio(userEntity.getBio())
+                .gender(userEntity.getGender())
+                .birthday(userEntity.getBirthday())
+                .regionCode(userEntity.getRegionCode())
+                .industry(userEntity.getIndustry())
+                .title(userEntity.getTitle())
+                .lastLoginTime(userEntity.getLastLoginTime())
+                .build();
+
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), responseDTO);
     }
 }

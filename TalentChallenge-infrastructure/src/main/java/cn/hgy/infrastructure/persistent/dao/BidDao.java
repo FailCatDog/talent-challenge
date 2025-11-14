@@ -25,5 +25,9 @@ public interface BidDao {
     int existsActiveBid(@Param("projectId") String projectId, @Param("studentId") String studentId, @Param("statusList") List<String> statusList);
 
     int updateStatus(@Param("bidId") String bidId, @Param("status") String status, @Param("version") Long version, @Param("remark") String remark);
+
+    List<String> findOtherActiveBidIds(@Param("projectId") String projectId,
+                                       @Param("excludeBidId") String excludeBidId,
+                                       @Param("statusList") List<String> statusList);
 }
 

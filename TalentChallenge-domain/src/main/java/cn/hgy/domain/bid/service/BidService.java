@@ -3,11 +3,13 @@ package cn.hgy.domain.bid.service;
 import cn.hgy.domain.bid.model.entity.BidEntity;
 import cn.hgy.domain.bid.model.valobj.BidStatusEnum;
 import cn.hgy.domain.bid.repository.IBidRepository;
+import cn.hgy.domain.bid.service.IBidEventPublisher;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
 import cn.hgy.domain.project.model.valobj.ProjectStatusEnum;
 import cn.hgy.domain.project.repository.IProjectRepository;
 import cn.hgy.types.common.BidCommand;
 import cn.hgy.types.enums.ResponseCode;
+import cn.hgy.types.event.BidConfirmedEvent;
 import cn.hgy.types.exception.AppException;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.StrUtil;
@@ -25,6 +27,7 @@ public class BidService implements IBidService {
     private final Snowflake snowflake;
     private final IBidRepository bidRepository;
     private final IProjectRepository projectRepository;
+    private final IBidEventPublisher bidEventPublisher;
 
     @Override
     public boolean apply(BidCommand command) {
@@ -87,7 +90,21 @@ public class BidService implements IBidService {
         if (!BidStatusEnum.SHORTLISTED.equals(bidEntity.getStatus())) {
             throw new AppException(ResponseCode.BID_STATUS_INVALID.getCode(), ResponseCode.BID_STATUS_INVALID.getInfo());
         }
-        return changeStatus(bidEntity, BidStatusEnum.CONFIRMED, null);
+        
+        boolean success = changeStatus(bidEntity, BidStatusEnum.CONFIRMED, null);
+        
+        if (success) {
+            BidConfirmedEvent event = BidConfirmedEvent.builder()
+                    .bidId(bidId)
+                    .projectId(bidEntity.getProjectId())
+                    .studentId(bidEntity.getStudentId())
+                    .operatorId(operatorId)
+                    .confirmedAt(LocalDateTime.now())
+                    .build();
+            bidEventPublisher.publishBidConfirmedEvent(event);
+        }
+        
+        return success;
     }
 
     @Override

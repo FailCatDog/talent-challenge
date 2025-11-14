@@ -216,4 +216,10 @@ public interface ProjectDao {
     int updateStatusAndReason(@Param("projectId") String projectId,
                               @Param("status") String status,
                               @Param("rejectReason") String rejectReason);
+
+    /**
+     * 更新项目中标团队ID
+     */
+    int updateAcceptedTeam(@Param("projectId") String projectId,
+                          @Param("teamId") String teamId);
 }

@@ -3,6 +3,8 @@ package cn.hgy.api;
 import cn.hgy.api.dto.AdminCreateRequestDTO;
 import cn.hgy.api.dto.UserLoginRequestDTO;
 import cn.hgy.api.dto.UserLoginResponseDTO;
+import cn.hgy.api.dto.UserProfileResponseDTO;
+import cn.hgy.api.dto.UserProfileUpdateRequestDTO;
 import cn.hgy.api.dto.UserRegisterRequestDTO;
 import cn.hgy.api.response.Response;
 
@@ -35,4 +37,12 @@ public interface IUserManagementHttpService {
      * @return 创建是否成功
      */
     Response<Boolean> createAdminAccount(AdminCreateRequestDTO dto, jakarta.servlet.http.HttpServletRequest request);
+
+    /**
+     * 更新用户资料
+     * @param dto 请求参数
+     * @param request HTTP请求对象
+     * @return 更新后的用户资料
+     */
+    Response<UserProfileResponseDTO> updateUserProfile(UserProfileUpdateRequestDTO dto, jakarta.servlet.http.HttpServletRequest request);
 }

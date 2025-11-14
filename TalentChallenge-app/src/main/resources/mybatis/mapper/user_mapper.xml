@@ -101,4 +101,20 @@
         WHERE user_id = #{userId}
     </update>
 
+    <update id="updateProfileByUserId" parameterType="cn.hgy.infrastructure.persistent.po.User">
+        UPDATE user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="avatarUrl != null">avatar_url = #{avatarUrl},</if>
+            <if test="bio != null">bio = #{bio},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="regionCode != null">region_code = #{regionCode},</if>
+            <if test="industry != null">industry = #{industry},</if>
+            <if test="title != null">title = #{title},</if>
+            update_time = NOW(),
+        </trim>
+        WHERE user_id = #{userId}
+    </update>
+
 </mapper>

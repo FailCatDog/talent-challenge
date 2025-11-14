@@ -150,4 +150,47 @@ public class UserManagementServiceImpl implements IUserManagementService{
         repository.insertNewUserAndUserAuthCredential(userEntity, userAuthCredentialEntity);
         return true;
     }
+
+    @Override
+    public UserEntity updateUserProfile(String userId, String nickname, String avatarUrl, String bio,
+                                         Integer gender, java.time.LocalDate birthday, String regionCode,
+                                         String industry, String title) {
+        UserEntity userEntity = repository.queryUserBaseByUserId(userId);
+        if (userEntity == null) {
+            throw new AppException(ResponseCode.USER_IS_NOT_EXIST.getCode(), ResponseCode.USER_IS_NOT_EXIST.getInfo());
+        }
+
+        if (!userEntity.checkUserStatus()) {
+            throw new AppException(ResponseCode.USER_IS_NOT_ACTIVE.getCode(), ResponseCode.USER_IS_NOT_ACTIVE.getInfo());
+        }
+
+        if (nickname != null) {
+            userEntity.setNickname(nickname);
+        }
+        if (avatarUrl != null) {
+            userEntity.setAvatarUrl(avatarUrl);
+        }
+        if (bio != null) {
+            userEntity.setBio(bio);
+        }
+        if (gender != null) {
+            userEntity.setGender(gender);
+        }
+        if (birthday != null) {
+            userEntity.setBirthday(birthday);
+        }
+        if (regionCode != null) {
+            userEntity.setRegionCode(regionCode);
+        }
+        if (industry != null) {
+            userEntity.setIndustry(industry);
+        }
+        if (title != null) {
+            userEntity.setTitle(title);
+        }
+
+        repository.updateUserProfile(userEntity);
+
+        return repository.queryUserBaseByUserId(userId);
+    }
 }

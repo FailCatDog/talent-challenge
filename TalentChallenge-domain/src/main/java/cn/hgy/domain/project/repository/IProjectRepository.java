@@ -143,6 +143,8 @@ public interface IProjectRepository {
 
     void incrementApplicationCount(String projectId);
 
+    void updateAcceptedTeam(String projectId, String teamId);
+
     /**
      * 创建项目分类
      * @param projectCategoryEntity 项目分类实体

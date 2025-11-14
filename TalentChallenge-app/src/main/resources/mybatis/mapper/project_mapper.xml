@@ -345,4 +345,11 @@
         WHERE project_id = #{projectId}
     </update>
 
+    <update id="updateAcceptedTeam">
+        UPDATE project SET
+            accepted_team_id = #{teamId},
+            update_time = NOW()
+        WHERE project_id = #{projectId}
+    </update>
+
 </mapper>

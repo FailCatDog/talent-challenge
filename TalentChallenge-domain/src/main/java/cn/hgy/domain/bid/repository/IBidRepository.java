@@ -21,5 +21,9 @@ public interface IBidRepository {
     Long countByProject(String projectId, BidStatusEnum status);
 
     boolean existsActiveBid(String projectId, String studentId);
+
+    List<String> findOtherActiveBidIds(String projectId, String excludeBidId);
+
+    void batchUpdateStatus(List<String> bidIds, BidStatusEnum status);
 }
 

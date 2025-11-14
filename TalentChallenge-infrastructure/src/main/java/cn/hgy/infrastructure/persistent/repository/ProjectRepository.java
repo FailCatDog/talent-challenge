@@ -177,6 +177,11 @@ public class ProjectRepository implements IProjectRepository {
         projectDao.incrementApplicationCount(projectId);
     }
 
+    @Override
+    public void updateAcceptedTeam(String projectId, String teamId) {
+        projectDao.updateAcceptedTeam(projectId, teamId);
+    }
+
     private Project convertToProject(ProjectEntity projectEntity) {
         Project project = new Project();
         project.setProjectId(projectEntity.getProjectId());

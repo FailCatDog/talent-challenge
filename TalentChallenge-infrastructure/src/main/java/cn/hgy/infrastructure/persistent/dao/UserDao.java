@@ -73,4 +73,10 @@ public interface UserDao {
      * @param lastLoginTime 最后登陆时间
      */
     void updateUserLastLoginTime(String userId, LocalDateTime lastLoginTime);
+
+    /**
+     * 更新用户资料信息（仅更新可编辑字段）
+     * @param user 用户对象
+     */
+    int updateProfileByUserId(User user);
 }

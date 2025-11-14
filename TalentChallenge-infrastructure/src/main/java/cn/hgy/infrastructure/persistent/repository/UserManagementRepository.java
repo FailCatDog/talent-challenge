@@ -105,4 +105,20 @@ public class UserManagementRepository implements IUserManagementRepository {
                 .lastLoginTime(user.getLastLoginTime())
                 .build();
     }
+
+    @Override
+    public void updateUserProfile(UserEntity userEntity) {
+        User user = new User();
+        user.setUserId(userEntity.getUserId());
+        user.setNickname(userEntity.getNickname());
+        user.setAvatarUrl(userEntity.getAvatarUrl());
+        user.setBio(userEntity.getBio());
+        user.setGender(userEntity.getGender());
+        user.setBirthday(userEntity.getBirthday());
+        user.setRegionCode(userEntity.getRegionCode());
+        user.setIndustry(userEntity.getIndustry());
+        user.setTitle(userEntity.getTitle());
+
+        userDao.updateProfileByUserId(user);
+    }
 }

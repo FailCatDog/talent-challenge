@@ -1,5 +1,6 @@
 package cn.hgy.domain.user.service;
 
+import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
 
 /**
@@ -34,5 +35,22 @@ public interface IUserManagementService {
      * @return 创建是否成功
      */
     Boolean createAdminAccount(String nickname, String identityType, String identifier, String credential);
+
+    /**
+     * 更新用户资料
+     * @param userId 用户ID
+     * @param nickname 昵称
+     * @param avatarUrl 头像URL
+     * @param bio 个人简介
+     * @param gender 性别
+     * @param birthday 生日
+     * @param regionCode 地区编码
+     * @param industry 行业
+     * @param title 职位
+     * @return 更新后的用户实体
+     */
+    UserEntity updateUserProfile(String userId, String nickname, String avatarUrl, String bio,
+                                  Integer gender, java.time.LocalDate birthday, String regionCode,
+                                  String industry, String title);
 
 }
