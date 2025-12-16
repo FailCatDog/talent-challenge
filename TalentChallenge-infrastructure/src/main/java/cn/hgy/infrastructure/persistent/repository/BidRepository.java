@@ -74,13 +74,13 @@ public class BidRepository implements IBidRepository {
     }
 
     @Override
-    public boolean existsActiveBid(String projectId, String studentId) {
+    public boolean existsActiveBid(String projectId, String teamId) {
         List<String> statusList = Arrays.asList(
                 BidStatusEnum.APPLIED.getCode(),
                 BidStatusEnum.SHORTLISTED.getCode(),
                 BidStatusEnum.CONFIRMED.getCode()
         );
-        return bidDao.existsActiveBid(projectId, studentId, statusList) > 0;
+        return bidDao.existsActiveBid(projectId, teamId, statusList) > 0;
     }
 
     @Override
@@ -106,7 +106,7 @@ public class BidRepository implements IBidRepository {
         Bid bid = new Bid();
         bid.setBidId(entity.getBidId());
         bid.setProjectId(entity.getProjectId());
-        bid.setStudentId(entity.getStudentId());
+        bid.setTeamId(entity.getTeamId());
         bid.setStatus(entity.getStatus() == null ? null : entity.getStatus().getCode());
         bid.setContent(entity.getContent());
         bid.setAttachmentUrl(entity.getAttachmentUrl());
@@ -121,7 +121,7 @@ public class BidRepository implements IBidRepository {
         return BidEntity.builder()
                 .bidId(bid.getBidId())
                 .projectId(bid.getProjectId())
-                .studentId(bid.getStudentId())
+                .teamId(bid.getTeamId())
                 .status(bid.getStatus() == null ? null : BidStatusEnum.getByCode(bid.getStatus()))
                 .content(bid.getContent())
                 .attachmentUrl(bid.getAttachmentUrl())

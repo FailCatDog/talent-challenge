@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hgy.infrastructure.persistent.dao.MilestoneTemplateDao">
+
+    <resultMap id="BaseResultMap" type="cn.hgy.infrastructure.persistent.po.MilestoneTemplate">
+        <id column="id" property="id"/>
+        <result column="template_id" property="templateId"/>
+        <result column="milestone_code" property="milestoneCode"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="milestone_type" property="milestoneType"/>
+        <result column="default_sequence_order" property="defaultSequenceOrder"/>
+        <result column="default_approval_rule" property="defaultApprovalRule"/>
+        <result column="default_remind_before_hours" property="defaultRemindBeforeHours"/>
+        <result column="is_enabled" property="isEnabled"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.MilestoneTemplate">
+        INSERT INTO milestone_template
+        (template_id, milestone_code, name, description, milestone_type, 
+         default_sequence_order, default_approval_rule, default_remind_before_hours, is_enabled)
+        VALUES
+        (#{templateId}, #{milestoneCode}, #{name}, #{description}, #{milestoneType},
+         #{defaultSequenceOrder}, #{defaultApprovalRule}, #{defaultRemindBeforeHours}, #{isEnabled})
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO milestone_template
+        (template_id, milestone_code, name, description, milestone_type,
+         default_sequence_order, default_approval_rule, default_remind_before_hours, is_enabled)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.templateId}, #{item.milestoneCode}, #{item.name}, #{item.description}, #{item.milestoneType},
+             #{item.defaultSequenceOrder}, #{item.defaultApprovalRule}, #{item.defaultRemindBeforeHours}, #{item.isEnabled})
+        </foreach>
+    </insert>
+
+    <select id="selectByTemplateId" resultMap="BaseResultMap">
+        SELECT * FROM milestone_template WHERE template_id = #{templateId}
+    </select>
+
+    <select id="selectByMilestoneCode" resultMap="BaseResultMap">
+        SELECT * FROM milestone_template WHERE milestone_code = #{milestoneCode} AND is_enabled = 1
+    </select>
+
+    <select id="selectAllEnabled" resultMap="BaseResultMap">
+        SELECT * FROM milestone_template WHERE is_enabled = 1 ORDER BY default_sequence_order ASC
+    </select>
+
+    <select id="selectByType" resultMap="BaseResultMap">
+        SELECT * FROM milestone_template 
+        WHERE milestone_type = #{milestoneType} AND is_enabled = 1 
+        ORDER BY default_sequence_order ASC
+    </select>
+
+</mapper>
+

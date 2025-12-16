@@ -16,7 +16,7 @@ public interface IBidService {
 
     boolean reject(String bidId, String operatorId, String reason);
 
-    boolean cancel(String bidId, String studentId);
+    boolean cancel(String bidId, String teamId);
 
     List<BidEntity> queryProjectBids(String projectId, BidStatusEnum status, Integer pageNum, Integer pageSize);
 

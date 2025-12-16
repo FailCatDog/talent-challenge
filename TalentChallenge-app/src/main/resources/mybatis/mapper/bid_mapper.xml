@@ -6,7 +6,7 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="bid_id" property="bidId" jdbcType="VARCHAR"/>
         <result column="project_id" property="projectId" jdbcType="VARCHAR"/>
-        <result column="student_id" property="studentId" jdbcType="VARCHAR"/>
+        <result column="team_id" property="teamId" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="VARCHAR"/>
         <result column="content" property="content" jdbcType="LONGVARCHAR"/>
         <result column="attachment_url" property="attachmentUrl" jdbcType="VARCHAR"/>
@@ -17,21 +17,21 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, bid_id, project_id, student_id, status, content, attachment_url, remark, create_time, update_time, version
+        id, bid_id, project_id, team_id, status, content, attachment_url, remark, create_time, update_time, version
     </sql>
 
     <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.Bid" useGeneratedKeys="true" keyProperty="id">
         insert into bid (
-            bid_id, project_id, student_id, status, content, attachment_url, remark, create_time, update_time, version
+            bid_id, project_id, team_id, status, content, attachment_url, remark, create_time, update_time, version
         ) values (
-            #{bidId}, #{projectId}, #{studentId}, #{status}, #{content}, #{attachmentUrl}, #{remark}, #{createTime}, #{updateTime}, #{version}
+            #{bidId}, #{projectId}, #{teamId}, #{status}, #{content}, #{attachmentUrl}, #{remark}, #{createTime}, #{updateTime}, #{version}
         )
     </insert>
 
     <update id="update" parameterType="cn.hgy.infrastructure.persistent.po.Bid">
         update bid
         set project_id = #{projectId},
-            student_id = #{studentId},
+            team_id = #{teamId},
             status = #{status},
             content = #{content},
             attachment_url = #{attachmentUrl},
@@ -75,7 +75,7 @@
         select count(1)
         from bid
         where project_id = #{projectId}
-          and student_id = #{studentId}
+          and team_id = #{teamId}
         <if test="statusList != null and statusList.size() > 0">
             and status in
             <foreach collection="statusList" item="status" open="(" separator="," close=")">

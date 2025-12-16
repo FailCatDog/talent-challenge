@@ -11,6 +11,8 @@ import cn.hgy.domain.bid.model.valobj.BidStatusEnum;
 import cn.hgy.domain.bid.service.IBidService;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
 import cn.hgy.domain.project.service.IProjectService;
+import cn.hgy.domain.team.model.entity.TeamEntity;
+import cn.hgy.domain.team.repository.ITeamRepository;
 import cn.hgy.trigger.interceptor.UserContextDynamic;
 import cn.hgy.types.common.BidCommand;
 import cn.hgy.types.enums.ResponseCode;
@@ -33,6 +35,7 @@ public class BidHttpController implements IBidHttpService {
 
     private final IBidService bidService;
     private final IProjectService projectService;
+    private final ITeamRepository teamRepository;
 
     private static final int STUDENT_TYPE = 1;
     private static final int COMPANY_TYPE = 2;
@@ -41,13 +44,18 @@ public class BidHttpController implements IBidHttpService {
     @Override
     public Response<Boolean> apply(@RequestBody BidApplyRequestDTO dto, HttpServletRequest request) {
         ensureStudent(UserContextDynamic.getUserType());
-        String studentId = requireUserId();
-        log.info("student {} apply bid, project {}", studentId, dto.getProjectId());
+        String userId = requireUserId();
+        TeamEntity team = teamRepository.queryByLeaderId(userId)
+                .orElseThrow(() -> new AppException(ResponseCode.BID_TEAM_REQUIRED.getCode(), ResponseCode.BID_TEAM_REQUIRED.getInfo()));
+        if (!StrUtil.equals("active", team.getStatus())) {
+            throw new AppException(ResponseCode.BID_TEAM_NOT_FOUND.getCode(), ResponseCode.BID_TEAM_NOT_FOUND.getInfo());
+        }
+        log.info("team {} apply bid, project {}", team.getTeamId(), dto.getProjectId());
 
         BidCommand command = BidCommand.builder()
                 .bidId(null)
                 .projectId(dto.getProjectId())
-                .studentId(studentId)
+                .teamId(team.getTeamId())
                 .content(dto.getContent())
                 .attachmentUrl(dto.getAttachmentUrl())
                 .build();
@@ -88,7 +96,7 @@ public class BidHttpController implements IBidHttpService {
             responses.add(BidResponseDTO.builder()
                     .bidId(entity.getBidId())
                     .projectId(entity.getProjectId())
-                    .studentId(entity.getStudentId())
+                    .teamId(entity.getTeamId())
                     .status(entity.getStatus() != null ? entity.getStatus().getCode() : null)
                     .content(entity.getContent())
                     .attachmentUrl(entity.getAttachmentUrl())
@@ -145,10 +153,15 @@ public class BidHttpController implements IBidHttpService {
     @Override
     public Response<Boolean> cancel(@PathVariable("bidId") String bidId, HttpServletRequest request) {
         ensureStudent(UserContextDynamic.getUserType());
-        String studentId = requireUserId();
-        log.info("student {} cancel bid {}", studentId, bidId);
+        String userId = requireUserId();
+        TeamEntity team = teamRepository.queryByLeaderId(userId)
+                .orElseThrow(() -> new AppException(ResponseCode.BID_TEAM_REQUIRED.getCode(), ResponseCode.BID_TEAM_REQUIRED.getInfo()));
+        if (!StrUtil.equals("active", team.getStatus())) {
+            throw new AppException(ResponseCode.BID_TEAM_NOT_FOUND.getCode(), ResponseCode.BID_TEAM_NOT_FOUND.getInfo());
+        }
+        log.info("team {} cancel bid {}", team.getTeamId(), bidId);
 
-        boolean result = bidService.cancel(bidId, studentId);
+        boolean result = bidService.cancel(bidId, team.getTeamId());
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
     }
 

@@ -13,7 +13,7 @@ public class BidCommand {
 
     private String bidId;
     private String projectId;
-    private String studentId;
+    private String teamId;
     private String content;
     private String attachmentUrl;
 }

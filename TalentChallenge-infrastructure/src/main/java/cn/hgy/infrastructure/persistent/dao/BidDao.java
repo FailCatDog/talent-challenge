@@ -22,7 +22,7 @@ public interface BidDao {
 
     long countByProjectId(@Param("projectId") String projectId, @Param("status") String status);
 
-    int existsActiveBid(@Param("projectId") String projectId, @Param("studentId") String studentId, @Param("statusList") List<String> statusList);
+    int existsActiveBid(@Param("projectId") String projectId, @Param("teamId") String teamId, @Param("statusList") List<String> statusList);
 
     int updateStatus(@Param("bidId") String bidId, @Param("status") String status, @Param("version") Long version, @Param("remark") String remark);
 

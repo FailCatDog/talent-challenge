@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hgy.infrastructure.persistent.dao.TeamDao">
+
+    <resultMap id="TeamResultMap" type="cn.hgy.infrastructure.persistent.po.Team">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="team_id" property="teamId" jdbcType="VARCHAR"/>
+        <result column="team_name" property="teamName" jdbcType="VARCHAR"/>
+        <result column="leader_id" property="leaderId" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="avatar_url" property="avatarUrl" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="member_count" property="memberCount" jdbcType="INTEGER"/>
+        <result column="max_member_count" property="maxMemberCount" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, team_id, team_name, leader_id, description, avatar_url, status, member_count, max_member_count, create_time, update_time
+    </sql>
+
+    <select id="selectByLeaderId" parameterType="java.lang.String" resultMap="TeamResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from team
+        where leader_id = #{leaderId}
+        and status = 'active'
+        order by create_time desc
+        limit 1
+    </select>
+
+    <select id="selectByTeamId" parameterType="java.lang.String" resultMap="TeamResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from team
+        where team_id = #{teamId}
+    </select>
+
+    <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.Team" useGeneratedKeys="true" keyProperty="id">
+        insert into team (
+            team_id, team_name, leader_id, description, avatar_url, status, member_count, max_member_count, create_time, update_time
+        ) values (
+            #{teamId}, #{teamName}, #{leaderId}, #{description}, #{avatarUrl}, #{status}, #{memberCount}, #{maxMemberCount}, #{createTime}, #{updateTime}
+        )
+    </insert>
+
+    <update id="update" parameterType="cn.hgy.infrastructure.persistent.po.Team">
+        update team
+        set team_name = #{teamName},
+            description = #{description},
+            avatar_url = #{avatarUrl},
+            status = #{status},
+            member_count = #{memberCount},
+            max_member_count = #{maxMemberCount},
+            update_time = #{updateTime}
+        where team_id = #{teamId}
+    </update>
+
+    <select id="selectByLeaderIdList" resultMap="TeamResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from team
+        where leader_id = #{leaderId}
+        order by create_time desc
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="countByLeaderId" resultType="long">
+        select count(1)
+        from team
+        where leader_id = #{leaderId}
+    </select>
+
+    <select id="existsByLeaderIdAndStatus" resultType="int">
+        select count(1)
+        from team
+        where leader_id = #{leaderId}
+        and status = #{status}
+    </select>
+
+</mapper>
+

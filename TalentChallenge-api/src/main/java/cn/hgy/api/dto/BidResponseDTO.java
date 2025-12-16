@@ -15,7 +15,7 @@ public class BidResponseDTO {
 
     private String bidId;
     private String projectId;
-    private String studentId;
+    private String teamId;
     private String status;
     private String content;
     private String attachmentUrl;

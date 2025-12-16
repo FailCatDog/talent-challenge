@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hgy.infrastructure.persistent.dao.ProjectMilestoneDao">
+
+    <resultMap id="BaseResultMap" type="cn.hgy.infrastructure.persistent.po.ProjectMilestone">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="milestone_id" property="milestoneId" jdbcType="VARCHAR"/>
+        <result column="project_id" property="projectId" jdbcType="VARCHAR"/>
+        <result column="milestone_code" property="milestoneCode" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="LONGVARCHAR"/>
+        <result column="sequence_order" property="sequenceOrder" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="progress_percent" property="progressPercent" jdbcType="TINYINT"/>
+        <result column="deliverable_url" property="deliverableUrl" jdbcType="VARCHAR"/>
+        <result column="approval_rule" property="approvalRule" jdbcType="VARCHAR"/>
+        <result column="approval_status" property="approvalStatus" jdbcType="VARCHAR"/>
+        <result column="current_owner_id" property="currentOwnerId" jdbcType="VARCHAR"/>
+        <result column="planned_start_time" property="plannedStartTime" jdbcType="TIMESTAMP"/>
+        <result column="planned_end_time" property="plannedEndTime" jdbcType="TIMESTAMP"/>
+        <result column="actual_start_time" property="actualStartTime" jdbcType="TIMESTAMP"/>
+        <result column="actual_end_time" property="actualEndTime" jdbcType="TIMESTAMP"/>
+        <result column="auto_extended_count" property="autoExtendedCount" jdbcType="INTEGER"/>
+        <result column="remind_before_hours" property="remindBeforeHours" jdbcType="INTEGER"/>
+        <result column="is_skipped" property="isSkipped" jdbcType="BIT"/>
+        <result column="skip_reason" property="skipReason" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="version" property="version" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, milestone_id, project_id, milestone_code, name, description, sequence_order, status,
+        progress_percent, deliverable_url, approval_rule, approval_status, current_owner_id,
+        planned_start_time, planned_end_time, actual_start_time, actual_end_time, auto_extended_count,
+        remind_before_hours, is_skipped, skip_reason, remark, create_time, update_time, version
+    </sql>
+
+    <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.ProjectMilestone">
+        INSERT INTO project_milestone (
+            milestone_id, project_id, milestone_code, name, description, sequence_order, status,
+            progress_percent, deliverable_url, approval_rule, approval_status, current_owner_id,
+            planned_start_time, planned_end_time, actual_start_time, actual_end_time, auto_extended_count,
+            remind_before_hours, is_skipped, skip_reason, remark, create_time, update_time, version
+        ) VALUES (
+            #{milestoneId}, #{projectId}, #{milestoneCode}, #{name}, #{description}, #{sequenceOrder},
+            #{status}, #{progressPercent}, #{deliverableUrl}, #{approvalRule}, #{approvalStatus}, #{currentOwnerId},
+            #{plannedStartTime}, #{plannedEndTime}, #{actualStartTime}, #{actualEndTime}, #{autoExtendedCount},
+            #{remindBeforeHours}, #{isSkipped}, #{skipReason}, #{remark}, #{createTime}, #{updateTime}, #{version}
+        )
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO project_milestone (
+            milestone_id, project_id, milestone_code, name, description, sequence_order, status,
+            progress_percent, deliverable_url, approval_rule, approval_status, current_owner_id,
+            planned_start_time, planned_end_time, actual_start_time, actual_end_time, auto_extended_count,
+            remind_before_hours, is_skipped, skip_reason, remark, create_time, update_time, version
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.milestoneId}, #{item.projectId}, #{item.milestoneCode}, #{item.name}, #{item.description},
+                #{item.sequenceOrder}, #{item.status}, #{item.progressPercent}, #{item.deliverableUrl},
+                #{item.approvalRule}, #{item.approvalStatus}, #{item.currentOwnerId}, #{item.plannedStartTime},
+                #{item.plannedEndTime}, #{item.actualStartTime}, #{item.actualEndTime}, #{item.autoExtendedCount},
+                #{item.remindBeforeHours}, #{item.isSkipped}, #{item.skipReason}, #{item.remark},
+                #{item.createTime}, #{item.updateTime}, #{item.version}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="cn.hgy.infrastructure.persistent.po.ProjectMilestone">
+        UPDATE project_milestone SET
+            milestone_code = #{milestoneCode},
+            name = #{name},
+            description = #{description},
+            sequence_order = #{sequenceOrder},
+            status = #{status},
+            progress_percent = #{progressPercent},
+            deliverable_url = #{deliverableUrl},
+            approval_rule = #{approvalRule},
+            approval_status = #{approvalStatus},
+            current_owner_id = #{currentOwnerId},
+            planned_start_time = #{plannedStartTime},
+            planned_end_time = #{plannedEndTime},
+            actual_start_time = #{actualStartTime},
+            actual_end_time = #{actualEndTime},
+            auto_extended_count = #{autoExtendedCount},
+            remind_before_hours = #{remindBeforeHours},
+            is_skipped = #{isSkipped},
+            skip_reason = #{skipReason},
+            remark = #{remark},
+            update_time = #{updateTime},
+            version = #{version}
+        WHERE milestone_id = #{milestoneId}
+    </update>
+
+    <select id="selectByMilestoneId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project_milestone
+        WHERE milestone_id = #{milestoneId}
+    </select>
+
+    <select id="selectByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project_milestone
+        WHERE project_id = #{projectId}
+        ORDER BY sequence_order ASC
+    </select>
+
+    <select id="selectByProjectIdAndCode" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project_milestone
+        WHERE project_id = #{projectId} AND milestone_code = #{milestoneCode}
+    </select>
+
+    <select id="selectByProjectIdAndStatus" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project_milestone
+        WHERE project_id = #{projectId} AND status = #{status}
+        ORDER BY sequence_order ASC
+    </select>
+
+    <update id="updateStatus">
+        UPDATE project_milestone SET
+            status = #{status},
+            update_time = NOW()
+        WHERE milestone_id = #{milestoneId}
+    </update>
+
+    <update id="updateApprovalStatus">
+        UPDATE project_milestone SET
+            approval_status = #{approvalStatus},
+            update_time = NOW()
+        WHERE milestone_id = #{milestoneId}
+    </update>
+
+    <update id="updateDeadline">
+        UPDATE project_milestone SET
+            planned_start_time = #{plannedStartTime},
+            planned_end_time = #{plannedEndTime},
+            remind_before_hours = #{remindBeforeHours},
+            update_time = NOW()
+        WHERE milestone_id = #{milestoneId}
+    </update>
+
+    <select id="countByProjectId" parameterType="java.lang.String" resultType="long">
+        SELECT COUNT(1)
+        FROM project_milestone
+        WHERE project_id = #{projectId}
+    </select>
+
+</mapper>
+

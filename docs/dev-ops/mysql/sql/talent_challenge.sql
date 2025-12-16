@@ -155,4 +155,84 @@ CREATE TABLE IF NOT EXISTS `user_auth_credential`  (
   INDEX `idx_auth_credential_create_time`(`create_time` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '统一认证凭证表' ROW_FORMAT = Dynamic;
 
+CREATE TABLE IF NOT EXISTS `project_milestone`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '物理主键',
+  `milestone_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '里程碑全局唯一标识',
+  `project_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '关联项目ID',
+  `milestone_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '里程碑编码（自定义，用于标识里程碑类型，如：proposal_submission、mid_term_defense等）',
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '里程碑名称（可自定义展示文案）',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '里程碑描述',
+  `sequence_order` int UNSIGNED NOT NULL DEFAULT 1 COMMENT '阶段顺序，从1开始',
+  `status` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'planned' COMMENT '阶段状态：planned, in_progress, delivered, under_review, completed, rejected, expired, skipped',
+  `progress_percent` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '阶段进度0-100',
+  `deliverable_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '成果附件/链接',
+  `approval_rule` json NULL COMMENT '审批规则配置（固定里程碑的角色/节点要求）',
+  `approval_status` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'pending' COMMENT '审批状态：pending, partial, approved, rejected',
+  `current_owner_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '当前负责人（如企业或获奖团队用户ID）',
+  `planned_start_time` datetime NULL DEFAULT NULL COMMENT '计划开始时间',
+  `planned_end_time` datetime NULL DEFAULT NULL COMMENT '计划结束时间',
+  `actual_start_time` datetime NULL DEFAULT NULL COMMENT '实际开始时间',
+  `actual_end_time` datetime NULL DEFAULT NULL COMMENT '实际完成时间',
+  `auto_extended_count` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '自动延期次数',
+  `remind_before_hours` int NULL DEFAULT NULL COMMENT '提醒提前小时数（实例化时可Override）',
+  `is_skipped` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否跳过该阶段',
+  `skip_reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '跳过原因说明',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '阶段备注',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `version` bigint NOT NULL DEFAULT 0 COMMENT '乐观锁版本号',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_milestone_id`(`milestone_id` ASC) USING BTREE,
+  INDEX `idx_project_milestone_code`(`project_id` ASC, `milestone_code` ASC) USING BTREE,
+  INDEX `idx_milestone_project`(`project_id` ASC, `sequence_order` ASC) USING BTREE,
+  INDEX `idx_milestone_status`(`status` ASC) USING BTREE,
+  CONSTRAINT `fk_milestone_project` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '项目里程碑实例表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for milestone_template
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `milestone_template`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '物理主键',
+  `template_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '模板唯一标识',
+  `milestone_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '里程碑编码',
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '里程碑名称',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '里程碑描述',
+  `milestone_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '里程碑类型：required(必须), optional(可选)',
+  `default_sequence_order` int UNSIGNED NOT NULL DEFAULT 1 COMMENT '默认顺序',
+  `default_approval_rule` json NULL COMMENT '默认审批规则配置',
+  `default_remind_before_hours` int NULL DEFAULT 24 COMMENT '默认提醒提前小时数',
+  `is_enabled` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否启用',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_template_id`(`template_id` ASC) USING BTREE,
+  UNIQUE INDEX `uk_milestone_code`(`milestone_code` ASC) USING BTREE,
+  INDEX `idx_milestone_type`(`milestone_type` ASC) USING BTREE,
+  INDEX `idx_is_enabled`(`is_enabled` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '里程碑模板表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for team
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `team`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键，内部使用',
+  `team_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '团队全局唯一标识符（对外暴露）',
+  `team_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '团队名称',
+  `leader_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '队长用户ID（关联user表）',
+  `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '团队描述',
+  `avatar_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '团队头像URL',
+  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active' COMMENT '团队状态：active（活跃）, inactive（不活跃）, disbanded（已解散）',
+  `member_count` int UNSIGNED NOT NULL DEFAULT 1 COMMENT '当前成员数量（冗余字段，便于查询统计）',
+  `max_member_count` int UNSIGNED NOT NULL DEFAULT 10 COMMENT '最大成员数量限制',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_team_id`(`team_id` ASC) USING BTREE,
+  INDEX `idx_team_leader_id`(`leader_id` ASC) USING BTREE,
+  INDEX `idx_team_status`(`status` ASC) USING BTREE,
+  INDEX `idx_team_create_time`(`create_time` ASC) USING BTREE,
+  CONSTRAINT `fk_team_leader` FOREIGN KEY (`leader_id`) REFERENCES `user` (`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '团队表' ROW_FORMAT = Dynamic;
+
 SET FOREIGN_KEY_CHECKS = 1;

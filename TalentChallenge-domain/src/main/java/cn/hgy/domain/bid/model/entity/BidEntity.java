@@ -16,7 +16,7 @@ public class BidEntity {
 
     private String bidId;
     private String projectId;
-    private String studentId;
+    private String teamId;
     private BidStatusEnum status;
     private String content;
     private String attachmentUrl;

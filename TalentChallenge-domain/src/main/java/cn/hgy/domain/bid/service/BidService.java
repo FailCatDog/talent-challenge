@@ -7,6 +7,8 @@ import cn.hgy.domain.bid.service.IBidEventPublisher;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
 import cn.hgy.domain.project.model.valobj.ProjectStatusEnum;
 import cn.hgy.domain.project.repository.IProjectRepository;
+import cn.hgy.domain.team.model.entity.TeamEntity;
+import cn.hgy.domain.team.repository.ITeamRepository;
 import cn.hgy.types.common.BidCommand;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.event.BidConfirmedEvent;
@@ -28,28 +30,31 @@ public class BidService implements IBidService {
     private final IBidRepository bidRepository;
     private final IProjectRepository projectRepository;
     private final IBidEventPublisher bidEventPublisher;
+    private final ITeamRepository teamRepository;
 
     @Override
     public boolean apply(BidCommand command) {
-        if (command == null || StrUtil.isBlank(command.getProjectId()) || StrUtil.isBlank(command.getStudentId())) {
+        if (command == null || StrUtil.isBlank(command.getProjectId()) || StrUtil.isBlank(command.getTeamId())) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
         }
-        ProjectEntity project = requireProject(command.getProjectId());
-        if (StrUtil.equals(project.getPublisherId(), command.getStudentId())) {
-            throw new AppException(ResponseCode.BID_PERMISSION_DENIED.getCode(), ResponseCode.BID_PERMISSION_DENIED.getInfo());
+        TeamEntity team = teamRepository.queryByTeamId(command.getTeamId())
+                .orElseThrow(() -> new AppException(ResponseCode.BID_TEAM_NOT_FOUND.getCode(), ResponseCode.BID_TEAM_NOT_FOUND.getInfo()));
+        if (!StrUtil.equals("active", team.getStatus())) {
+            throw new AppException(ResponseCode.BID_TEAM_NOT_FOUND.getCode(), ResponseCode.BID_TEAM_NOT_FOUND.getInfo());
         }
+        ProjectEntity project = requireProject(command.getProjectId());
         ProjectStatusEnum projectStatus = ProjectStatusEnum.getByCode(project.getStatus());
         if (projectStatus == null || !(ProjectStatusEnum.PUBLISHED.equals(projectStatus) || ProjectStatusEnum.IN_PROGRESS.equals(projectStatus))) {
             throw new AppException(ResponseCode.BID_PROJECT_INVALID.getCode(), ResponseCode.BID_PROJECT_INVALID.getInfo());
         }
-        if (bidRepository.existsActiveBid(command.getProjectId(), command.getStudentId())) {
+        if (bidRepository.existsActiveBid(command.getProjectId(), command.getTeamId())) {
             throw new AppException(ResponseCode.BID_DUPLICATE.getCode(), ResponseCode.BID_DUPLICATE.getInfo());
         }
         LocalDateTime now = LocalDateTime.now();
         BidEntity bidEntity = BidEntity.builder()
                 .bidId(snowflake.nextIdStr())
                 .projectId(command.getProjectId())
-                .studentId(command.getStudentId())
+                .teamId(command.getTeamId())
                 .status(BidStatusEnum.APPLIED)
                 .content(command.getContent())
                 .attachmentUrl(command.getAttachmentUrl())
@@ -97,7 +102,7 @@ public class BidService implements IBidService {
             BidConfirmedEvent event = BidConfirmedEvent.builder()
                     .bidId(bidId)
                     .projectId(bidEntity.getProjectId())
-                    .studentId(bidEntity.getStudentId())
+                    .teamId(bidEntity.getTeamId())
                     .operatorId(operatorId)
                     .confirmedAt(LocalDateTime.now())
                     .build();
@@ -119,9 +124,9 @@ public class BidService implements IBidService {
     }
 
     @Override
-    public boolean cancel(String bidId, String studentId) {
+    public boolean cancel(String bidId, String teamId) {
         BidEntity bidEntity = loadBid(bidId);
-        if (!StrUtil.equals(bidEntity.getStudentId(), studentId)) {
+        if (!StrUtil.equals(bidEntity.getTeamId(), teamId)) {
             throw new AppException(ResponseCode.BID_PERMISSION_DENIED.getCode(), ResponseCode.BID_PERMISSION_DENIED.getInfo());
         }
         if (!Arrays.asList(BidStatusEnum.APPLIED, BidStatusEnum.SHORTLISTED).contains(bidEntity.getStatus())) {
