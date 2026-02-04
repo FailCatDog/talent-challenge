@@ -52,30 +52,35 @@ public class MilestoneTemplateService implements IMilestoneTemplateService {
                 MilestoneTypeEnum.REQUIRED.getTypeCode(), 1,
                 "{\"approverRoles\":[\"enterprise\"],\"autoApprove\":true}", 72));
         
+        templates.add(createTemplate("agreement_signing", "协议签订",
+                "企业与团队/学校签署协议，明确权责与时间",
+                MilestoneTypeEnum.REQUIRED.getTypeCode(), 2,
+                "{\"approverRoles\":[\"enterprise\"],\"autoApprove\":false}", 48));
+
         templates.add(createTemplate("deliverable_submission", "成果提交",
                 "上传交付成果包并同步进度与实际时间",
-                MilestoneTypeEnum.REQUIRED.getTypeCode(), 3,
+                MilestoneTypeEnum.REQUIRED.getTypeCode(), 4,
                 "{\"approverRoles\":[\"enterprise\",\"team\"],\"autoApprove\":false}", 48));
+
+        templates.add(createTemplate("result_review", "成果评审",
+                "专家组评审成果并填写审批意见",
+                MilestoneTypeEnum.REQUIRED.getTypeCode(), 5,
+                "{\"approverRoles\":[\"review_committee\"],\"auditLevel\":\"committee\"}", 24));
         
         templates.add(createTemplate("project_settlement", "项目结算",
                 "产出结算凭证并推进财务付款流程",
-                MilestoneTypeEnum.REQUIRED.getTypeCode(), 5,
+                MilestoneTypeEnum.REQUIRED.getTypeCode(), 6,
                 "{\"approverRoles\":[\"finance\"],\"requiresReceipt\":true}", 24));
         
         // 可选里程碑
         templates.add(createTemplate("mid_term_defense", "中期答辩",
                 "安排中期答辩、准备材料并确认实际时间",
-                MilestoneTypeEnum.OPTIONAL.getTypeCode(), 2,
-                "{\"approverRoles\":[\"academic\"],\"reviewTy pe\":\"defense\"}", 48));
-        
-        templates.add(createTemplate("result_review", "成果评审",
-                "专家组评审成果并填写审批意见",
-                MilestoneTypeEnum.OPTIONAL.getTypeCode(), 4,
-                "{\"approverRoles\":[\"review_committee\"],\"auditLevel\":\"committee\"}", 24));
+                MilestoneTypeEnum.OPTIONAL.getTypeCode(), 3,
+                "{\"approverRoles\":[\"academic\"],\"reviewType\":\"defense\"}", 48));
         
         templates.add(createTemplate("closure_announcement", "结项公示",
                 "发布结项公示、归档成果与通知相关角色",
-                MilestoneTypeEnum.OPTIONAL.getTypeCode(), 6,
+                MilestoneTypeEnum.OPTIONAL.getTypeCode(), 7,
                 "{\"approverRoles\":[\"platform\"],\"notifyChannels\":[\"homepage\"]}", 24));
         
         try {

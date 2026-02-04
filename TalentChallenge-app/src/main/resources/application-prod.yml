@@ -12,35 +12,28 @@ thread:
         block-queue-size: 5000
         policy: CallerRunsPolicy
 
-# 数据库配置
-#spring:
-#  datasource:
-#    username: root
-#    password: 123456
-#    url: jdbc:mysql://127.0.0.1:3306/xfg_frame_archetype?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&useSSL=true
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#  hikari:
-#    pool-name: Retail_HikariCP
-#    minimum-idle: 15 #最小空闲连接数量
-#    idle-timeout: 180000 #空闲连接存活最大时间，默认600000（10分钟）
-#    maximum-pool-size: 25 #连接池最大连接数，默认是10
-#    auto-commit: true  #此属性控制从池返回的连接的默认自动提交行为,默认值：true
-#    max-lifetime: 1800000 #此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
-#    connection-timeout: 30000 #数据库连接超时时间,默认30秒，即30000
-#    connection-test-query: SELECT 1
-#  type: com.zaxxer.hikari.HikariDataSource
-
-#mybatis:
-#  mapper-locations: classpath:/mybatis/mapper/*.xml
-#  config-location:  classpath:/mybatis/config/mybatis-config.xml
-
-# RabbitMQ配置
+# 数据库配置；启动时配置数据库资源信息
 spring:
+  datasource:
+    username: root
+    password: hgy123456
+    url: jdbc:mysql://43.142.157.145:3306/talent_challenge?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&useSSL=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  hikari:
+    pool-name: Retail_HikariCP
+    minimum-idle: 15 #最小空闲连接数量
+    idle-timeout: 180000 #空闲连接存活最大时间，默认600000（10分钟）
+    maximum-pool-size: 25 #连接池最大连接数，默认是10
+    auto-commit: true  #此属性控制从池返回的连接的默认自动提交行为,默认值：true
+    max-lifetime: 1800000 #此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+    connection-timeout: 30000 #数据库连接超时时间,默认30秒，即30000
+    connection-test-query: SELECT 1
+  type: com.zaxxer.hikari.HikariDataSource
   rabbitmq:
-    host: ${RABBITMQ_HOST:rabbitmq.prod.example.com}
+    host: ${RABBITMQ_HOST:43.142.157.145}
     port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:}
-    password: ${RABBITMQ_PASSWORD:}
+    username: ${RABBITMQ_USERNAME:admin}
+    password: ${RABBITMQ_PASSWORD:admin}
     virtual-host: ${RABBITMQ_VIRTUAL_HOST:/}
     publisher-confirm-type: correlated
     publisher-returns: true
@@ -48,25 +41,41 @@ spring:
       mandatory: true
       retry:
         enabled: true
-        initial-interval: 2000ms
-        max-attempts: 5
+        initial-interval: 1000ms
+        max-attempts: 3
         multiplier: 2
-        max-interval: 30000ms
+        max-interval: 10000ms
     listener:
       simple:
         acknowledge-mode: manual
-        concurrency: 5
-        max-concurrency: 20
-        prefetch: 20
+        concurrency: 3
+        max-concurrency: 10
+        prefetch: 10
         retry:
           enabled: true
-          initial-interval: 2000ms
-          max-attempts: 5
+          initial-interval: 1000ms
+          max-attempts: 3
           multiplier: 2
-          max-interval: 30000ms
+          max-interval: 10000ms
+
+# MyBatis 配置【如需使用记得打开】
+mybatis:
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+  #  config-location:  classpath:/mybatis/config/mybatis-config.xml
+  configuration:
+    map-underscore-to-camel-case: true  # 开启驼峰命名转换
 
 # 日志
 logging:
   level:
     root: info
   config: classpath:logback-spring.xml
+
+app:
+  snowflake:
+    data-center-id: ${SNOWFLAKE_DATA_CENTER_ID:1}
+    worker-id: ${SNOWFLAKE_WORKER_ID:1}
+  jwt:
+    secret: uflDZHmxOfdP9h5bFcxP4Ls1192dBxNEKbKPstQeRSvwF73sdeLhgc7jCl4CATTh2zDoa9RVf0v3ioFH62TuwT2a2JYD1JXuKJ2t867RLtSQWbp6sVQuwq79tYuz28w6feEXKsApaJqgijiw2JVXsB6RwvtGDcHYLD2xC0O8ZVyYIddoxvG8KJKF8CMrl4UYRHcaPShTBjjHoLeQP9EHIV55KGrjvqKA1HiAkpI83pfb2mtulEvINNdDvs4E9YuVp8aTsw0aHhzVy7f0bbdp0UL5XcV0qL8AKInAg0iSvNgB
+    expiration: 604800000     # 7天（毫秒）
+    refresh-expiration: 604800000  # 7天（毫秒）
