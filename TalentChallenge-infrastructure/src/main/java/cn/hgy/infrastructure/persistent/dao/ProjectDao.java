@@ -28,6 +28,11 @@ public interface ProjectDao {
      * 根据项目ID查找项目
      */
     Project selectByProjectId(@Param("projectId") String projectId);
+
+    /**
+     * 根据项目ID查找项目（包含企业名称和团队名称）
+     */
+    Project selectByProjectIdWithNames(@Param("projectId") String projectId);
     
     /**
      * 根据流水号查找项目

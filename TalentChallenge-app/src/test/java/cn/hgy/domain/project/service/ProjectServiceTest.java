@@ -33,6 +33,9 @@ class ProjectServiceTest {
     @Mock
     private IProjectRepository repository;
 
+    @Mock
+    private IMilestoneTemplateService milestoneTemplateService;
+
     @InjectMocks
     private ProjectService projectService;
 
@@ -46,7 +49,8 @@ class ProjectServiceTest {
                 projectComment.getTitle(), projectComment.getCategoryId(), projectComment.getPublisherId());
 
         when(snowflake.nextIdStr()).thenReturn(projectId);
-        log.info("已设置Mock：雪花算法生成项目ID={}", projectId);
+        when(milestoneTemplateService.initializeRequiredMilestones(projectId)).thenReturn(true);
+        log.info("已设置Mock：雪花算法生成项目ID={}，里程碑初始化返回true", projectId);
 
         Boolean result = projectService.createProject(projectComment);
 
@@ -78,6 +82,8 @@ class ProjectServiceTest {
             assertThat(projectEntity.getPublisherId()).isEqualTo(projectComment.getPublisherId());
             return true;
         }));
+        verify(milestoneTemplateService, times(1)).initializeRequiredMilestones(projectId);
+        log.info("验证里程碑初始化方法被调用一次");
 
         log.info("测试完成：项目创建成功测试通过");
     }
@@ -105,6 +111,8 @@ class ProjectServiceTest {
 
         verify(snowflake, times(1)).nextIdStr();
         verify(repository, times(1)).createProject(any(ProjectEntity.class));
+        verify(milestoneTemplateService, never()).initializeRequiredMilestones(anyString());
+        log.info("验证里程碑初始化方法未被调用");
 
         log.info("测试完成：项目创建失败异常测试通过");
     }
@@ -118,6 +126,7 @@ class ProjectServiceTest {
         log.info("测试数据：title={}, publisherId={}", projectComment.getTitle(), projectComment.getPublisherId());
 
         when(snowflake.nextIdStr()).thenReturn(projectId);
+        when(milestoneTemplateService.initializeRequiredMilestones(projectId)).thenReturn(true);
 
         Boolean result = projectService.createProject(projectComment);
 
@@ -132,6 +141,7 @@ class ProjectServiceTest {
             assertThat(projectEntity.getPublisherId()).isEqualTo(projectComment.getPublisherId());
             return true;
         }));
+        verify(milestoneTemplateService, times(1)).initializeRequiredMilestones(projectId);
 
         log.info("测试完成：最少数据项目创建测试通过");
     }
@@ -156,6 +166,7 @@ class ProjectServiceTest {
             projectComment.setCurrency(expectedCurrency);
 
             when(snowflake.nextIdStr()).thenReturn(projectId);
+            when(milestoneTemplateService.initializeRequiredMilestones(projectId)).thenReturn(true);
 
             Boolean result = projectService.createProject(projectComment);
 
@@ -168,8 +179,9 @@ class ProjectServiceTest {
                 assertThat(projectEntity.getCurrency()).isEqualTo(expectedCurrency);
                 return true;
             }));
+            verify(milestoneTemplateService).initializeRequiredMilestones(projectId);
 
-            reset(snowflake, repository);
+            reset(snowflake, repository, milestoneTemplateService);
         }
 
         log.info("测试完成：不同预算类型项目创建测试通过");
@@ -194,6 +206,7 @@ class ProjectServiceTest {
             projectComment.setSkillLevel(expectedSkillLevel);
 
             when(snowflake.nextIdStr()).thenReturn(projectId);
+            when(milestoneTemplateService.initializeRequiredMilestones(projectId)).thenReturn(true);
 
             Boolean result = projectService.createProject(projectComment);
 
@@ -207,8 +220,9 @@ class ProjectServiceTest {
                 assertThat(projectEntity.getSkillLevel()).isEqualTo(expectedSkillLevel);
                 return true;
             }));
+            verify(milestoneTemplateService).initializeRequiredMilestones(projectId);
 
-            reset(snowflake, repository);
+            reset(snowflake, repository, milestoneTemplateService);
         }
 
         log.info("测试完成：不同团队规模项目创建测试通过");
@@ -222,6 +236,7 @@ class ProjectServiceTest {
         ProjectComment projectComment = buildValidProjectComment();
 
         when(snowflake.nextIdStr()).thenReturn(expectedProjectId);
+        when(milestoneTemplateService.initializeRequiredMilestones(expectedProjectId)).thenReturn(true);
 
         projectService.createProject(projectComment);
 
@@ -232,6 +247,7 @@ class ProjectServiceTest {
             log.info("项目ID和序列号均设置为：{}", expectedProjectId);
             return true;
         }));
+        verify(milestoneTemplateService).initializeRequiredMilestones(expectedProjectId);
 
         log.info("测试完成：项目ID和序列号设置验证通过");
     }
@@ -295,6 +311,35 @@ class ProjectServiceTest {
         verify(repository, never()).createProject(any());
 
         log.info("测试完成：团队规模无效异常测试通过");
+    }
+
+    @Test
+    void test_ThrowProjectCreateFailExceptionWhenMilestoneInitializationFails() {
+        log.info("开始测试：当里程碑初始化失败时应抛出项目创建失败异常");
+
+        String projectId = "1234567890123456789";
+        ProjectComment projectComment = buildValidProjectComment();
+        log.info("测试数据：title={}, publisherId={}", projectComment.getTitle(), projectComment.getPublisherId());
+
+        when(snowflake.nextIdStr()).thenReturn(projectId);
+        doThrow(new AppException(ResponseCode.MILESTONE_INIT_FAIL.getCode(), ResponseCode.MILESTONE_INIT_FAIL.getInfo()))
+                .when(milestoneTemplateService).initializeRequiredMilestones(projectId);
+        log.info("已设置Mock：项目创建成功，但里程碑初始化会抛出异常");
+
+        AppException exception = assertThrows(AppException.class, () -> {
+            projectService.createProject(projectComment);
+        });
+
+        assertThat(exception.getCode()).isEqualTo(ResponseCode.PROJECT_CREATE_FAIL.getCode());
+        assertThat(exception.getInfo()).isEqualTo(ResponseCode.PROJECT_CREATE_FAIL.getInfo());
+        log.info("验证异常代码和信息符合预期");
+
+        verify(snowflake, times(1)).nextIdStr();
+        verify(repository, times(1)).createProject(any(ProjectEntity.class));
+        verify(milestoneTemplateService, times(1)).initializeRequiredMilestones(projectId);
+        log.info("验证项目创建和里程碑初始化方法都被调用");
+
+        log.info("测试完成：里程碑初始化失败异常测试通过");
     }
 
     private ProjectComment buildValidProjectComment() {

@@ -350,6 +350,8 @@ public class ProjectHttpController implements IProjectHttpService {
                 .applicationCount(entity.getApplicationCount())
                 .viewCount(entity.getViewCount())
                 .favoriteCount(entity.getFavoriteCount())
+                .publisherName(entity.getPublisherName())
+                .acceptedTeamName(entity.getAcceptedTeamName())
                 .build();
     }
 

@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @Author: 黄光宇
@@ -36,7 +35,7 @@ public class MilestoneHttpController implements IMilestoneHttpService {
     
     @GetMapping("project/{projectId}")
     @Override
-    public Response<MilestoneListResponseDTO> getMilestonesByProjectId(@PathVariable String projectId, HttpServletRequest request) {
+    public Response<MilestoneListResponseDTO> getMilestonesByProjectId(@PathVariable(value = "projectId") String projectId, HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
         Integer userType = UserContextDynamic.getUserType();
         log.info("查询项目里程碑列表 userId={}, userType={}, projectId={}", userId, userType, projectId);
@@ -180,6 +179,40 @@ public class MilestoneHttpController implements IMilestoneHttpService {
         }
     }
     
+    @PostMapping("update")
+    @Override
+    public Response<Boolean> updateMilestone(@RequestBody MilestoneUpdateRequestDTO dto, HttpServletRequest request) {
+        String userId = UserContextDynamic.getUserContextDynamic();
+        log.info("更新里程碑信息 userId={}, milestoneId={}", userId, dto.getMilestoneId());
+        
+        if (dto == null || StrUtil.isBlank(dto.getMilestoneId())) {
+            return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo(), false);
+        }
+        
+        try {
+            ProjectMilestoneEntity entity = milestoneService.getMilestoneById(dto.getMilestoneId());
+            
+            if (StrUtil.isNotBlank(dto.getDescription())) {
+                entity.setDescription(dto.getDescription());
+            }
+            if (dto.getPlannedStartTime() != null) {
+                entity.setPlannedStartTime(dto.getPlannedStartTime());
+            }
+            if (dto.getPlannedEndTime() != null) {
+                entity.setPlannedEndTime(dto.getPlannedEndTime());
+            }
+            if (dto.getRemindBeforeHours() != null) {
+                entity.setRemindBeforeHours(dto.getRemindBeforeHours());
+            }
+            
+            boolean result = milestoneService.updateMilestone(entity);
+            return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
+        } catch (Exception e) {
+            log.error("更新里程碑信息失败", e);
+            return new Response<>(ResponseCode.MILESTONE_CREATE_FAIL.getCode(), e.getMessage(), false);
+        }
+    }
+    
     @PostMapping("skip")
     @Override
     public Response<Boolean> skipMilestone(@RequestBody MilestoneSkipRequestDTO dto, HttpServletRequest request) {
@@ -191,9 +224,7 @@ public class MilestoneHttpController implements IMilestoneHttpService {
         }
         
         try {
-            // 跳过里程碑：状态改为skipped
             boolean result = milestoneService.updateMilestoneStatus(dto.getMilestoneId(), "skipped");
-            // TODO: 如果需要保存跳过原因，需要扩展updateMilestone方法
             return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
         } catch (Exception e) {
             log.error("跳过里程碑失败", e);

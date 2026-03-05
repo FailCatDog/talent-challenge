@@ -154,6 +154,16 @@ public class ProjectEntity {
      */
     private Long version;
 
+    /**
+     * 发布方企业名称
+     */
+    private String publisherName;
+
+    /**
+     * 中标团队名称
+     */
+    private String acceptedTeamName;
+
     public void validateForCreation() {
         if (StrUtil.isBlank(this.title) || this.title.length() < 5 || this.title.length() > 100) {
             throw new AppException(ResponseCode.PROJECT_TITLE_INVALID.getCode(), ResponseCode.PROJECT_TITLE_INVALID.getInfo());

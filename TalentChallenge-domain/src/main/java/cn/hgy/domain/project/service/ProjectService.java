@@ -2,6 +2,7 @@ package cn.hgy.domain.project.service;
 
 import cn.hgy.domain.project.model.entity.ProjectCategoryEntity;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
+import cn.hgy.domain.project.model.entity.ProjectMilestoneEntity;
 import cn.hgy.domain.project.model.valobj.ProjectStatusEnum;
 import cn.hgy.domain.project.repository.IProjectRepository;
 import cn.hgy.types.common.ProjectComment;
@@ -27,6 +28,8 @@ public class ProjectService implements IProjectService{
 
     private final Snowflake snowflake;
     private final IProjectRepository repository;
+    private final IMilestoneTemplateService milestoneTemplateService;
+    private final IMilestoneService milestoneService;
 
     @Override
     public boolean createProject(ProjectComment projectComment) {
@@ -66,8 +69,12 @@ public class ProjectService implements IProjectService{
 
         try {
             repository.createProject(projectEntity);
+            log.info("项目创建成功 projectId={}", projectId);
+            
+            milestoneTemplateService.initializeRequiredMilestones(projectId);
+            log.info("项目必须里程碑初始化成功 projectId={}", projectId);
         } catch (Exception e) {
-            log.error("项目创建失败 原因:{}", e.getMessage());
+            log.error("项目创建失败 projectId={} 原因:{}", projectId, e.getMessage());
             throw new AppException(ResponseCode.PROJECT_CREATE_FAIL.getCode(), ResponseCode.PROJECT_CREATE_FAIL.getInfo());
         }
 
@@ -110,6 +117,10 @@ public class ProjectService implements IProjectService{
 
         try {
             repository.createProject(projectEntity);
+            log.info("项目草稿保存成功 projectId={}", projectId);
+            
+            milestoneTemplateService.initializeRequiredMilestones(projectId);
+            log.info("项目必须里程碑初始化成功 projectId={}", projectId);
         } catch (Exception e) {
             log.error("保存项目草稿失败 原因:{}", e.getMessage());
             throw new AppException(ResponseCode.PROJECT_CREATE_FAIL.getCode(), ResponseCode.PROJECT_CREATE_FAIL.getInfo());
@@ -176,7 +187,7 @@ public class ProjectService implements IProjectService{
 
     @Override
     public ProjectEntity getProjectDetail(String projectId) {
-        ProjectEntity projectEntity = repository.queryProjectById(projectId);
+        ProjectEntity projectEntity = repository.queryProjectByIdWithNames(projectId);
         if (projectEntity == null) {
             throw new AppException(ResponseCode.PROJECT_NOT_FOUND.getCode(), ResponseCode.PROJECT_NOT_FOUND.getInfo());
         }
@@ -209,6 +220,22 @@ public class ProjectService implements IProjectService{
         if (!ProjectStatusEnum.DRAFT.getStatusCode().equals(existingProject.getStatus()) && 
             !ProjectStatusEnum.REJECTED.getStatusCode().equals(existingProject.getStatus())) {
             throw new AppException(ResponseCode.PROJECT_STATUS_INVALID.getCode(), ResponseCode.PROJECT_STATUS_INVALID.getInfo());
+        }
+
+        List<ProjectMilestoneEntity> milestones = milestoneService.getMilestonesByProjectId(projectId);
+        if (milestones == null || milestones.isEmpty()) {
+            throw new AppException(ResponseCode.MILESTONE_NOT_CONFIGURED.getCode(), ResponseCode.MILESTONE_NOT_CONFIGURED.getInfo());
+        }
+
+        for (ProjectMilestoneEntity milestone : milestones) {
+            if (StrUtil.isBlank(milestone.getDescription())) {
+                throw new AppException(ResponseCode.MILESTONE_INCOMPLETE.getCode(), 
+                    "里程碑【" + milestone.getName() + "】缺少描述信息");
+            }
+            if (milestone.getPlannedStartTime() == null || milestone.getPlannedEndTime() == null) {
+                throw new AppException(ResponseCode.MILESTONE_INCOMPLETE.getCode(), 
+                    "里程碑【" + milestone.getName() + "】缺少计划时间");
+            }
         }
 
         try {

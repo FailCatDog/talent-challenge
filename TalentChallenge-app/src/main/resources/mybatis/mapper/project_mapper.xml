@@ -33,6 +33,8 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
         <result column="version" property="version" jdbcType="BIGINT"/>
+        <result column="publisher_name" property="publisherName" jdbcType="VARCHAR"/>
+        <result column="accepted_team_name" property="acceptedTeamName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -94,6 +96,21 @@
         SELECT <include refid="Base_Column_List"/>
         FROM project
         WHERE project_id = #{projectId}
+    </select>
+
+    <select id="selectByProjectIdWithNames" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT 
+            p.id, p.project_id, p.serial_number, p.title, p.description, p.category_id, p.tags, p.requirements,
+            p.skill_level, p.team_size_min, p.team_size_max, p.duration_days, p.budget_type, p.budget_amount,
+            p.currency, p.published_at, p.application_deadline, p.expected_start_date, p.expected_end_date,
+            p.status, p.reject_reason, p.progress, p.publisher_id, p.accepted_team_id, p.application_count,
+            p.view_count, p.favorite_count, p.create_time, p.update_time, p.version,
+            u.nickname AS publisher_name,
+            t.team_name AS accepted_team_name
+        FROM project p
+        LEFT JOIN user u ON p.publisher_id = u.user_id
+        LEFT JOIN team t ON p.accepted_team_id = t.team_id
+        WHERE p.project_id = #{projectId}
     </select>
 
     <select id="selectBySerialNumber" parameterType="java.lang.String" resultMap="BaseResultMap">

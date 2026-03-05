@@ -35,6 +35,8 @@ public enum ResponseCode {
     MILESTONE_ALREADY_EXISTS("ERR_BIZ_051", "该里程碑已存在"),
     MILESTONE_CREATE_FAIL("ERR_BIZ_052", "里程碑创建失败"),
     MILESTONE_TEMPLATE_NOT_FOUND("ERR_BIZ_053", "里程碑模板不存在"),
+    MILESTONE_NOT_CONFIGURED("ERR_BIZ_054", "项目尚未配置里程碑，无法提交审核"),
+    MILESTONE_INCOMPLETE("ERR_BIZ_055", "里程碑信息不完整"),
 
     CATEGORY_NAME_EMPTY("ERR_BIZ_017", "分类名称不能为空"),
     CATEGORY_NAME_EXISTS("ERR_BIZ_018", "分类名称已存在"),
@@ -59,6 +61,8 @@ public enum ResponseCode {
     TEAM_STATUS_INVALID("ERR_BIZ_046", "团队状态不允许此操作"),
 
     ADMIN_PERMISSION_DENIED("ERR_AUTH_001", "需要管理员权限"),
+    TOKEN_EXPIRED("ERR_AUTH_002", "登录已过期，请重新登录"),
+    TOKEN_INVALID("ERR_AUTH_003", "登录凭证无效，请重新登录"),
 
     SYSTEM_ERROR("ERR_SYSTEM_001", "系统错误")
     ;

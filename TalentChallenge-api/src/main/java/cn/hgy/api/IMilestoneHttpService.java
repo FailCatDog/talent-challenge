@@ -61,6 +61,14 @@ public interface IMilestoneHttpService {
     Response<Boolean> updateMilestoneStatus(MilestoneStatusUpdateRequestDTO dto, HttpServletRequest request);
     
     /**
+     * 更新里程碑信息
+     * @param dto 更新里程碑请求对象
+     * @param request HTTP请求对象
+     * @return 是否成功
+     */
+    Response<Boolean> updateMilestone(MilestoneUpdateRequestDTO dto, HttpServletRequest request);
+    
+    /**
      * 跳过里程碑
      * @param dto 跳过里程碑请求对象
      * @param request HTTP请求对象

@@ -47,5 +47,7 @@ public class Project {
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private Long version;
+    private String publisherName;
+    private String acceptedTeamName;
 
 }

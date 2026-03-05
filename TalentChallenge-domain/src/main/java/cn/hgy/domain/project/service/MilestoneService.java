@@ -41,10 +41,7 @@ public class MilestoneService implements IMilestoneService {
             return true;
         }
 
-        // 模板机制：通过模板服务自动创建必须里程碑
-        // 必须里程碑包括：方案提交、成果提交、项目结算
-        // 可选里程碑由企业通过API选择创建
-        log.info("项目里程碑初始化完成（模板机制，已自动创建必须里程碑） projectId={}", projectId);
+        log.info("项目里程碑初始化完成 projectId={}", projectId);
         return true;
     }
     
@@ -135,9 +132,18 @@ public class MilestoneService implements IMilestoneService {
     
     @Override
     public boolean updateMilestone(ProjectMilestoneEntity milestoneEntity) {
-        // TODO: 实现更新里程碑逻辑
+        if (milestoneEntity == null || StrUtil.isBlank(milestoneEntity.getMilestoneId())) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        
+        ProjectMilestoneEntity existed = milestoneRepository.queryMilestoneById(milestoneEntity.getMilestoneId());
+        if (existed == null) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑不存在");
+        }
+        
         log.info("更新里程碑 milestoneId={}", milestoneEntity.getMilestoneId());
-        return false;
+        milestoneRepository.updateMilestone(milestoneEntity);
+        return true;
     }
     
     @Override

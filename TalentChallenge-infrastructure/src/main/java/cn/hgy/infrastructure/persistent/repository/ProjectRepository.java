@@ -51,6 +51,12 @@ public class ProjectRepository implements IProjectRepository {
     }
 
     @Override
+    public ProjectEntity queryProjectByIdWithNames(String projectId) {
+        Project project = projectDao.selectByProjectIdWithNames(projectId);
+        return project == null ? null : convertToEntity(project);
+    }
+
+    @Override
     public List<ProjectEntity> queryProjectsByPublisherId(String publisherId, String status, Integer offset, Integer limit) {
         List<Project> projects;
         if (StrUtil.isNotBlank(status)) {
@@ -328,6 +334,8 @@ public class ProjectRepository implements IProjectRepository {
                 .viewCount(project.getViewCount())
                 .favoriteCount(project.getFavoriteCount())
                 .version(project.getVersion())
+                .publisherName(project.getPublisherName())
+                .acceptedTeamName(project.getAcceptedTeamName())
                 .build();
     }
 }

@@ -4,6 +4,8 @@ import cn.hgy.infrastructure.persistent.jwt.JWTServiceImpl;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.exception.AppException;
 import cn.hutool.core.util.StrUtil;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +35,15 @@ public class UserContextDynamicInterceptor implements HandlerInterceptor {
 
         Integer userType = null;
         if (StrUtil.isNotBlank(token)) {
-            userType = jwtService.parseUserType(token);
+            try {
+                userType = jwtService.parseUserType(token);
+            } catch (ExpiredJwtException e) {
+                log.warn("JWT令牌已过期，请求URI: {}", requestURI);
+                throw e;
+            } catch (JwtException e) {
+                log.warn("JWT令牌无效，请求URI: {}", requestURI);
+                throw e;
+            }
         }
 
         if (requestURI.contains("/admin/")) {
@@ -43,8 +53,16 @@ public class UserContextDynamicInterceptor implements HandlerInterceptor {
         }
 
         if (StrUtil.isNotBlank(token)) {
-            String userId = jwtService.parseToken(token);
-            UserContextDynamic.setUserContext(userId, userType);
+            try {
+                String userId = jwtService.parseToken(token);
+                UserContextDynamic.setUserContext(userId, userType);
+            } catch (ExpiredJwtException e) {
+                log.warn("JWT令牌已过期，请求URI: {}", requestURI);
+                throw e;
+            } catch (JwtException e) {
+                log.warn("JWT令牌无效，请求URI: {}", requestURI);
+                throw e;
+            }
         }
         return true;
     }

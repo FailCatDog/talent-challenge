@@ -30,6 +30,13 @@ public interface IProjectRepository {
     ProjectEntity queryProjectById(String projectId);
 
     /**
+     * 根据项目ID查询项目（包含企业名称和团队名称）
+     * @param projectId 项目ID
+     * @return 项目实体
+     */
+    ProjectEntity queryProjectByIdWithNames(String projectId);
+
+    /**
      * 根据发布者ID查询项目列表
      * @param publisherId 发布者ID
      * @param status 项目状态（可选）

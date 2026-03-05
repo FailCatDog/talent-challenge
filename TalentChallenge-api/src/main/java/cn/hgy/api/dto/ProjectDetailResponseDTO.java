@@ -150,6 +150,16 @@ public class ProjectDetailResponseDTO {
     private Integer favoriteCount;
 
     /**
+     * 发布方企业名称
+     */
+    private String publisherName;
+
+    /**
+     * 中标团队名称
+     */
+    private String acceptedTeamName;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createTime;

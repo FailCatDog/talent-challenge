@@ -192,32 +192,36 @@ public class MilestoneTemplateService implements IMilestoneTemplateService {
         
         log.info("为项目初始化必须里程碑 projectId={}", projectId);
         
-        // 检查是否已存在里程碑
         if (milestoneRepository.existsMilestonesByProjectId(projectId)) {
             log.info("项目里程碑已存在，跳过初始化 projectId={}", projectId);
             return true;
         }
         
-        // 查询所有必须里程碑模板
         List<MilestoneTemplateEntity> requiredTemplates = templateRepository.queryTemplatesByType(
                 MilestoneTypeEnum.REQUIRED.getTypeCode());
         
         if (requiredTemplates.isEmpty()) {
             log.warn("未找到必须里程碑模板，请先初始化默认模板 projectId={}", projectId);
-            return false;
+            throw new AppException(ResponseCode.MILESTONE_TEMPLATE_NOT_FOUND.getCode(), 
+                    "未找到必须里程碑模板，请先初始化默认模板");
         }
         
-        // 批量创建必须里程碑
+        int successCount = 0;
         for (MilestoneTemplateEntity template : requiredTemplates) {
             try {
                 createMilestoneFromTemplateEntity(projectId, template);
-                log.info("创建必须里程碑成功 projectId={}, milestoneCode={}", projectId, template.getMilestoneCode());
+                successCount++;
+                log.info("创建必须里程碑成功 projectId={}, milestoneCode={}, name={}", 
+                        projectId, template.getMilestoneCode(), template.getName());
             } catch (Exception e) {
-                log.error("创建必须里程碑失败 projectId={}, milestoneCode={}", projectId, template.getMilestoneCode(), e);
+                log.error("创建必须里程碑失败 projectId={}, milestoneCode={}, name={}", 
+                        projectId, template.getMilestoneCode(), template.getName(), e);
+                throw new AppException(ResponseCode.MILESTONE_INIT_FAIL.getCode(), 
+                        "创建必须里程碑失败: " + template.getName(), e);
             }
         }
         
-        log.info("项目必须里程碑初始化完成 projectId={}", projectId);
+        log.info("项目必须里程碑初始化完成 projectId={}, 成功创建{}个里程碑", projectId, successCount);
         return true;
     }
     
