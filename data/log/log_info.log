@@ -1,0 +1,27 @@
+26-03-09.16:41:30.341 [main            ] INFO  Application            - Starting Application using Java 17.0.16 with PID 48588 (E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes started by 32934 in E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge)
+26-03-09.16:41:30.343 [main            ] INFO  Application            - The following 1 profile is active: "prod"
+26-03-09.16:41:32.415 [main            ] INFO  TomcatWebServer        - Tomcat initialized with port 8091 (http)
+26-03-09.16:41:32.435 [main            ] INFO  Http11NioProtocol      - Initializing ProtocolHandler ["http-nio-8091"]
+26-03-09.16:41:32.436 [main            ] INFO  StandardService        - Starting service [Tomcat]
+26-03-09.16:41:32.436 [main            ] INFO  StandardEngine         - Starting Servlet engine: [Apache Tomcat/10.1.36]
+26-03-09.16:41:32.537 [main            ] INFO  [/]                    - Initializing Spring embedded WebApplicationContext
+26-03-09.16:41:32.538 [main            ] INFO  ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2122 ms
+26-03-09.16:41:34.021 [main            ] INFO  OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+26-03-09.16:41:34.267 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
+26-03-09.16:41:34.703 [main            ] INFO  Http11NioProtocol      - Starting ProtocolHandler ["http-nio-8091"]
+26-03-09.16:41:34.729 [main            ] INFO  TomcatWebServer        - Tomcat started on port 8091 (http) with context path '/'
+26-03-09.16:41:34.732 [main            ] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.16:41:35.184 [main            ] INFO  CachingConnectionFactory - Created new connection: rabbitConnectionFactory#22865072:0/SimpleConnection@720c8f80 [delegate=amqp://admin@43.142.157.145:5672/, localPort=56011]
+26-03-09.16:41:36.618 [main            ] INFO  Application            - Started Application in 7.313 seconds (process running for 8.254)
+26-03-09.16:41:36.622 [main            ] INFO  MilestoneTemplateInitializer - 开始初始化默认里程碑模板...
+26-03-09.16:41:36.622 [main            ] INFO  MilestoneTemplateService - 开始初始化默认里程碑模板
+26-03-09.16:41:36.644 [main            ] INFO  HikariDataSource       - HikariPool-1 - Starting...
+26-03-09.16:41:37.825 [main            ] INFO  HikariPool             - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@771cbd13
+26-03-09.16:41:37.828 [main            ] INFO  HikariDataSource       - HikariPool-1 - Start completed.
+26-03-09.16:41:37.990 [main            ] INFO  MilestoneTemplateService - 里程碑模板已存在，跳过初始化
+26-03-09.16:41:37.990 [main            ] INFO  MilestoneTemplateInitializer - 默认里程碑模板初始化成功
+26-03-09.16:41:55.141 [http-nio-8091-exec-3] INFO  [/]                    - Initializing Spring DispatcherServlet 'dispatcherServlet'
+26-03-09.16:41:55.141 [http-nio-8091-exec-3] INFO  DispatcherServlet      - Initializing Servlet 'dispatcherServlet'
+26-03-09.16:41:55.142 [http-nio-8091-exec-3] INFO  DispatcherServlet      - Completed initialization in 1 ms
+26-03-09.16:41:55.273 [http-nio-8091-exec-3] INFO  UserManagementHttpController - 用户登录
+26-03-09.16:41:55.994 [http-nio-8091-exec-3] INFO  UserManagementHttpController - 用户登录完成 userId=2018608120762339328 userType=学生
