@@ -47,15 +47,15 @@ public class MilestoneTemplateService implements IMilestoneTemplateService {
         List<MilestoneTemplateEntity> templates = new ArrayList<>();
         
         // 必须里程碑
-        templates.add(createTemplate("proposal_submission", "方案提交", 
-                "企业/团队提交完整方案、附录与预计交付时间", 
-                MilestoneTypeEnum.REQUIRED.getTypeCode(), 1,
-                "{\"approverRoles\":[\"enterprise\"],\"autoApprove\":true}", 72));
-        
         templates.add(createTemplate("agreement_signing", "协议签订",
                 "企业与团队/学校签署协议，明确权责与时间",
-                MilestoneTypeEnum.REQUIRED.getTypeCode(), 2,
+                MilestoneTypeEnum.REQUIRED.getTypeCode(), 1,
                 "{\"approverRoles\":[\"enterprise\"],\"autoApprove\":false}", 48));
+        
+        templates.add(createTemplate("proposal_submission", "方案提交", 
+                "企业/团队提交完整方案、附录与预计交付时间", 
+                MilestoneTypeEnum.REQUIRED.getTypeCode(), 2,
+                "{\"approverRoles\":[\"enterprise\"],\"autoApprove\":true}", 72));
 
         templates.add(createTemplate("deliverable_submission", "成果提交",
                 "上传交付成果包并同步进度与实际时间",

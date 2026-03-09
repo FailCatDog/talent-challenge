@@ -32,6 +32,7 @@ public class ProjectHttpController implements IProjectHttpService {
 
     private final IProjectService projectService;
     private final JWTServiceImpl jwtService;
+    private final cn.hgy.domain.team.repository.ITeamRepository teamRepository;
 
     @PostMapping("create_project")
     @Override
@@ -469,6 +470,68 @@ public class ProjectHttpController implements IProjectHttpService {
                 .isVisible(entity.getIsVisible())
                 .isActive(entity.getIsActive())
                 .build();
+    }
+
+    @PostMapping("publish_draft/{projectId}")
+    @Override
+    public Response<Boolean> publishDraftDirectly(@PathVariable("projectId") String projectId, HttpServletRequest request) {
+        String userId = UserContextDynamic.getUserContextDynamic();
+        logRequest("企业直接发布草稿项目", userId, request);
+
+        boolean result = projectService.publishDraftDirectly(projectId, userId);
+
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
+    }
+
+    @GetMapping("my_accepted_projects")
+    @Override
+    public Response<ProjectListResponseDTO> getMyAcceptedProjects(@RequestParam(value = "status", required = false) String status,
+                                                                   @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                                   @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+                                                                   HttpServletRequest request) {
+        String userId = UserContextDynamic.getUserContextDynamic();
+        logRequest("学生查询自己承接的项目列表", userId, request);
+
+        String teamId = getTeamIdByUserId(userId);
+        
+        if (StrUtil.isBlank(teamId)) {
+            ProjectListResponseDTO emptyList = ProjectListResponseDTO.builder()
+                    .projects(new ArrayList<>())
+                    .total(0L)
+                    .pageNum(pageNum)
+                    .pageSize(pageSize)
+                    .build();
+            return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), emptyList);
+        }
+
+        List<ProjectEntity> projects = projectService.getProjectsByAcceptedTeam(teamId, status, pageNum, pageSize);
+        Long total = projectService.countProjectsByAcceptedTeam(teamId, status);
+
+        List<ProjectListItemResponseDTO> projectDTOs = new ArrayList<>();
+        for (ProjectEntity project : projects) {
+            projectDTOs.add(convertToListItemDTO(project));
+        }
+
+        ProjectListResponseDTO listDTO = ProjectListResponseDTO.builder()
+                .projects(projectDTOs)
+                .total(total)
+                .pageNum(pageNum)
+                .pageSize(pageSize)
+                .build();
+
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), listDTO);
+    }
+
+    private String getTeamIdByUserId(String userId) {
+        try {
+            java.util.Optional<cn.hgy.domain.team.model.entity.TeamEntity> teamOpt = teamRepository.queryByLeaderId(userId);
+            if (teamOpt.isPresent()) {
+                return teamOpt.get().getTeamId();
+            }
+        } catch (Exception e) {
+            log.warn("查询用户团队失败 userId={}", userId, e);
+        }
+        return null;
     }
 
     private void logRequest(String action, String userId, HttpServletRequest request) {

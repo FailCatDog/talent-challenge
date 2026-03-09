@@ -227,4 +227,30 @@ public interface ProjectDao {
      */
     int updateAcceptedTeam(@Param("projectId") String projectId,
                           @Param("teamId") String teamId);
+
+    /**
+     * 根据承接团队ID分页查询项目
+     */
+    List<Project> selectByAcceptedTeamIdAndPage(@Param("teamId") String teamId,
+                                                @Param("offset") int offset,
+                                                @Param("limit") int limit);
+
+    /**
+     * 根据承接团队ID和状态分页查询项目
+     */
+    List<Project> selectByAcceptedTeamIdAndStatus(@Param("teamId") String teamId,
+                                                  @Param("status") String status,
+                                                  @Param("offset") int offset,
+                                                  @Param("limit") int limit);
+
+    /**
+     * 根据承接团队ID统计项目数
+     */
+    long countByAcceptedTeamId(@Param("teamId") String teamId);
+
+    /**
+     * 根据承接团队ID和状态统计项目数
+     */
+    long countByAcceptedTeamIdAndStatus(@Param("teamId") String teamId,
+                                       @Param("status") String status);
 }

@@ -188,6 +188,31 @@ public class ProjectRepository implements IProjectRepository {
         projectDao.updateAcceptedTeam(projectId, teamId);
     }
 
+    @Override
+    public List<ProjectEntity> queryProjectsByAcceptedTeamId(String teamId, String status, Integer offset, Integer limit) {
+        List<Project> projects;
+        if (StrUtil.isNotBlank(status)) {
+            projects = projectDao.selectByAcceptedTeamIdAndStatus(teamId, status, offset, limit);
+        } else {
+            projects = projectDao.selectByAcceptedTeamIdAndPage(teamId, offset, limit);
+        }
+        
+        List<ProjectEntity> entities = new ArrayList<>();
+        for (Project project : projects) {
+            entities.add(convertToEntity(project));
+        }
+        return entities;
+    }
+
+    @Override
+    public Long countProjectsByAcceptedTeamId(String teamId, String status) {
+        if (StrUtil.isNotBlank(status)) {
+            return projectDao.countByAcceptedTeamIdAndStatus(teamId, status);
+        } else {
+            return projectDao.countByAcceptedTeamId(teamId);
+        }
+    }
+
     private Project convertToProject(ProjectEntity projectEntity) {
         Project project = new Project();
         project.setProjectId(projectEntity.getProjectId());

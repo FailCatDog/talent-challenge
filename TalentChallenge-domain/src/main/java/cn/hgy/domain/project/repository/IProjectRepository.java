@@ -202,4 +202,22 @@ public interface IProjectRepository {
      * @return 分类实体
      */
     cn.hgy.domain.project.model.entity.ProjectCategoryEntity queryCategoryById(String categoryId);
+
+    /**
+     * 根据承接团队ID查询项目列表
+     * @param teamId 团队ID
+     * @param status 项目状态（可选）
+     * @param offset 偏移量
+     * @param limit 限制数量
+     * @return 项目列表
+     */
+    List<ProjectEntity> queryProjectsByAcceptedTeamId(String teamId, String status, Integer offset, Integer limit);
+
+    /**
+     * 统计承接团队的项目数量
+     * @param teamId 团队ID
+     * @param status 项目状态（可选）
+     * @return 项目数量
+     */
+    Long countProjectsByAcceptedTeamId(String teamId, String status);
 }

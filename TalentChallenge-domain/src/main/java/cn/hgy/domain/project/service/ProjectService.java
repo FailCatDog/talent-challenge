@@ -55,7 +55,7 @@ public class ProjectService implements IProjectService{
                 .applicationDeadline(projectComment.getApplicationDeadline())
                 .expectedStartDate(projectComment.getExpectedStartDate())
                 .expectedEndDate(projectComment.getExpectedEndDate())
-                .status(ProjectStatusEnum.PUBLISHED.getStatusCode())
+                .status(ProjectStatusEnum.DRAFT.getStatusCode())
                 .publisherId(projectComment.getPublisherId())
                 .applicationCount(0)
                 .viewCount(0)
@@ -64,7 +64,6 @@ public class ProjectService implements IProjectService{
                 .version(0L)
                 .build();
 
-        // 业务参数校验
         projectEntity.validateForCreation();
 
         try {
@@ -420,6 +419,54 @@ public class ProjectService implements IProjectService{
             throw new AppException(ResponseCode.CATEGORY_NOT_FOUND.getCode(), ResponseCode.CATEGORY_NOT_FOUND.getInfo());
         }
         return category;
+    }
+
+    @Override
+    public boolean publishDraftDirectly(String projectId, String publisherId) {
+        ProjectEntity existingProject = repository.queryProjectById(projectId);
+        
+        if (existingProject == null) {
+            throw new AppException(ResponseCode.PROJECT_NOT_FOUND.getCode(), ResponseCode.PROJECT_NOT_FOUND.getInfo());
+        }
+        
+        if (!existingProject.getPublisherId().equals(publisherId)) {
+            throw new AppException(ResponseCode.PROJECT_PERMISSION_DENIED.getCode(), ResponseCode.PROJECT_PERMISSION_DENIED.getInfo());
+        }
+        
+        if (!ProjectStatusEnum.DRAFT.getStatusCode().equals(existingProject.getStatus())) {
+            throw new AppException(ResponseCode.PROJECT_STATUS_INVALID.getCode(), "只能发布草稿状态的项目");
+        }
+
+        List<ProjectMilestoneEntity> milestones = milestoneService.getMilestonesByProjectId(projectId);
+        if (milestones == null || milestones.isEmpty()) {
+            throw new AppException(ResponseCode.MILESTONE_NOT_CONFIGURED.getCode(), ResponseCode.MILESTONE_NOT_CONFIGURED.getInfo());
+        }
+
+        for (ProjectMilestoneEntity milestone : milestones) {
+            if (StrUtil.isBlank(milestone.getDescription())) {
+                throw new AppException(ResponseCode.MILESTONE_INCOMPLETE.getCode(), 
+                    "里程碑【" + milestone.getName() + "】缺少描述信息");
+            }
+            if (milestone.getPlannedStartTime() == null || milestone.getPlannedEndTime() == null) {
+                throw new AppException(ResponseCode.MILESTONE_INCOMPLETE.getCode(), 
+                    "里程碑【" + milestone.getName() + "】缺少计划时间");
+            }
+        }
+
+        repository.updateProjectStatus(projectId, ProjectStatusEnum.PUBLISHED.getStatusCode());
+        log.info("企业直接发布项目成功 projectId={} publisherId={}", projectId, publisherId);
+        return true;
+    }
+
+    @Override
+    public List<ProjectEntity> getProjectsByAcceptedTeam(String teamId, String status, Integer pageNum, Integer pageSize) {
+        int offset = (pageNum - 1) * pageSize;
+        return repository.queryProjectsByAcceptedTeamId(teamId, status, offset, pageSize);
+    }
+
+    @Override
+    public Long countProjectsByAcceptedTeam(String teamId, String status) {
+        return repository.countProjectsByAcceptedTeamId(teamId, status);
     }
 
     private String generateSerialNumber() {

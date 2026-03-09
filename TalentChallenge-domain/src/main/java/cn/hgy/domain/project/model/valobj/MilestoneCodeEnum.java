@@ -6,12 +6,13 @@ import lombok.Getter;
 /**
  * @Author: 黄光宇
  * @CreateTime: 2025-11-13
- * @Description: 里程碑编码枚举（固定6个里程碑）
+ * @Description: 里程碑编码枚举（固定7个里程碑）
  */
 @Getter
 @AllArgsConstructor
 public enum MilestoneCodeEnum {
     
+    AGREEMENT_SIGNING("协议签订", "agreement_signing"),
     PROPOSAL_SUBMISSION("方案提交", "proposal_submission"),
     MID_TERM_DEFENSE("中期答辩", "mid_term_defense"),
     DELIVERABLE_SUBMISSION("成果提交", "deliverable_submission"),

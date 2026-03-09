@@ -211,4 +211,30 @@ public interface IProjectService {
      * @return 分类实体
      */
     cn.hgy.domain.project.model.entity.ProjectCategoryEntity getCategoryById(String categoryId);
+
+    /**
+     * 企业直接发布草稿项目（跳过审核）
+     * @param projectId 项目ID
+     * @param publisherId 发布者ID
+     * @return 发布是否成功
+     */
+    boolean publishDraftDirectly(String projectId, String publisherId);
+
+    /**
+     * 学生查询自己承接的项目列表
+     * @param teamId 团队ID
+     * @param status 项目状态（可选）
+     * @param pageNum 页码
+     * @param pageSize 每页大小
+     * @return 项目列表
+     */
+    List<ProjectEntity> getProjectsByAcceptedTeam(String teamId, String status, Integer pageNum, Integer pageSize);
+
+    /**
+     * 统计学生承接的项目数量
+     * @param teamId 团队ID
+     * @param status 项目状态（可选）
+     * @return 项目数量
+     */
+    Long countProjectsByAcceptedTeam(String teamId, String status);
 }

@@ -165,4 +165,22 @@ public interface IProjectHttpService {
      * @return 分类详情
      */
     Response<ProjectCategoryResponseDTO> getCategoryById(String categoryId, HttpServletRequest request);
+
+    /**
+     * 企业直接发布草稿项目（跳过审核）
+     * @param projectId 项目ID
+     * @param request HTTP请求对象
+     * @return 发布结果
+     */
+    Response<Boolean> publishDraftDirectly(String projectId, HttpServletRequest request);
+
+    /**
+     * 学生查询自己承接的项目列表
+     * @param status 项目状态（可选）
+     * @param pageNum 页码
+     * @param pageSize 每页大小
+     * @param request HTTP请求对象
+     * @return 项目列表
+     */
+    Response<ProjectListResponseDTO> getMyAcceptedProjects(String status, Integer pageNum, Integer pageSize, HttpServletRequest request);
 }

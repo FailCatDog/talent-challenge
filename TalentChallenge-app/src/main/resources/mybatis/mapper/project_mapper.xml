@@ -369,4 +369,29 @@
         WHERE project_id = #{projectId}
     </update>
 
+    <select id="selectByAcceptedTeamIdAndPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project
+        WHERE accepted_team_id = #{teamId}
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="selectByAcceptedTeamIdAndStatus" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project
+        WHERE accepted_team_id = #{teamId} AND status = #{status}
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countByAcceptedTeamId" parameterType="java.lang.String" resultType="long">
+        SELECT COUNT(1) FROM project WHERE accepted_team_id = #{teamId}
+    </select>
+
+    <select id="countByAcceptedTeamIdAndStatus" resultType="long">
+        SELECT COUNT(1) FROM project 
+        WHERE accepted_team_id = #{teamId} AND status = #{status}
+    </select>
+
 </mapper>
