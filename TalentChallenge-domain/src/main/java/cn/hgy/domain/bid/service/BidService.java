@@ -1,7 +1,9 @@
 package cn.hgy.domain.bid.service;
 
+import cn.hgy.api.dto.BidDetailResponseDTO;
 import cn.hgy.api.dto.BidPublicListItemResponseDTO;
 import cn.hgy.api.dto.StudentBidListResponseDTO;
+import cn.hgy.api.dto.TeamMemberItemDTO;
 import cn.hgy.domain.bid.model.entity.BidEntity;
 import cn.hgy.domain.bid.model.valobj.BidStatusEnum;
 import cn.hgy.domain.bid.repository.IBidRepository;
@@ -11,6 +13,7 @@ import cn.hgy.domain.project.model.valobj.ProjectStatusEnum;
 import cn.hgy.domain.project.repository.IProjectRepository;
 import cn.hgy.domain.team.model.entity.TeamEntity;
 import cn.hgy.domain.team.repository.ITeamRepository;
+import cn.hgy.domain.team.service.ITeamService;
 import cn.hgy.types.common.BidCommand;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.event.BidConfirmedEvent;
@@ -33,6 +36,7 @@ public class BidService implements IBidService {
     private final IProjectRepository projectRepository;
     private final IBidEventPublisher bidEventPublisher;
     private final ITeamRepository teamRepository;
+    private final ITeamService teamService;
 
     @Override
     public boolean apply(BidCommand command) {
@@ -171,6 +175,37 @@ public class BidService implements IBidService {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
         }
         return bidRepository.queryStudentBids(userId);
+    }
+
+    @Override
+    public BidDetailResponseDTO getBidDetail(String bidId) {
+        BidEntity bid = loadBid(bidId);
+        ProjectEntity project = requireProject(bid.getProjectId());
+        TeamEntity team = teamRepository.queryByTeamId(bid.getTeamId())
+                .orElseThrow(() -> new AppException(ResponseCode.BID_TEAM_NOT_FOUND.getCode(), ResponseCode.BID_TEAM_NOT_FOUND.getInfo()));
+        List<TeamMemberItemDTO> members = teamService.getTeamMembers(bid.getTeamId());
+
+        return BidDetailResponseDTO.builder()
+                .bidId(bid.getBidId())
+                .status(bid.getStatus() != null ? bid.getStatus().getCode() : null)
+                .content(bid.getContent())
+                .attachmentUrl(bid.getAttachmentUrl())
+                .remark(bid.getRemark())
+                .createdAt(bid.getCreatedAt())
+                .updatedAt(bid.getUpdatedAt())
+                .project(BidDetailResponseDTO.ProjectInfo.builder()
+                        .projectId(project.getProjectId())
+                        .projectTitle(project.getTitle())
+                        .projectDescription(project.getDescription())
+                        .publisherId(project.getPublisherId())
+                        .publisherName(project.getPublisherName())
+                        .build())
+                .team(BidDetailResponseDTO.TeamInfo.builder()
+                        .teamId(team.getTeamId())
+                        .teamName(team.getTeamName())
+                        .members(members)
+                        .build())
+                .build();
     }
 
     private BidEntity loadBid(String bidId) {

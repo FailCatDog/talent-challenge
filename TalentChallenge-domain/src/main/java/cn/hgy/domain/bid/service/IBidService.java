@@ -1,5 +1,6 @@
 package cn.hgy.domain.bid.service;
 
+import cn.hgy.api.dto.BidDetailResponseDTO;
 import cn.hgy.api.dto.BidPublicListItemResponseDTO;
 import cn.hgy.api.dto.StudentBidListResponseDTO;
 import cn.hgy.domain.bid.model.entity.BidEntity;
@@ -33,5 +34,10 @@ public interface IBidService {
      * 查询学生的揭榜列表
      */
     List<StudentBidListResponseDTO> queryStudentBids(String userId);
+
+    /**
+     * 查询揭榜详情
+     */
+    BidDetailResponseDTO getBidDetail(String bidId);
 }
 

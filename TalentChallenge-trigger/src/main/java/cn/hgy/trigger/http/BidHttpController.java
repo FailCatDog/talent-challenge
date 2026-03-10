@@ -181,6 +181,14 @@ public class BidHttpController implements IBidHttpService {
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
     }
 
+    @GetMapping("detail/{bidId}")
+    public Response<cn.hgy.api.dto.BidDetailResponseDTO> getBidDetail(@PathVariable("bidId") String bidId, HttpServletRequest request) {
+        String userId = requireUserId();
+        log.info("user {} query bid detail {}", userId, bidId);
+        cn.hgy.api.dto.BidDetailResponseDTO result = bidService.getBidDetail(bidId);
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
+    }
+
     private void ensureStudent(Integer userType) {
         if (!Integer.valueOf(STUDENT_TYPE).equals(userType)) {
             throw new AppException(ResponseCode.BID_PERMISSION_DENIED.getCode(), ResponseCode.BID_PERMISSION_DENIED.getInfo());
