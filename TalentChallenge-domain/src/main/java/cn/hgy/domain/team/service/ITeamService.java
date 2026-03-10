@@ -1,5 +1,6 @@
 package cn.hgy.domain.team.service;
 
+import cn.hgy.api.dto.TeamMemberItemDTO;
 import cn.hgy.domain.team.model.entity.TeamEntity;
 import cn.hgy.types.common.TeamCommand;
 
@@ -20,5 +21,8 @@ public interface ITeamService {
     List<TeamEntity> getTeamsByLeaderId(String leaderId, Integer pageNum, Integer pageSize);
 
     Long countTeamsByLeaderId(String leaderId);
+
+    /** 查询团队成员列表 */
+    List<TeamMemberItemDTO> getTeamMembers(String teamId);
 }
 

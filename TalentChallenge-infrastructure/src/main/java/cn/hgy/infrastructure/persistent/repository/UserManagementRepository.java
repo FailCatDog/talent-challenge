@@ -1,19 +1,28 @@
 package cn.hgy.infrastructure.persistent.repository;
 
+import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
+import cn.hgy.domain.user.model.entity.StudentProfileEntity;
 import cn.hgy.domain.user.model.entity.UserAuthCredentialEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.repository.IUserManagementRepository;
+import cn.hgy.infrastructure.persistent.dao.CompanyProfileDao;
+import cn.hgy.infrastructure.persistent.dao.StudentProfileDao;
 import cn.hgy.infrastructure.persistent.dao.UserAuthCredentialDao;
 import cn.hgy.infrastructure.persistent.dao.UserDao;
+import cn.hgy.infrastructure.persistent.po.CompanyProfile;
+import cn.hgy.infrastructure.persistent.po.StudentProfile;
 import cn.hgy.infrastructure.persistent.po.User;
 import cn.hgy.infrastructure.persistent.po.UserAuthCredential;
 import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @Author: 黄光宇
@@ -27,6 +36,8 @@ public class UserManagementRepository implements IUserManagementRepository {
 
     private final UserDao userDao;
     private final UserAuthCredentialDao userAuthCredentialDao;
+    private final StudentProfileDao studentProfileDao;
+    private final CompanyProfileDao companyProfileDao;
     private final Snowflake snowflake;
 
     @Override
@@ -120,5 +131,53 @@ public class UserManagementRepository implements IUserManagementRepository {
         user.setTitle(userEntity.getTitle());
 
         userDao.updateProfileByUserId(user);
+    }
+
+    @Override
+    public StudentProfileEntity queryStudentProfileByUserId(String userId) {
+        StudentProfile studentProfile = studentProfileDao.queryByUserId(userId);
+        if (studentProfile == null) {
+            return null;
+        }
+
+        return StudentProfileEntity.builder()
+                .userId(studentProfile.getUserId())
+                .realName(studentProfile.getRealName())
+                .college(studentProfile.getCollege())
+                .major(studentProfile.getMajor())
+                .grade(studentProfile.getGrade())
+                .studentId(studentProfile.getStudentId())
+                .email(studentProfile.getEmail())
+                .phone(studentProfile.getPhone())
+                .techTags(StrUtil.isNotBlank(studentProfile.getTechTags()) ?
+                    JSON.parseArray(studentProfile.getTechTags(), String.class) : null)
+                .techIntro(studentProfile.getTechIntro())
+                .build();
+    }
+
+    @Override
+    public CompanyProfileEntity queryCompanyProfileByUserId(String userId) {
+        CompanyProfile companyProfile = companyProfileDao.queryByUserId(userId);
+        if (companyProfile == null) {
+            return null;
+        }
+
+        return CompanyProfileEntity.builder()
+                .userId(companyProfile.getUserId())
+                .companyIntro(companyProfile.getCompanyIntro())
+                .companyTags(StrUtil.isNotBlank(companyProfile.getCompanyTags()) ?
+                    JSON.parseArray(companyProfile.getCompanyTags(), String.class) : null)
+                .creditCode(companyProfile.getCreditCode())
+                .companyIndustry(companyProfile.getCompanyIndustry())
+                .companyScale(companyProfile.getCompanyScale())
+                .companyRegion(companyProfile.getCompanyRegion())
+                .companyWebsite(companyProfile.getCompanyWebsite())
+                .contactPerson(companyProfile.getContactPerson())
+                .contactPosition(companyProfile.getContactPosition())
+                .contactPhone(companyProfile.getContactPhone())
+                .contactEmail(companyProfile.getContactEmail())
+                .qualificationFiles(StrUtil.isNotBlank(companyProfile.getQualificationFiles()) ?
+                    JSON.parseArray(companyProfile.getQualificationFiles(), String.class) : null)
+                .build();
     }
 }

@@ -1,5 +1,7 @@
 package cn.hgy.domain.bid.service;
 
+import cn.hgy.api.dto.BidPublicListItemResponseDTO;
+import cn.hgy.api.dto.StudentBidListResponseDTO;
 import cn.hgy.domain.bid.model.entity.BidEntity;
 import cn.hgy.domain.bid.model.valobj.BidStatusEnum;
 import cn.hgy.domain.bid.repository.IBidRepository;
@@ -153,6 +155,22 @@ public class BidService implements IBidService {
         }
         requireProject(projectId);
         return bidRepository.countByProject(projectId, status);
+    }
+
+    @Override
+    public List<BidPublicListItemResponseDTO> queryPublicBidsByProject(String projectId) {
+        if (StrUtil.isBlank(projectId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        return bidRepository.queryPublicBidsByProject(projectId);
+    }
+
+    @Override
+    public List<StudentBidListResponseDTO> queryStudentBids(String userId) {
+        if (StrUtil.isBlank(userId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        return bidRepository.queryStudentBids(userId);
     }
 
     private BidEntity loadBid(String bidId) {

@@ -3,6 +3,7 @@ package cn.hgy.trigger.http;
 import cn.hgy.api.ITeamHttpService;
 import cn.hgy.api.dto.TeamCreateRequestDTO;
 import cn.hgy.api.dto.TeamListResponseDTO;
+import cn.hgy.api.dto.TeamMemberItemDTO;
 import cn.hgy.api.dto.TeamResponseDTO;
 import cn.hgy.api.dto.TeamUpdateRequestDTO;
 import cn.hgy.api.response.Response;
@@ -148,6 +149,7 @@ public class TeamHttpController implements ITeamHttpService {
     }
 
     private TeamResponseDTO convertToResponseDTO(TeamEntity entity) {
+        List<TeamMemberItemDTO> members = teamService.getTeamMembers(entity.getTeamId());
         return TeamResponseDTO.builder()
                 .teamId(entity.getTeamId())
                 .teamName(entity.getTeamName())
@@ -159,6 +161,7 @@ public class TeamHttpController implements ITeamHttpService {
                 .maxMemberCount(entity.getMaxMemberCount())
                 .createTime(entity.getCreateTime())
                 .updateTime(entity.getUpdateTime())
+                .members(members)
                 .build();
     }
 }

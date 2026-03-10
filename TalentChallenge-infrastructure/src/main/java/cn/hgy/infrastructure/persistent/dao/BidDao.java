@@ -1,5 +1,7 @@
 package cn.hgy.infrastructure.persistent.dao;
 
+import cn.hgy.api.dto.BidPublicListItemResponseDTO;
+import cn.hgy.api.dto.StudentBidListResponseDTO;
 import cn.hgy.infrastructure.persistent.po.Bid;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -29,5 +31,15 @@ public interface BidDao {
     List<String> findOtherActiveBidIds(@Param("projectId") String projectId,
                                        @Param("excludeBidId") String excludeBidId,
                                        @Param("statusList") List<String> statusList);
+
+    /**
+     * 查询项目的公开揭榜名单
+     */
+    List<BidPublicListItemResponseDTO> selectPublicBidsByProject(@Param("projectId") String projectId);
+
+    /**
+     * 查询学生的揭榜列表
+     */
+    List<StudentBidListResponseDTO> selectStudentBids(@Param("userId") String userId);
 }
 

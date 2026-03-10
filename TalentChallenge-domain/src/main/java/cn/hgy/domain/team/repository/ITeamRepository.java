@@ -1,5 +1,6 @@
 package cn.hgy.domain.team.repository;
 
+import cn.hgy.api.dto.TeamMemberItemDTO;
 import cn.hgy.domain.team.model.entity.TeamEntity;
 
 import java.util.List;
@@ -20,5 +21,8 @@ public interface ITeamRepository {
     Long countByLeaderId(String leaderId);
 
     boolean existsByLeaderIdAndStatus(String leaderId, String status);
+
+    /** 查询团队成员列表（含昵称、头像、角色） */
+    List<TeamMemberItemDTO> queryMembersByTeamId(String teamId);
 }
 

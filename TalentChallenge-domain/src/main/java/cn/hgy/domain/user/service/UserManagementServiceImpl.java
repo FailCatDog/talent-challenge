@@ -1,5 +1,8 @@
 package cn.hgy.domain.user.service;
 
+import cn.hgy.api.dto.UserProfileResponseDTO;
+import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
+import cn.hgy.domain.user.model.entity.StudentProfileEntity;
 import cn.hgy.domain.user.model.entity.UserAuthCredentialEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
@@ -192,5 +195,65 @@ public class UserManagementServiceImpl implements IUserManagementService{
         repository.updateUserProfile(userEntity);
 
         return repository.queryUserBaseByUserId(userId);
+    }
+
+    @Override
+    public UserProfileResponseDTO getUserProfile(String userId) {
+        // 查询用户基础信息
+        UserEntity userEntity = repository.queryUserBaseByUserId(userId);
+        if (userEntity == null) {
+            throw new AppException(ResponseCode.USER_IS_NOT_EXIST.getCode(), ResponseCode.USER_IS_NOT_EXIST.getInfo());
+        }
+
+        // 构建基础DTO
+        UserProfileResponseDTO dto = UserProfileResponseDTO.builder()
+                .userId(userEntity.getUserId())
+                .type(userEntity.getType())
+                .nickname(userEntity.getNickname())
+                .avatarUrl(userEntity.getAvatarUrl())
+                .bio(userEntity.getBio())
+                .gender(userEntity.getGender())
+                .birthday(userEntity.getBirthday())
+                .regionCode(userEntity.getRegionCode())
+                .industry(userEntity.getIndustry())
+                .title(userEntity.getTitle())
+                .lastLoginTime(userEntity.getLastLoginTime())
+                .build();
+
+        // 根据用户类型查询扩展信息
+        if (UserTypeEnum.STUDENT.getCode() == userEntity.getType()) {
+            // 学生用户
+            StudentProfileEntity studentProfile = repository.queryStudentProfileByUserId(userId);
+            if (studentProfile != null) {
+                dto.setRealName(studentProfile.getRealName());
+                dto.setCollege(studentProfile.getCollege());
+                dto.setMajor(studentProfile.getMajor());
+                dto.setGrade(studentProfile.getGrade());
+                dto.setStudentId(studentProfile.getStudentId());
+                dto.setEmail(studentProfile.getEmail());
+                dto.setPhone(studentProfile.getPhone());
+                dto.setTechTags(studentProfile.getTechTags());
+                dto.setTechIntro(studentProfile.getTechIntro());
+            }
+        } else if (UserTypeEnum.COMPANY.getCode() == userEntity.getType()) {
+            // 企业用户
+            CompanyProfileEntity companyProfile = repository.queryCompanyProfileByUserId(userId);
+            if (companyProfile != null) {
+                dto.setCompanyIntro(companyProfile.getCompanyIntro());
+                dto.setCompanyTags(companyProfile.getCompanyTags());
+                dto.setCreditCode(companyProfile.getCreditCode());
+                dto.setCompanyIndustry(companyProfile.getCompanyIndustry());
+                dto.setCompanyScale(companyProfile.getCompanyScale());
+                dto.setCompanyRegion(companyProfile.getCompanyRegion());
+                dto.setCompanyWebsite(companyProfile.getCompanyWebsite());
+                dto.setContactPerson(companyProfile.getContactPerson());
+                dto.setContactPosition(companyProfile.getContactPosition());
+                dto.setContactPhone(companyProfile.getContactPhone());
+                dto.setContactEmail(companyProfile.getContactEmail());
+                dto.setQualificationFiles(companyProfile.getQualificationFiles());
+            }
+        }
+
+        return dto;
     }
 }

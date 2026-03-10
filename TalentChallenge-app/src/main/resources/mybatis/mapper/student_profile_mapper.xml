@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hgy.infrastructure.persistent.dao.StudentProfileDao">
+
+    <resultMap id="BaseResultMap" type="cn.hgy.infrastructure.persistent.po.StudentProfile">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="college" property="college" jdbcType="VARCHAR"/>
+        <result column="major" property="major" jdbcType="VARCHAR"/>
+        <result column="grade" property="grade" jdbcType="VARCHAR"/>
+        <result column="student_id" property="studentId" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="tech_tags" property="techTags" jdbcType="VARCHAR"/>
+        <result column="tech_intro" property="techIntro" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, real_name, college, major, grade, student_id, email, phone,
+        tech_tags, tech_intro, create_time, update_time
+    </sql>
+
+    <select id="queryByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM student_profile
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.StudentProfile">
+        INSERT INTO student_profile (
+            user_id, real_name, college, major, grade, student_id, email, phone,
+            tech_tags, tech_intro
+        ) VALUES (
+            #{userId}, #{realName}, #{college}, #{major}, #{grade}, #{studentId}, #{email}, #{phone},
+            #{techTags}, #{techIntro}
+        )
+    </insert>
+
+    <update id="updateByUserId" parameterType="cn.hgy.infrastructure.persistent.po.StudentProfile">
+        UPDATE student_profile SET
+            real_name = #{realName},
+            college = #{college},
+            major = #{major},
+            grade = #{grade},
+            student_id = #{studentId},
+            email = #{email},
+            phone = #{phone},
+            tech_tags = #{techTags},
+            tech_intro = #{techIntro}
+        WHERE user_id = #{userId}
+    </update>
+
+</mapper>

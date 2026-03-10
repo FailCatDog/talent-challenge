@@ -1,5 +1,6 @@
 package cn.hgy.domain.team.service;
 
+import cn.hgy.api.dto.TeamMemberItemDTO;
 import cn.hgy.domain.team.model.entity.TeamEntity;
 import cn.hgy.domain.team.model.valobj.TeamStatusEnum;
 import cn.hgy.domain.team.repository.ITeamRepository;
@@ -148,6 +149,14 @@ public class TeamService implements ITeamService {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
         }
         return teamRepository.countByLeaderId(leaderId);
+    }
+
+    @Override
+    public List<TeamMemberItemDTO> getTeamMembers(String teamId) {
+        if (StrUtil.isBlank(teamId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        return teamRepository.queryMembersByTeamId(teamId);
     }
 
     private TeamEntity loadTeam(String teamId) {

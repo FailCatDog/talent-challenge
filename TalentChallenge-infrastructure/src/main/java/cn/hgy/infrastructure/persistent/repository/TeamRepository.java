@@ -1,9 +1,12 @@
 package cn.hgy.infrastructure.persistent.repository;
 
+import cn.hgy.api.dto.TeamMemberItemDTO;
 import cn.hgy.domain.team.model.entity.TeamEntity;
 import cn.hgy.domain.team.repository.ITeamRepository;
 import cn.hgy.infrastructure.persistent.dao.TeamDao;
+import cn.hgy.infrastructure.persistent.dao.TeamMemberDao;
 import cn.hgy.infrastructure.persistent.po.Team;
+import cn.hgy.infrastructure.persistent.po.TeamMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -17,13 +20,25 @@ import java.util.Optional;
 public class TeamRepository implements ITeamRepository {
 
     private final TeamDao teamDao;
+    private final TeamMemberDao teamMemberDao;
 
     @Override
     public boolean save(TeamEntity teamEntity) {
         Team team = convertToPo(teamEntity);
-        team.setCreateTime(LocalDateTime.now());
-        team.setUpdateTime(LocalDateTime.now());
-        return teamDao.insert(team) > 0;
+        LocalDateTime now = LocalDateTime.now();
+        team.setCreateTime(now);
+        team.setUpdateTime(now);
+        boolean saved = teamDao.insert(team) > 0;
+        if (saved) {
+            // 创建团队时同步写入队长的成员记录
+            TeamMember leaderMember = new TeamMember();
+            leaderMember.setTeamId(teamEntity.getTeamId());
+            leaderMember.setUserId(teamEntity.getLeaderId());
+            leaderMember.setRole("leader");
+            leaderMember.setJoinTime(now);
+            teamMemberDao.insert(leaderMember);
+        }
+        return saved;
     }
 
     @Override
@@ -72,6 +87,11 @@ public class TeamRepository implements ITeamRepository {
     @Override
     public boolean existsByLeaderIdAndStatus(String leaderId, String status) {
         return teamDao.existsByLeaderIdAndStatus(leaderId, status) > 0;
+    }
+
+    @Override
+    public List<TeamMemberItemDTO> queryMembersByTeamId(String teamId) {
+        return teamMemberDao.selectMembersByTeamId(teamId);
     }
 
     private Team convertToPo(TeamEntity entity) {

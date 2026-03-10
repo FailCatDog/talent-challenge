@@ -1,5 +1,6 @@
 package cn.hgy.domain.user.service;
 
+import cn.hgy.api.dto.UserProfileResponseDTO;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
 
@@ -52,5 +53,12 @@ public interface IUserManagementService {
     UserEntity updateUserProfile(String userId, String nickname, String avatarUrl, String bio,
                                   Integer gender, java.time.LocalDate birthday, String regionCode,
                                   String industry, String title);
+
+    /**
+     * 查询用户完整资料（包括扩展信息）
+     * @param userId 用户ID
+     * @return 用户完整资料DTO
+     */
+    UserProfileResponseDTO getUserProfile(String userId);
 
 }

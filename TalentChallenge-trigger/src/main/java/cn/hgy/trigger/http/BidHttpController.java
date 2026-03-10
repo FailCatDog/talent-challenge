@@ -165,6 +165,22 @@ public class BidHttpController implements IBidHttpService {
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
     }
 
+    @GetMapping("public/project/{projectId}")
+    public Response<List<cn.hgy.api.dto.BidPublicListItemResponseDTO>> getPublicBidsByProject(@PathVariable("projectId") String projectId) {
+        log.info("query public bids for project {}", projectId);
+        List<cn.hgy.api.dto.BidPublicListItemResponseDTO> result = bidService.queryPublicBidsByProject(projectId);
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
+    }
+
+    @GetMapping("student/my-bids")
+    public Response<List<cn.hgy.api.dto.StudentBidListResponseDTO>> getMyBids(HttpServletRequest request) {
+        ensureStudent(UserContextDynamic.getUserType());
+        String userId = requireUserId();
+        log.info("student {} query my bids", userId);
+        List<cn.hgy.api.dto.StudentBidListResponseDTO> result = bidService.queryStudentBids(userId);
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
+    }
+
     private void ensureStudent(Integer userType) {
         if (!Integer.valueOf(STUDENT_TYPE).equals(userType)) {
             throw new AppException(ResponseCode.BID_PERMISSION_DENIED.getCode(), ResponseCode.BID_PERMISSION_DENIED.getInfo());

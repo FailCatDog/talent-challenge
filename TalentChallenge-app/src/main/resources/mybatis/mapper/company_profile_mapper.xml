@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hgy.infrastructure.persistent.dao.CompanyProfileDao">
+
+    <resultMap id="BaseResultMap" type="cn.hgy.infrastructure.persistent.po.CompanyProfile">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="company_intro" property="companyIntro" jdbcType="VARCHAR"/>
+        <result column="company_tags" property="companyTags" jdbcType="VARCHAR"/>
+        <result column="credit_code" property="creditCode" jdbcType="VARCHAR"/>
+        <result column="company_industry" property="companyIndustry" jdbcType="VARCHAR"/>
+        <result column="company_scale" property="companyScale" jdbcType="VARCHAR"/>
+        <result column="company_region" property="companyRegion" jdbcType="VARCHAR"/>
+        <result column="company_website" property="companyWebsite" jdbcType="VARCHAR"/>
+        <result column="contact_person" property="contactPerson" jdbcType="VARCHAR"/>
+        <result column="contact_position" property="contactPosition" jdbcType="VARCHAR"/>
+        <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR"/>
+        <result column="contact_email" property="contactEmail" jdbcType="VARCHAR"/>
+        <result column="qualification_files" property="qualificationFiles" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, company_intro, company_tags, credit_code, company_industry,
+        company_scale, company_region, company_website, contact_person, contact_position,
+        contact_phone, contact_email, qualification_files, create_time, update_time
+    </sql>
+
+    <select id="queryByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM company_profile
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.CompanyProfile">
+        INSERT INTO company_profile (
+            user_id, company_intro, company_tags, credit_code, company_industry,
+            company_scale, company_region, company_website, contact_person, contact_position,
+            contact_phone, contact_email, qualification_files
+        ) VALUES (
+            #{userId}, #{companyIntro}, #{companyTags}, #{creditCode}, #{companyIndustry},
+            #{companyScale}, #{companyRegion}, #{companyWebsite}, #{contactPerson}, #{contactPosition},
+            #{contactPhone}, #{contactEmail}, #{qualificationFiles}
+        )
+    </insert>
+
+    <update id="updateByUserId" parameterType="cn.hgy.infrastructure.persistent.po.CompanyProfile">
+        UPDATE company_profile SET
+            company_intro = #{companyIntro},
+            company_tags = #{companyTags},
+            credit_code = #{creditCode},
+            company_industry = #{companyIndustry},
+            company_scale = #{companyScale},
+            company_region = #{companyRegion},
+            company_website = #{companyWebsite},
+            contact_person = #{contactPerson},
+            contact_position = #{contactPosition},
+            contact_phone = #{contactPhone},
+            contact_email = #{contactEmail},
+            qualification_files = #{qualificationFiles}
+        WHERE user_id = #{userId}
+    </update>
+
+</mapper>

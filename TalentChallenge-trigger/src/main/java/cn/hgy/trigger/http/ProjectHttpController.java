@@ -366,6 +366,9 @@ public class ProjectHttpController implements IProjectHttpService {
                 .status(entity.getStatus())
                 .budgetAmount(entity.getBudgetAmount())
                 .currency(entity.getCurrency())
+                .publisherName(entity.getPublisherName())
+                .viewCount(entity.getViewCount())
+                .expectedEndDate(entity.getExpectedEndDate())
                 .build();
     }
 

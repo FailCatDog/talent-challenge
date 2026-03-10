@@ -1,5 +1,7 @@
 package cn.hgy.domain.user.repository;
 
+import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
+import cn.hgy.domain.user.model.entity.StudentProfileEntity;
 import cn.hgy.domain.user.model.entity.UserAuthCredentialEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
@@ -55,4 +57,18 @@ public interface IUserManagementRepository {
      * @param userEntity 用户实体
      */
     void updateUserProfile(UserEntity userEntity);
+
+    /**
+     * 根据userId查询学生资料
+     * @param userId 用户ID
+     * @return 学生资料实体
+     */
+    StudentProfileEntity queryStudentProfileByUserId(String userId);
+
+    /**
+     * 根据userId查询企业资料
+     * @param userId 用户ID
+     * @return 企业资料实体
+     */
+    CompanyProfileEntity queryCompanyProfileByUserId(String userId);
 }

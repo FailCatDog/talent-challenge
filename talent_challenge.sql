@@ -11,7 +11,7 @@
  Target Server Version : 80044 (8.0.44-0ubuntu0.24.04.2)
  File Encoding         : 65001
 
- Date: 09/03/2026 16:07:05
+ Date: 09/03/2026 23:00:40
 */
 
 SET NAMES utf8mb4;
@@ -47,6 +47,37 @@ INSERT INTO `bid` VALUES (1, '2021456663671869440', '2021453479545016320', '2020
 INSERT INTO `bid` VALUES (2, '2022959748642639872', '2022959380340805632', '2020476698205753344', 'applied', '擅长Java后端与MySQL调优，近期完成过校园实验室排班系统。', 'https://resume.example.com/student-001.pdf', NULL, '2026-02-15 17:02:44', '2026-02-15 17:02:44', 0);
 INSERT INTO `bid` VALUES (3, '2022960911228211200', '2022960804281847808', '2020476698205753344', 'applied', '擅长Java后端与MySQL调优，近期完成过校园实验室排班系统。', 'https://resume.example.com/student-001.pdf', NULL, '2026-02-15 17:07:21', '2026-02-15 17:07:21', 0);
 INSERT INTO `bid` VALUES (4, '2023249295125385216', '2023249119094640640', '2020476698205753344', 'confirmed', '擅长Java后端与MySQL调优，近期完成过校园实验室排班系统。', 'https://resume.example.com/student-001.pdf', NULL, '2026-02-16 12:13:17', '2026-02-17 16:58:05', 2);
+
+-- ----------------------------
+-- Table structure for company_profile
+-- ----------------------------
+DROP TABLE IF EXISTS `company_profile`;
+CREATE TABLE `company_profile`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `user_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '关联user表的user_id',
+  `company_intro` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '企业介绍',
+  `company_tags` json NULL COMMENT '企业标签',
+  `credit_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '统一社会信用代码',
+  `company_industry` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '行业领域',
+  `company_scale` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '企业规模',
+  `company_region` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '所在地区',
+  `company_website` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '官方网址',
+  `contact_person` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '主要联系人',
+  `contact_position` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '联系人职务',
+  `contact_phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '联系电话',
+  `contact_email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '联系邮箱',
+  `qualification_files` json NULL COMMENT '资质文件URL数组',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_user_id`(`user_id` ASC) USING BTREE,
+  INDEX `idx_credit_code`(`credit_code` ASC) USING BTREE,
+  INDEX `idx_contact_email`(`contact_email` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '企业资料扩展表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of company_profile
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for milestone_template
@@ -144,7 +175,7 @@ INSERT INTO `project` VALUES (8, '2021800217111826432', 'PRJ20260212094896', '�
 INSERT INTO `project` VALUES (9, '2021845090804305920', 'PRJ20260212428263', '保存项目草稿测试334443', '需要开发一个现代化的电商平台前端系统，包含商品展示、购物车、订单管理等功能。要求使用Vue 3框架，具备良好的用户体验和响应式设计。', 'WEB_DEVELOPMENT', '[\"Vue.js\", \"Element Plus\", \"TypeScript\", \"Vite\", \"Pinia\"]', '1. 熟练掌握Vue 3组合式API\n2. 具备TypeScript开发经验\n3. 了解前端工程化', 'intermediate', 2, 4, 60, 'fixed', 50000.00, 'CNY', NULL, '2025-11-30 23:59:59', '2025-12-01', '2026-01-30', 'draft', NULL, 0, '2018608172406804480', NULL, 0, 0, 0, '2026-02-12 15:13:28', '2026-02-12 15:13:28', 0);
 INSERT INTO `project` VALUES (10, '2022959380340805632', 'PRJ20260215450132', '里程碑配置测试6-测试拒绝', '需要开发一个现代化的电商平台前端系统，包含商品展示、购物车、订单管理等功能。要求使用Vue 3框架，具备良好的用户体验和响应式设计。', 'WEB_DEVELOPMENT', '[\"Vue.js\", \"Element Plus\", \"TypeScript\", \"Vite\", \"Pinia\"]', '1. 熟练掌握Vue 3组合式API\n2. 具备TypeScript开发经验\n3. 了解前端工程化', 'intermediate', 2, 4, 60, 'fixed', 50000.00, 'CNY', '2025-10-19 16:00:00', '2025-11-30 23:59:59', '2025-12-01', '2026-01-30', 'published', NULL, 0, '2018608172406804480', NULL, 1, 0, 0, '2026-02-15 17:01:16', '2026-02-15 17:02:43', 0);
 INSERT INTO `project` VALUES (11, '2022960804281847808', 'PRJ20260215292027', '里程碑配置测试7-测试拒绝2', '需要开发一个现代化的电商平台前端系统，包含商品展示、购物车、订单管理等功能。要求使用Vue 3框架，具备良好的用户体验和响应式设计。', 'WEB_DEVELOPMENT', '[\"Vue.js\", \"Element Plus\", \"TypeScript\", \"Vite\", \"Pinia\"]', '1. 熟练掌握Vue 3组合式API\n2. 具备TypeScript开发经验\n3. 了解前端工程化', 'intermediate', 2, 4, 60, 'fixed', 50000.00, 'CNY', '2025-10-19 16:00:00', '2025-11-30 23:59:59', '2025-12-01', '2026-01-30', 'published', NULL, 0, '2018608172406804480', NULL, 1, 2, 0, '2026-02-15 17:06:55', '2026-03-03 23:32:31', 0);
-INSERT INTO `project` VALUES (12, '2023249119094640640', 'PRJ20260216293856', '里程碑配置测试7-测试拒绝3', '需要开发一个现代化的电商平台前端系统，包含商品展示、购物车、订单管理等功能。要求使用Vue 3框架，具备良好的用户体验和响应式设计。', 'WEB_DEVELOPMENT', '[\"Vue.js\", \"Element Plus\", \"TypeScript\", \"Vite\", \"Pinia\"]', '1. 熟练掌握Vue 3组合式API\n2. 具备TypeScript开发经验\n3. 了解前端工程化', 'intermediate', 2, 4, 60, 'fixed', 50000.00, 'CNY', '2025-10-19 16:00:00', '2025-11-30 23:59:59', '2025-12-01', '2026-01-30', 'in_progress', NULL, 0, '2018608172406804480', '2020476698205753344', 1, 21, 0, '2026-02-16 12:12:35', '2026-03-09 15:42:09', 0);
+INSERT INTO `project` VALUES (12, '2023249119094640640', 'PRJ20260216293856', '里程碑配置测试7-测试拒绝3', '需要开发一个现代化的电商平台前端系统，包含商品展示、购物车、订单管理等功能。要求使用Vue 3框架，具备良好的用户体验和响应式设计。', 'WEB_DEVELOPMENT', '[\"Vue.js\", \"Element Plus\", \"TypeScript\", \"Vite\", \"Pinia\"]', '1. 熟练掌握Vue 3组合式API\n2. 具备TypeScript开发经验\n3. 了解前端工程化', 'intermediate', 2, 4, 60, 'fixed', 50000.00, 'CNY', '2025-10-19 16:00:00', '2025-11-30 23:59:59', '2025-12-01', '2026-01-30', 'in_progress', NULL, 0, '2018608172406804480', '2020476698205753344', 1, 21, 0, '2026-02-16 12:12:35', '2026-03-09 22:45:40', 0);
 INSERT INTO `project` VALUES (13, '2029219188194807808', 'PRJ20260304455623', '前端发布项目测试', '请详细描述项目信息，建议包含以下内容：\n项目背景：项目的需求来源和背景说明\n项目目标：预期达成的目标和成果\n成果形式：最终交付物的形式（源代码、文档、视频等）\n功能要求：详细的功能需求和技术规范\n技术栈要求：所需的技术栈（如Vue3、Spring Boot等）\n性能指标：响应时间、并发数、可用性等要求\n：联系方式：项目联系人及联系电话', '人工智能', '[]', '要求要求要求要求要求要求要求要求要求要求', 'intermediate', 2, 4, 60, 'fixed', 5000.00, 'CNY', NULL, '2026-03-20 00:00:00', '2026-03-20', '2026-05-19', 'published', NULL, 0, '2018608172406804480', NULL, 0, 0, 0, '2026-03-04 23:35:30', '2026-03-05 13:53:16', 0);
 INSERT INTO `project` VALUES (14, '2029437312420679680', 'PRJ20260305355836', '前端发布测试2', '请详细描述项目信息，建议包含以下内容：\n·项目背景：项目的需求来源和背景说明\n·项目目标：预期达成的目标和成果\n：成果形式：最终交付物的形式（源代码、文档、视频等）\n·功能要求：详细的功能需求和技术规范\n·技术栈要求：所需的技术栈（如Vue3、SpringBoot等）\n·性能指标：响应时间、并发数、可用性等要求\n·联系方式：项目联系人及联系电话', '人工智能', '[]', '要求要求要求要求要求要求要求', 'intermediate', 2, 4, 60, 'fixed', 5000.00, 'CNY', NULL, '2026-03-13 00:00:00', '2026-03-13', '2026-05-12', 'draft', NULL, 0, '2018608172406804480', NULL, 0, 3, 0, '2026-03-05 14:02:15', '2026-03-05 17:24:56', 0);
 INSERT INTO `project` VALUES (15, '2029439365637345280', 'PRJ20260305608412', '前端发布测试3', '任务详情\n\n创客任务背景：\n        根据工作安排和进展情况，近期拟采购面向GEO的空间博弈仿真推演，主要内容包括两种场景的空间博弈仿真推演，包括一对一在轨追逃博弈、多对多集群博弈，其中多对多集群博弈仿真涉及双方飞行器总数不少于9个。推演过程需要素齐全，方案合理，可支撑开展空间博弈场景研究，重点推演微小卫星在GEO空间博弈中的应用模式、关键技术和性能需求。\n任务指标要求：\n1.空间博弈仿真推演需求\n1）仿真推演功能模块\n围绕上述两种场景，基于国产化航天仿真平台软件如ATK、SpaceSim等，开发符合功能需求的仿真推演功能模块，具体包括以下功能需求：\n①场景编辑功能：支持用户对空间博弈场景进行编辑，包括博弈双方飞行器模型参数、部署位置、轨道参数、任务规则等的配置；\n②仿真运行控制功能：提供仿真运行的控制功能，如启动、暂停、重启、快进、慢回放等；\n③可视化展示功能：支持二维和三维视景展示，能够直观显示飞行器的运动轨迹、态势变化等；\n④数据管理功能：实现对飞行器数据、推演数据的存储、查询、分析和可视化；\n⑤规则配置功能：支持对博弈规则的配置，包括胜负裁决规则、资源分配规则、环境规则等；\n⑥仿真评估功能：支持定性、定量的对飞行器的相关指标进行分析评估，以图、表形式展现评估结果。\n2）仿真推演规则研究\n围绕上述两种场景，研究场景中的博弈方案、关键技术，研究空间博弈推演规则，确保推演过程的全面性和科学性。包括但不限于胜负规则、资源（任务时间）分配规则、环境规则等。\n3）仿真推演验证\n①数据收集：围绕上述两种场景，调研场景相关的飞行器。数据应包含飞行器的性能参数、部署位置、功能特性等。\n②参数定义：根据场景设定定义飞行器运行环境及参数，如轨道参数、姿态参数、飞行器探测范围参数等。\n③场景验证：基于上述两种场景，验证场景中的博弈方案设计是否合理、科学，并提出优化建议。\n4）数据分析与评价\n①推演数据集：提供结构化的仿真推演数据，包括博弈过程时间序列、资源消耗记录、飞行器状态变化等。\n②研究报告：包含规则研究、推演过程描述、关键节点分析和结果解读等。根据评价规则，对不同部署位置、初始状态、博弈策略、技术参数下仿真结果打分评价，获得最优参数方案并提供优化建议。\n2.成果指标要求\n1）仿真推演功能模块指标要求：\n①模块功能完整性：所有功能模块需按需求开发完成，确保场景编辑、仿真运行、可视化展示等功能正常使用；\n②模块运行效率：仿真支持至少10倍的快进播放；\n③模块可扩展性：模块设计需支持后续功能扩展，确保系统具有良好的可扩展性；\n④模块用户体验：模块设计需注重用户体验，确保操作直观、界面友好，降低用户使用门槛。\n2）研究报告：包含仿真需求分析、空间博弈推演规则研究、仿真推演验证、数据分析与评价等章节，报告字数不少于2万字。报告内容覆盖规则研究、场景相关飞行器概述、两种场景的推演过程与结果（推演过程描述、关键节点分析和结果解读）、数据分析等内容。\n3）推演数据集：不同场景的数据集2套，包括两种场景的空间博弈仿真推演，包括一对一在轨追逃博弈与多对多集群博弈，其中多对多集群博弈仿真涉及双方飞行器总数不少于9个，单个数据集覆盖完整任务周期，推演数据可进行可视化展示。数据集内容包括但不限于：收集场景相关飞行器数据，推演过程中产生的轨道数据、载荷性能、能源消耗等；场景要素齐全，方案合理，二维、三维视景展示可支撑演示片内容制作。\n3.质量标准\n1）结果符合合同约定的质量标准；\n2）在进行运行及验收过程中发生的故障和发现的隐患已被排除并得到甲方的认可；\n3）所有合同中规定的数据集、资料、技术文件已提交并得到甲方认可；\n4）成果在交由甲方使用之前需通过专家评审；\n成果形式：\n1.面向GEO的空间博弈推演研究报告\n2.面向GEO的空间博弈仿真推演数据集\n3.仿真推演功能模块\n4.仿真功能模块设计方案、使用说明等相关技术文档。\n征集方式：单人悬赏\n经费：39万元\n知识产权归属：以合同约定为准\n成果评审方式：专家线下评审\n联系人及电话：平台流程问题请联系孙老师/15522100850；技术指标问题请联系李老师/13811063368', '人工智能', '[]', '要求要求要求要求要求要求要求', 'intermediate', 2, 4, 60, 'fixed', 5000.00, 'CNY', NULL, '2026-03-06 00:00:00', '2026-03-06', '2026-05-05', 'published', NULL, 0, '2018608172406804480', NULL, 0, 7, 0, '2026-03-05 14:10:25', '2026-03-05 22:52:26', 0);
@@ -265,6 +296,34 @@ INSERT INTO `project_milestone` VALUES (42, '2029491113806663680', '202949111348
 INSERT INTO `project_milestone` VALUES (43, '2029492309405601792', '2029491113483702272', 'mid_term_defense', '中期答辩', '安排中期答辩、准备材料并确认实际时间', 2, 'planned', 0, NULL, '{\"reviewTy pe\": \"defense\", \"approverRoles\": [\"academic\"]}', 'pending', NULL, '2026-03-11 00:00:00', '2026-03-12 00:00:00', NULL, NULL, 0, 24, 0, NULL, NULL, '2026-03-05 17:40:47', '2026-03-05 17:40:48', 0);
 
 -- ----------------------------
+-- Table structure for student_profile
+-- ----------------------------
+DROP TABLE IF EXISTS `student_profile`;
+CREATE TABLE `student_profile`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `user_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '关联user表的user_id',
+  `real_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '真实姓名',
+  `college` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '学院',
+  `major` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '专业',
+  `grade` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '年级',
+  `student_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '学号',
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱',
+  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '联系方式',
+  `tech_tags` json NULL COMMENT '技术标签',
+  `tech_intro` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '个人技术介绍',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_user_id`(`user_id` ASC) USING BTREE,
+  INDEX `idx_student_id`(`student_id` ASC) USING BTREE,
+  INDEX `idx_email`(`email` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '学生资料扩展表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of student_profile
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for team
 -- ----------------------------
 DROP TABLE IF EXISTS `team`;
@@ -292,6 +351,25 @@ CREATE TABLE `team`  (
 -- Records of team
 -- ----------------------------
 INSERT INTO `team` VALUES (1, '2020476698205753344', '蛋仔派对', '2018608120762339328', '111', '123456', 'active', 1, 5, '2026-02-08 20:35:58', '2026-02-08 20:35:58');
+
+-- ----------------------------
+-- Table structure for team_member
+-- ----------------------------
+DROP TABLE IF EXISTS `team_member`;
+CREATE TABLE `team_member`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `team_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '团队ID',
+  `user_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '成员用户ID',
+  `role` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'member' COMMENT '角色：leader / member',
+  `join_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '加入时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_team_user`(`team_id` ASC, `user_id` ASC) USING BTREE,
+  INDEX `idx_user_id`(`user_id` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '团队成员关联表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of team_member
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user
@@ -325,11 +403,11 @@ CREATE TABLE `user`  (
 -- ----------------------------
 INSERT INTO `user` VALUES (2, '2018604030183477248', 2, 'Job', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2026-02-03 16:34:39', '2026-02-03 16:34:39');
 INSERT INTO `user` VALUES (3, '2018606776374661120', 1, 'kun', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2026-02-03 16:45:34', '2026-02-03 16:45:34');
-INSERT INTO `user` VALUES (4, '2018608120762339328', 1, '测试学生', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-02-10 12:21:07', '2026-02-03 16:50:55', '2026-02-10 12:21:07');
+INSERT INTO `user` VALUES (4, '2018608120762339328', 1, '测试学生', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-09 18:28:16', '2026-02-03 16:50:55', '2026-03-09 18:28:12');
 INSERT INTO `user` VALUES (5, '2018608172406804480', 2, '测试企业', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-02-04 23:36:00', '2026-02-03 16:51:07', '2026-02-04 23:36:00');
 INSERT INTO `user` VALUES (6, '2018608565266288640', 1, 'testuser99', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2026-02-03 16:52:41', '2026-02-03 16:52:41');
 INSERT INTO `user` VALUES (7, '2018608783495925760', 1, 'testuser98', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2026-02-03 16:53:33', '2026-02-03 16:53:33');
-INSERT INTO `user` VALUES (11, '2028847268169388032', 1, '测试学生2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2026-03-03 22:57:38', '2026-03-03 22:57:38');
+INSERT INTO `user` VALUES (11, '2028847268169388032', 1, '测试学生2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-09 18:27:36', '2026-03-03 22:57:38', '2026-03-09 18:27:32');
 INSERT INTO `user` VALUES (12, '2028847298607452160', 1, '测试学生3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '2026-03-03 22:57:45', '2026-03-03 22:57:45');
 
 -- ----------------------------

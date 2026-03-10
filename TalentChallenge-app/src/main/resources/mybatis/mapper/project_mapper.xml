@@ -339,18 +339,32 @@
     </select>
 
     <select id="selectPopularProjects" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/>
-        FROM project
-        WHERE status = 'published'
-        ORDER BY view_count DESC, application_count DESC
+        SELECT
+            p.id, p.project_id, p.serial_number, p.title, p.description, p.category_id, p.tags, p.requirements,
+            p.skill_level, p.team_size_min, p.team_size_max, p.duration_days, p.budget_type, p.budget_amount,
+            p.currency, p.published_at, p.application_deadline, p.expected_start_date, p.expected_end_date,
+            p.status, p.reject_reason, p.progress, p.publisher_id, p.accepted_team_id, p.application_count,
+            p.view_count, p.favorite_count, p.create_time, p.update_time, p.version,
+            u.nickname AS publisher_name
+        FROM project p
+        LEFT JOIN user u ON p.publisher_id = u.user_id
+        WHERE p.status = 'published'
+        ORDER BY p.view_count DESC, p.application_count DESC
         LIMIT #{limit}
     </select>
 
     <select id="selectLatestProjects" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/>
-        FROM project
-        WHERE status = 'published'
-        ORDER BY published_at DESC
+        SELECT
+            p.id, p.project_id, p.serial_number, p.title, p.description, p.category_id, p.tags, p.requirements,
+            p.skill_level, p.team_size_min, p.team_size_max, p.duration_days, p.budget_type, p.budget_amount,
+            p.currency, p.published_at, p.application_deadline, p.expected_start_date, p.expected_end_date,
+            p.status, p.reject_reason, p.progress, p.publisher_id, p.accepted_team_id, p.application_count,
+            p.view_count, p.favorite_count, p.create_time, p.update_time, p.version,
+            u.nickname AS publisher_name
+        FROM project p
+        LEFT JOIN user u ON p.publisher_id = u.user_id
+        WHERE p.status = 'published'
+        ORDER BY p.published_at DESC
         LIMIT #{limit}
     </select>
 

@@ -1,5 +1,7 @@
 package cn.hgy.infrastructure.persistent.repository;
 
+import cn.hgy.api.dto.BidPublicListItemResponseDTO;
+import cn.hgy.api.dto.StudentBidListResponseDTO;
 import cn.hgy.domain.bid.model.entity.BidEntity;
 import cn.hgy.domain.bid.model.valobj.BidStatusEnum;
 import cn.hgy.domain.bid.repository.IBidRepository;
@@ -100,6 +102,16 @@ public class BidRepository implements IBidRepository {
         for (String bidId : bidIds) {
             bidDao.updateStatus(bidId, status.getCode(), null, "其他申请已中标");
         }
+    }
+
+    @Override
+    public List<BidPublicListItemResponseDTO> queryPublicBidsByProject(String projectId) {
+        return bidDao.selectPublicBidsByProject(projectId);
+    }
+
+    @Override
+    public List<StudentBidListResponseDTO> queryStudentBids(String userId) {
+        return bidDao.selectStudentBids(userId);
     }
 
     private Bid convertToPo(BidEntity entity) {
