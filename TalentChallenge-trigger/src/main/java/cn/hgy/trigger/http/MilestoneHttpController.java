@@ -27,7 +27,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/milestone/")
+@RequestMapping("/api/v1/milestone")
 public class MilestoneHttpController implements IMilestoneHttpService {
     
     private final IMilestoneService milestoneService;
@@ -59,7 +59,7 @@ public class MilestoneHttpController implements IMilestoneHttpService {
     
     @GetMapping("{milestoneId}")
     @Override
-    public Response<MilestoneResponseDTO> getMilestoneDetail(@PathVariable String milestoneId, HttpServletRequest request) {
+    public Response<MilestoneResponseDTO> getMilestoneDetail(@PathVariable("milestoneId") String milestoneId, HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
         Integer userType = UserContextDynamic.getUserType();
         log.info("查询里程碑详情 userId={}, userType={}, milestoneId={}", userId, userType, milestoneId);
@@ -74,8 +74,8 @@ public class MilestoneHttpController implements IMilestoneHttpService {
     @GetMapping("project/{projectId}/code/{milestoneCode}")
     @Override
     public Response<MilestoneResponseDTO> getMilestoneByProjectIdAndCode(
-            @PathVariable String projectId, 
-            @PathVariable String milestoneCode, 
+            @PathVariable("projectId") String projectId,
+            @PathVariable("milestoneCode") String milestoneCode, 
             HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
         Integer userType = UserContextDynamic.getUserType();
@@ -224,7 +224,12 @@ public class MilestoneHttpController implements IMilestoneHttpService {
         }
         
         try {
-            boolean result = milestoneService.updateMilestoneStatus(dto.getMilestoneId(), "skipped");
+            // 先取出实体，保存 skipReason 和 isSkipped，再整体更新
+            ProjectMilestoneEntity entity = milestoneService.getMilestoneById(dto.getMilestoneId());
+            entity.setStatus("skipped");
+            entity.setIsSkipped(true);
+            entity.setSkipReason(dto.getSkipReason());
+            boolean result = milestoneService.updateMilestone(entity);
             return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
         } catch (Exception e) {
             log.error("跳过里程碑失败", e);

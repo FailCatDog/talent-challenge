@@ -129,7 +129,7 @@ public class UserManagementHttpController implements IUserManagementHttpService 
      * 查看用户完整资料
      */
     @GetMapping(value = "/profile/{userId}")
-    public Response<UserProfileResponseDTO> getUserProfile(@PathVariable String userId) {
+    public Response<UserProfileResponseDTO> getUserProfile(@PathVariable("userId") String userId) {
         log.info("查看用户资料 userId={}", userId);
 
         UserProfileResponseDTO profileDTO = userManagementService.getUserProfile(userId);

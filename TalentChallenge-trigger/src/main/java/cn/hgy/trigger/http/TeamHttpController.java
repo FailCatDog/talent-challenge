@@ -25,7 +25,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/team/")
+@RequestMapping("/api/v1/team")
 public class TeamHttpController implements ITeamHttpService {
 
     private static final int STUDENT_TYPE = 1;

@@ -27,7 +27,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/project/")
+@RequestMapping("/api/v1/project")
 public class ProjectHttpController implements IProjectHttpService {
 
     private final IProjectService projectService;

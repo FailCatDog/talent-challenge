@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/milestone/template/")
+@RequestMapping("/api/v1/milestone/template")
 public class MilestoneTemplateHttpController implements IMilestoneTemplateHttpService {
     
     private final IMilestoneTemplateService templateService;

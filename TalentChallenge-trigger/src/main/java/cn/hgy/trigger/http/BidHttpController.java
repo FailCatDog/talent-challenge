@@ -30,7 +30,7 @@ import java.util.Locale;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/bid/")
+@RequestMapping("/api/v1/bid")
 public class BidHttpController implements IBidHttpService {
 
     private final IBidService bidService;
