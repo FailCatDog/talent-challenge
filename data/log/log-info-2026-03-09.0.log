@@ -1,0 +1,1001 @@
+26-03-09.16:41:30.341 [main            ] INFO  Application            - Starting Application using Java 17.0.16 with PID 48588 (E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes started by 32934 in E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge)
+26-03-09.16:41:30.343 [main            ] INFO  Application            - The following 1 profile is active: "prod"
+26-03-09.16:41:32.415 [main            ] INFO  TomcatWebServer        - Tomcat initialized with port 8091 (http)
+26-03-09.16:41:32.435 [main            ] INFO  Http11NioProtocol      - Initializing ProtocolHandler ["http-nio-8091"]
+26-03-09.16:41:32.436 [main            ] INFO  StandardService        - Starting service [Tomcat]
+26-03-09.16:41:32.436 [main            ] INFO  StandardEngine         - Starting Servlet engine: [Apache Tomcat/10.1.36]
+26-03-09.16:41:32.537 [main            ] INFO  [/]                    - Initializing Spring embedded WebApplicationContext
+26-03-09.16:41:32.538 [main            ] INFO  ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2122 ms
+26-03-09.16:41:34.021 [main            ] INFO  OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+26-03-09.16:41:34.267 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
+26-03-09.16:41:34.703 [main            ] INFO  Http11NioProtocol      - Starting ProtocolHandler ["http-nio-8091"]
+26-03-09.16:41:34.729 [main            ] INFO  TomcatWebServer        - Tomcat started on port 8091 (http) with context path '/'
+26-03-09.16:41:34.732 [main            ] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.16:41:35.184 [main            ] INFO  CachingConnectionFactory - Created new connection: rabbitConnectionFactory#22865072:0/SimpleConnection@720c8f80 [delegate=amqp://admin@43.142.157.145:5672/, localPort=56011]
+26-03-09.16:41:36.618 [main            ] INFO  Application            - Started Application in 7.313 seconds (process running for 8.254)
+26-03-09.16:41:36.622 [main            ] INFO  MilestoneTemplateInitializer - 开始初始化默认里程碑模板...
+26-03-09.16:41:36.622 [main            ] INFO  MilestoneTemplateService - 开始初始化默认里程碑模板
+26-03-09.16:41:36.644 [main            ] INFO  HikariDataSource       - HikariPool-1 - Starting...
+26-03-09.16:41:37.825 [main            ] INFO  HikariPool             - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@771cbd13
+26-03-09.16:41:37.828 [main            ] INFO  HikariDataSource       - HikariPool-1 - Start completed.
+26-03-09.16:41:37.990 [main            ] INFO  MilestoneTemplateService - 里程碑模板已存在，跳过初始化
+26-03-09.16:41:37.990 [main            ] INFO  MilestoneTemplateInitializer - 默认里程碑模板初始化成功
+26-03-09.16:41:55.141 [http-nio-8091-exec-3] INFO  [/]                    - Initializing Spring DispatcherServlet 'dispatcherServlet'
+26-03-09.16:41:55.141 [http-nio-8091-exec-3] INFO  DispatcherServlet      - Initializing Servlet 'dispatcherServlet'
+26-03-09.16:41:55.142 [http-nio-8091-exec-3] INFO  DispatcherServlet      - Completed initialization in 1 ms
+26-03-09.16:41:55.273 [http-nio-8091-exec-3] INFO  UserManagementHttpController - 用户登录
+26-03-09.16:41:55.994 [http-nio-8091-exec-3] INFO  UserManagementHttpController - 用户登录完成 userId=2018608120762339328 userType=学生
+26-03-09.16:43:42.030 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
+26-03-09.16:43:42.842 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] INFO  SimpleMessageListenerContainer - Restarting Consumer@2591d23a: tags=[[amq.ctag-teyCwgDW8h7qxLKu_YEWzQ]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,3), conn: Proxy@2838eb Shared Rabbit Connection: SimpleConnection@720c8f80 [delegate=amqp://admin@43.142.157.145:5672/, localPort=56011], acknowledgeMode=MANUAL local queue size=0
+26-03-09.16:43:42.844 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] INFO  SimpleMessageListenerContainer - Restarting Consumer@6c1f15df: tags=[[amq.ctag-qXF-YweUczKG9nhutWCugA]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,2), conn: Proxy@2838eb Shared Rabbit Connection: SimpleConnection@720c8f80 [delegate=amqp://admin@43.142.157.145:5672/, localPort=56011], acknowledgeMode=MANUAL local queue size=0
+26-03-09.16:43:42.844 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  SimpleMessageListenerContainer - Restarting Consumer@39e7e040: tags=[[amq.ctag-KQlFSDPlbj9EJsQ4k1v2fA]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,1), conn: Proxy@2838eb Shared Rabbit Connection: SimpleConnection@720c8f80 [delegate=amqp://admin@43.142.157.145:5672/, localPort=56011], acknowledgeMode=MANUAL local queue size=0
+26-03-09.16:43:42.850 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.16:43:58.044 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] INFO  CachingConnectionFactory - Created new connection: rabbitConnectionFactory#22865072:1/SimpleConnection@76e92070 [delegate=amqp://admin@43.142.157.145:5672/, localPort=51653]
+26-03-09.17:27:31.207 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
+26-03-09.17:27:31.554 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] INFO  SimpleMessageListenerContainer - Restarting Consumer@f82a303: tags=[[amq.ctag-QRn0gksI55UGcGKOfk2I2w]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,1), conn: Proxy@2838eb Shared Rabbit Connection: SimpleConnection@76e92070 [delegate=amqp://admin@43.142.157.145:5672/, localPort=51653], acknowledgeMode=MANUAL local queue size=0
+26-03-09.17:27:31.661 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.17:27:31.734 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] INFO  SimpleMessageListenerContainer - Restarting Consumer@a83f7cd: tags=[[amq.ctag-uD0tkdgDY6ikuutA93ZjOA]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,3), conn: Proxy@2838eb Shared Rabbit Connection: null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.17:27:31.698 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.net.SocketException: Network is unreachable: no further information
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:70)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:632)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:726)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createBareChannel(CachingConnectionFactory.java:671)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getCachedChannelProxy(CachingConnectionFactory.java:644)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getChannel(CachingConnectionFactory.java:533)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory$ChannelCachingConnectionProxy.createChannel(CachingConnectionFactory.java:1484)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2268)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2235)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2215)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:467)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:451)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1972)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1936)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1483)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1324)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.net.SocketException: Network is unreachable: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:547)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:602)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:633)
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:61)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1249)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1198)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectAddresses(AbstractConnectionFactory.java:678)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:647)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:593)
+	... 15 common frames omitted
+26-03-09.17:27:31.753 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.17:27:31.759 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] INFO  SimpleMessageListenerContainer - Restarting Consumer@4f167c11: tags=[[amq.ctag-6lqq44PU54TGfPWrURbLpA]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,2), conn: Proxy@2838eb Shared Rabbit Connection: null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.17:27:31.786 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.17:27:31.787 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-03-09.17:27:31.787 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.17:27:31.791 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.17:27:31.795 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-03-09.17:27:31.795 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.17:27:36.817 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] INFO  SimpleMessageListenerContainer - Restarting Consumer@eb193c2: tags=[[]], channel=null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.17:27:36.819 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-10] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.17:27:36.833 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] INFO  SimpleMessageListenerContainer - Restarting Consumer@212878d: tags=[[]], channel=null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.17:27:36.910 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] INFO  SimpleMessageListenerContainer - Restarting Consumer@77dadf4c: tags=[[]], channel=null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.17:27:38.659 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-10] INFO  CachingConnectionFactory - Created new connection: rabbitConnectionFactory#22865072:8/SimpleConnection@3c7159e3 [delegate=amqp://admin@43.142.157.145:5672/, localPort=50365]
+26-03-09.17:42:21.822 [HikariPool-1 connection adder] ERROR HikariPool             - HikariPool-1 - Error thrown while acquiring connection from data source
+com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 5,892 milliseconds ago. The last packet sent successfully to the server was 5,892 milliseconds ago.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createCommunicationsException(SQLError.java:174)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:64)
+	at com.mysql.cj.jdbc.ConnectionImpl.isReadOnly(ConnectionImpl.java:1404)
+	at com.mysql.cj.jdbc.ConnectionImpl.isReadOnly(ConnectionImpl.java:1389)
+	at com.zaxxer.hikari.pool.PoolBase.setupConnection(PoolBase.java:404)
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:365)
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:202)
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:461)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:724)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:703)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: com.mysql.cj.exceptions.CJCommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 5,892 milliseconds ago. The last packet sent successfully to the server was 5,892 milliseconds ago.
+	at jdk.internal.reflect.GeneratedConstructorAccessor55.newInstance(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:61)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:105)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:151)
+	at com.mysql.cj.exceptions.ExceptionFactory.createCommunicationsException(ExceptionFactory.java:167)
+	at com.mysql.cj.protocol.a.NativeProtocol.readMessage(NativeProtocol.java:520)
+	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:700)
+	at com.mysql.cj.protocol.a.NativeProtocol.sendCommand(NativeProtocol.java:639)
+	at com.mysql.cj.protocol.a.NativeProtocol.sendCommand(NativeProtocol.java:137)
+	at com.mysql.cj.NativeSession.sendCommand(NativeSession.java:279)
+	at com.mysql.cj.NativeSession.queryServerVariable(NativeSession.java:599)
+	at com.mysql.cj.jdbc.ConnectionImpl.isReadOnly(ConnectionImpl.java:1396)
+	... 11 common frames omitted
+Caused by: java.net.SocketTimeoutException: Read timed out
+	at java.base/sun.nio.ch.NioSocketImpl.timedRead(NioSocketImpl.java:288)
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:314)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:355)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:808)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:966)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.read(SSLSocketInputRecord.java:484)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.readHeader(SSLSocketInputRecord.java:478)
+	at java.base/sun.security.ssl.SSLSocketInputRecord.bytesInCompletePacket(SSLSocketInputRecord.java:70)
+	at java.base/sun.security.ssl.SSLSocketImpl.readApplicationRecord(SSLSocketImpl.java:1461)
+	at java.base/sun.security.ssl.SSLSocketImpl$AppInputStream.read(SSLSocketImpl.java:1065)
+	at java.base/java.io.FilterInputStream.read(FilterInputStream.java:132)
+	at com.mysql.cj.protocol.FullReadInputStream.readFully(FullReadInputStream.java:64)
+	at com.mysql.cj.protocol.a.SimplePacketReader.readHeaderLocal(SimplePacketReader.java:81)
+	at com.mysql.cj.protocol.a.SimplePacketReader.readHeader(SimplePacketReader.java:63)
+	at com.mysql.cj.protocol.a.SimplePacketReader.readHeader(SimplePacketReader.java:45)
+	at com.mysql.cj.protocol.a.TimeTrackingPacketReader.readHeader(TimeTrackingPacketReader.java:52)
+	at com.mysql.cj.protocol.a.TimeTrackingPacketReader.readHeader(TimeTrackingPacketReader.java:41)
+	at com.mysql.cj.protocol.a.MultiPacketReader.readHeader(MultiPacketReader.java:54)
+	at com.mysql.cj.protocol.a.MultiPacketReader.readHeader(MultiPacketReader.java:44)
+	at com.mysql.cj.protocol.a.NativeProtocol.readMessage(NativeProtocol.java:514)
+	... 17 common frames omitted
+26-03-09.17:58:35.995 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] INFO  SimpleMessageListenerContainer - Waiting for workers to finish.
+26-03-09.17:58:35.995 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] INFO  SimpleMessageListenerContainer - Successfully waited for workers to finish.
+26-03-09.17:58:36.002 [SpringApplicationShutdownHook] INFO  GracefulShutdown       - Commencing graceful shutdown. Waiting for active requests to complete
+26-03-09.17:58:36.561 [tomcat-shutdown ] INFO  GracefulShutdown       - Graceful shutdown complete
+26-03-09.17:58:36.676 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown initiated...
+26-03-09.17:58:37.751 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown completed.
+26-03-09.18:05:29.543 [main            ] INFO  Application            - Starting Application using Java 17.0.16 with PID 44468 (E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes started by 32934 in E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge)
+26-03-09.18:05:29.547 [main            ] INFO  Application            - The following 1 profile is active: "prod"
+26-03-09.18:05:31.102 [main            ] INFO  TomcatWebServer        - Tomcat initialized with port 8091 (http)
+26-03-09.18:05:31.119 [main            ] INFO  Http11NioProtocol      - Initializing ProtocolHandler ["http-nio-8091"]
+26-03-09.18:05:31.122 [main            ] INFO  StandardService        - Starting service [Tomcat]
+26-03-09.18:05:31.123 [main            ] INFO  StandardEngine         - Starting Servlet engine: [Apache Tomcat/10.1.36]
+26-03-09.18:05:31.220 [main            ] INFO  [/]                    - Initializing Spring embedded WebApplicationContext
+26-03-09.18:05:31.221 [main            ] INFO  ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1617 ms
+26-03-09.18:05:32.363 [main            ] INFO  OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+26-03-09.18:05:32.578 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
+26-03-09.18:05:32.917 [main            ] INFO  Http11NioProtocol      - Starting ProtocolHandler ["http-nio-8091"]
+26-03-09.18:05:32.941 [main            ] INFO  TomcatWebServer        - Tomcat started on port 8091 (http) with context path '/'
+26-03-09.18:05:32.943 [main            ] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.18:05:33.342 [main            ] INFO  CachingConnectionFactory - Created new connection: rabbitConnectionFactory#11bfffb3:0/SimpleConnection@71734463 [delegate=amqp://admin@43.142.157.145:5672/, localPort=49685]
+26-03-09.18:05:34.462 [main            ] INFO  Application            - Started Application in 5.681 seconds (process running for 6.507)
+26-03-09.18:05:34.466 [main            ] INFO  MilestoneTemplateInitializer - 开始初始化默认里程碑模板...
+26-03-09.18:05:34.466 [main            ] INFO  MilestoneTemplateService - 开始初始化默认里程碑模板
+26-03-09.18:05:34.484 [main            ] INFO  HikariDataSource       - HikariPool-1 - Starting...
+26-03-09.18:05:35.631 [main            ] INFO  HikariPool             - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@75de7009
+26-03-09.18:05:35.633 [main            ] INFO  HikariDataSource       - HikariPool-1 - Start completed.
+26-03-09.18:05:35.768 [main            ] INFO  MilestoneTemplateService - 里程碑模板已存在，跳过初始化
+26-03-09.18:05:35.768 [main            ] INFO  MilestoneTemplateInitializer - 默认里程碑模板初始化成功
+26-03-09.18:17:36.186 [http-nio-8091-exec-1] INFO  [/]                    - Initializing Spring DispatcherServlet 'dispatcherServlet'
+26-03-09.18:17:36.188 [http-nio-8091-exec-1] INFO  DispatcherServlet      - Initializing Servlet 'dispatcherServlet'
+26-03-09.18:17:36.191 [http-nio-8091-exec-1] INFO  DispatcherServlet      - Completed initialization in 1 ms
+26-03-09.18:17:36.251 [http-nio-8091-exec-1] INFO  ProjectHttpController  - 获取热门项目列表
+26-03-09.18:20:17.557 [http-nio-8091-exec-9] INFO  BidHttpController      - query public bids for project 2029491113483702272
+26-03-09.18:20:41.761 [http-nio-8091-exec-6] INFO  BidHttpController      - query public bids for project 2023249119094640640
+26-03-09.18:22:16.851 [http-nio-8091-exec-5] ERROR GlobalExceptionHandler - 业务异常: null
+cn.hgy.types.exception.AppException: null
+	at cn.hgy.trigger.http.BidHttpController.ensureStudent(BidHttpController.java:186)
+	at cn.hgy.trigger.http.BidHttpController.getMyBids(BidHttpController.java:177)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+26-03-09.18:22:38.308 [http-nio-8091-exec-10] INFO  BidHttpController      - student 2018608120762339328 query my bids
+26-03-09.18:22:38.707 [http-nio-8091-exec-10] ERROR GlobalExceptionHandler - 系统异常: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\bid_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT             b.bid_id,             b.project_id,             p.title AS project_title,             u.nickname AS publisher_name,             b.team_id,             t.team_name,             b.status,             b.create_time         FROM bid b         INNER JOIN team_member tm ON b.team_id = tm.team_id         LEFT JOIN project p ON b.project_id = p.project_id         LEFT JOIN user u ON p.publisher_id = u.user_id         LEFT JOIN team t ON b.team_id = t.team_id         WHERE tm.user_id = ?         ORDER BY b.create_time DESC
+### Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+; bad SQL grammar []
+org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\bid_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT             b.bid_id,             b.project_id,             p.title AS project_title,             u.nickname AS publisher_name,             b.team_id,             t.team_name,             b.status,             b.create_time         FROM bid b         INNER JOIN team_member tm ON b.team_id = tm.team_id         LEFT JOIN project p ON b.project_id = p.project_id         LEFT JOIN user u ON p.publisher_id = u.user_id         LEFT JOIN team t ON b.team_id = t.team_id         WHERE tm.user_id = ?         ORDER BY b.create_time DESC
+### Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+; bad SQL grammar []
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:246)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:107)
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:93)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347)
+	at jdk.proxy2/jdk.proxy2.$Proxy77.selectList(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:194)
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:147)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:80)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at jdk.proxy2/jdk.proxy2.$Proxy85.selectStudentBids(Unknown Source)
+	at cn.hgy.infrastructure.persistent.repository.BidRepository.queryStudentBids(BidRepository.java:114)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:138)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:727)
+	at cn.hgy.infrastructure.persistent.repository.BidRepository$$SpringCGLIB$$0.queryStudentBids(<generated>)
+	at cn.hgy.domain.bid.service.BidService.queryStudentBids(BidService.java:173)
+	at cn.hgy.trigger.http.BidHttpController.getMyBids(BidHttpController.java:180)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:953)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:371)
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44)
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:65)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:80)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:65)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333)
+	... 71 common frames omitted
+26-03-09.18:23:00.129 [http-nio-8091-exec-2] INFO  BidHttpController      - student 2018608120762339328 query my bids
+26-03-09.18:23:00.431 [http-nio-8091-exec-2] ERROR GlobalExceptionHandler - 系统异常: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\bid_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT             b.bid_id,             b.project_id,             p.title AS project_title,             u.nickname AS publisher_name,             b.team_id,             t.team_name,             b.status,             b.create_time         FROM bid b         INNER JOIN team_member tm ON b.team_id = tm.team_id         LEFT JOIN project p ON b.project_id = p.project_id         LEFT JOIN user u ON p.publisher_id = u.user_id         LEFT JOIN team t ON b.team_id = t.team_id         WHERE tm.user_id = ?         ORDER BY b.create_time DESC
+### Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+; bad SQL grammar []
+org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\bid_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT             b.bid_id,             b.project_id,             p.title AS project_title,             u.nickname AS publisher_name,             b.team_id,             t.team_name,             b.status,             b.create_time         FROM bid b         INNER JOIN team_member tm ON b.team_id = tm.team_id         LEFT JOIN project p ON b.project_id = p.project_id         LEFT JOIN user u ON p.publisher_id = u.user_id         LEFT JOIN team t ON b.team_id = t.team_id         WHERE tm.user_id = ?         ORDER BY b.create_time DESC
+### Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+; bad SQL grammar []
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:246)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:107)
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:93)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347)
+	at jdk.proxy2/jdk.proxy2.$Proxy77.selectList(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:194)
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:147)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:80)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at jdk.proxy2/jdk.proxy2.$Proxy85.selectStudentBids(Unknown Source)
+	at cn.hgy.infrastructure.persistent.repository.BidRepository.queryStudentBids(BidRepository.java:114)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:138)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:727)
+	at cn.hgy.infrastructure.persistent.repository.BidRepository$$SpringCGLIB$$0.queryStudentBids(<generated>)
+	at cn.hgy.domain.bid.service.BidService.queryStudentBids(BidService.java:173)
+	at cn.hgy.trigger.http.BidHttpController.getMyBids(BidHttpController.java:180)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:953)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:371)
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44)
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:65)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:80)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:65)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333)
+	... 71 common frames omitted
+26-03-09.18:23:38.021 [http-nio-8091-exec-1] INFO  UserManagementHttpController - 用户登录
+26-03-09.18:23:39.056 [http-nio-8091-exec-1] INFO  UserManagementHttpController - 用户登录完成 userId=2018608120762339328 userType=学生
+26-03-09.18:23:56.729 [http-nio-8091-exec-3] INFO  BidHttpController      - student 2018608120762339328 query my bids
+26-03-09.18:23:56.940 [http-nio-8091-exec-3] ERROR GlobalExceptionHandler - 系统异常: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\bid_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT             b.bid_id,             b.project_id,             p.title AS project_title,             u.nickname AS publisher_name,             b.team_id,             t.team_name,             b.status,             b.create_time         FROM bid b         INNER JOIN team_member tm ON b.team_id = tm.team_id         LEFT JOIN project p ON b.project_id = p.project_id         LEFT JOIN user u ON p.publisher_id = u.user_id         LEFT JOIN team t ON b.team_id = t.team_id         WHERE tm.user_id = ?         ORDER BY b.create_time DESC
+### Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+; bad SQL grammar []
+org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\bid_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT             b.bid_id,             b.project_id,             p.title AS project_title,             u.nickname AS publisher_name,             b.team_id,             t.team_name,             b.status,             b.create_time         FROM bid b         INNER JOIN team_member tm ON b.team_id = tm.team_id         LEFT JOIN project p ON b.project_id = p.project_id         LEFT JOIN user u ON p.publisher_id = u.user_id         LEFT JOIN team t ON b.team_id = t.team_id         WHERE tm.user_id = ?         ORDER BY b.create_time DESC
+### Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+; bad SQL grammar []
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:246)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:107)
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:93)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347)
+	at jdk.proxy2/jdk.proxy2.$Proxy77.selectList(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:194)
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:147)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:80)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at jdk.proxy2/jdk.proxy2.$Proxy85.selectStudentBids(Unknown Source)
+	at cn.hgy.infrastructure.persistent.repository.BidRepository.queryStudentBids(BidRepository.java:114)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:138)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:727)
+	at cn.hgy.infrastructure.persistent.repository.BidRepository$$SpringCGLIB$$0.queryStudentBids(<generated>)
+	at cn.hgy.domain.bid.service.BidService.queryStudentBids(BidService.java:173)
+	at cn.hgy.trigger.http.BidHttpController.getMyBids(BidHttpController.java:180)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:953)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:371)
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44)
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:65)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:80)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:65)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333)
+	... 71 common frames omitted
+26-03-09.18:24:28.399 [http-nio-8091-exec-4] INFO  BidHttpController      - student 2018608120762339328 query my bids
+26-03-09.18:24:28.652 [http-nio-8091-exec-4] ERROR GlobalExceptionHandler - 系统异常: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\bid_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT             b.bid_id,             b.project_id,             p.title AS project_title,             u.nickname AS publisher_name,             b.team_id,             t.team_name,             b.status,             b.create_time         FROM bid b         INNER JOIN team_member tm ON b.team_id = tm.team_id         LEFT JOIN project p ON b.project_id = p.project_id         LEFT JOIN user u ON p.publisher_id = u.user_id         LEFT JOIN team t ON b.team_id = t.team_id         WHERE tm.user_id = ?         ORDER BY b.create_time DESC
+### Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+; bad SQL grammar []
+org.springframework.jdbc.BadSqlGrammarException: 
+### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\bid_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT             b.bid_id,             b.project_id,             p.title AS project_title,             u.nickname AS publisher_name,             b.team_id,             t.team_name,             b.status,             b.create_time         FROM bid b         INNER JOIN team_member tm ON b.team_id = tm.team_id         LEFT JOIN project p ON b.project_id = p.project_id         LEFT JOIN user u ON p.publisher_id = u.user_id         LEFT JOIN team t ON b.team_id = t.team_id         WHERE tm.user_id = ?         ORDER BY b.create_time DESC
+### Cause: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+; bad SQL grammar []
+	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:246)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:107)
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:93)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347)
+	at jdk.proxy2/jdk.proxy2.$Proxy77.selectList(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:194)
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:147)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:80)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at jdk.proxy2/jdk.proxy2.$Proxy85.selectStudentBids(Unknown Source)
+	at cn.hgy.infrastructure.persistent.repository.BidRepository.queryStudentBids(BidRepository.java:114)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:138)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:727)
+	at cn.hgy.infrastructure.persistent.repository.BidRepository$$SpringCGLIB$$0.queryStudentBids(<generated>)
+	at cn.hgy.domain.bid.service.BidService.queryStudentBids(BidService.java:173)
+	at cn.hgy.trigger.http.BidHttpController.getMyBids(BidHttpController.java:180)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.sql.SQLSyntaxErrorException: Table 'talent_challenge.team_member' doesn't exist
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:953)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:371)
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44)
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:65)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:80)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:65)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333)
+	... 71 common frames omitted
+26-03-09.18:26:33.033 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] INFO  SimpleMessageListenerContainer - Waiting for workers to finish.
+26-03-09.18:26:33.034 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] INFO  SimpleMessageListenerContainer - Successfully waited for workers to finish.
+26-03-09.18:26:33.037 [SpringApplicationShutdownHook] INFO  GracefulShutdown       - Commencing graceful shutdown. Waiting for active requests to complete
+26-03-09.18:26:33.764 [tomcat-shutdown ] INFO  GracefulShutdown       - Graceful shutdown complete
+26-03-09.18:26:33.858 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown initiated...
+26-03-09.18:26:43.869 [SpringApplicationShutdownHook] WARN  HikariPool             - Timed-out waiting for close connection executor to shutdown
+26-03-09.18:26:43.869 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown completed.
+26-03-09.18:26:47.310 [main            ] INFO  Application            - Starting Application using Java 17.0.16 with PID 52800 (E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes started by 32934 in E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge)
+26-03-09.18:26:47.313 [main            ] INFO  Application            - The following 1 profile is active: "prod"
+26-03-09.18:26:48.825 [main            ] INFO  TomcatWebServer        - Tomcat initialized with port 8091 (http)
+26-03-09.18:26:48.839 [main            ] INFO  Http11NioProtocol      - Initializing ProtocolHandler ["http-nio-8091"]
+26-03-09.18:26:48.842 [main            ] INFO  StandardService        - Starting service [Tomcat]
+26-03-09.18:26:48.843 [main            ] INFO  StandardEngine         - Starting Servlet engine: [Apache Tomcat/10.1.36]
+26-03-09.18:26:48.917 [main            ] INFO  [/]                    - Initializing Spring embedded WebApplicationContext
+26-03-09.18:26:48.917 [main            ] INFO  ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1538 ms
+26-03-09.18:26:50.202 [main            ] INFO  OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+26-03-09.18:26:50.435 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
+26-03-09.18:26:50.829 [main            ] INFO  Http11NioProtocol      - Starting ProtocolHandler ["http-nio-8091"]
+26-03-09.18:26:50.852 [main            ] INFO  TomcatWebServer        - Tomcat started on port 8091 (http) with context path '/'
+26-03-09.18:26:50.854 [main            ] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.18:26:51.257 [main            ] INFO  CachingConnectionFactory - Created new connection: rabbitConnectionFactory#46d0f89c:0/SimpleConnection@299eca90 [delegate=amqp://admin@43.142.157.145:5672/, localPort=60110]
+26-03-09.18:26:52.561 [main            ] INFO  Application            - Started Application in 5.985 seconds (process running for 6.775)
+26-03-09.18:26:52.564 [main            ] INFO  MilestoneTemplateInitializer - 开始初始化默认里程碑模板...
+26-03-09.18:26:52.565 [main            ] INFO  MilestoneTemplateService - 开始初始化默认里程碑模板
+26-03-09.18:26:52.586 [main            ] INFO  HikariDataSource       - HikariPool-1 - Starting...
+26-03-09.18:26:53.691 [main            ] INFO  HikariPool             - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2f3cd727
+26-03-09.18:26:53.693 [main            ] INFO  HikariDataSource       - HikariPool-1 - Start completed.
+26-03-09.18:26:53.827 [main            ] INFO  MilestoneTemplateService - 里程碑模板已存在，跳过初始化
+26-03-09.18:26:53.828 [main            ] INFO  MilestoneTemplateInitializer - 默认里程碑模板初始化成功
+26-03-09.18:27:04.071 [http-nio-8091-exec-2] INFO  [/]                    - Initializing Spring DispatcherServlet 'dispatcherServlet'
+26-03-09.18:27:04.071 [http-nio-8091-exec-2] INFO  DispatcherServlet      - Initializing Servlet 'dispatcherServlet'
+26-03-09.18:27:04.072 [http-nio-8091-exec-2] INFO  DispatcherServlet      - Completed initialization in 1 ms
+26-03-09.18:27:04.224 [http-nio-8091-exec-2] INFO  BidHttpController      - student 2018608120762339328 query my bids
+26-03-09.18:27:19.373 [http-nio-8091-exec-6] INFO  BidHttpController      - student 2018608120762339328 query my bids
+26-03-09.18:27:32.006 [http-nio-8091-exec-3] INFO  UserManagementHttpController - 用户登录
+26-03-09.18:27:36.339 [http-nio-8091-exec-3] INFO  UserManagementHttpController - 用户登录完成 userId=2028847268169388032 userType=学生
+26-03-09.18:28:06.851 [http-nio-8091-exec-1] INFO  BidHttpController      - student 2028847268169388032 query my bids
+26-03-09.18:28:15.506 [http-nio-8091-exec-4] INFO  UserManagementHttpController - 用户登录
+26-03-09.18:28:16.061 [http-nio-8091-exec-4] INFO  UserManagementHttpController - 用户登录完成 userId=2018608120762339328 userType=学生
+26-03-09.18:28:29.446 [http-nio-8091-exec-7] INFO  BidHttpController      - student 2018608120762339328 query my bids
+26-03-09.20:31:47.384 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
+26-03-09.20:31:48.239 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] INFO  SimpleMessageListenerContainer - Restarting Consumer@3a8b9458: tags=[[amq.ctag-N3oOU0LTlYuEVaZyoCpbYw]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,2), conn: Proxy@3eff6846 Shared Rabbit Connection: SimpleConnection@299eca90 [delegate=amqp://admin@43.142.157.145:5672/, localPort=60110], acknowledgeMode=MANUAL local queue size=0
+26-03-09.20:31:48.249 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:48.256 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.net.NoRouteToHostException: No route to host: no further information
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:70)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:632)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:726)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createBareChannel(CachingConnectionFactory.java:671)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getCachedChannelProxy(CachingConnectionFactory.java:644)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getChannel(CachingConnectionFactory.java:533)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory$ChannelCachingConnectionProxy.createChannel(CachingConnectionFactory.java:1484)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2268)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2235)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2215)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:467)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:451)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1972)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1936)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1483)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1324)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.net.NoRouteToHostException: No route to host: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:547)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:602)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:633)
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:61)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1249)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1198)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectAddresses(AbstractConnectionFactory.java:678)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:647)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:593)
+	... 15 common frames omitted
+26-03-09.20:31:48.262 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:48.286 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  SimpleMessageListenerContainer - Restarting Consumer@7497a554: tags=[[amq.ctag-1OnoPCWKMmeaA50RIHdBoQ]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,1), conn: Proxy@3eff6846 Shared Rabbit Connection: null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.20:31:48.295 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:48.313 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-03-09.20:31:48.313 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:48.314 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] INFO  SimpleMessageListenerContainer - Restarting Consumer@5dd23809: tags=[[amq.ctag-BCIsprtPsQd3UzJMGP_A3g]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,3), conn: Proxy@3eff6846 Shared Rabbit Connection: null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.20:31:48.330 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:48.358 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-03-09.20:31:48.358 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:53.348 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] INFO  SimpleMessageListenerContainer - Restarting Consumer@41b76885: tags=[[]], channel=null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.20:31:53.349 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:53.358 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] INFO  SimpleMessageListenerContainer - Restarting Consumer@22653e8a: tags=[[]], channel=null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.20:31:53.374 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-03-09.20:31:53.375 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:53.376 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-03-09.20:31:53.376 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:53.378 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:53.499 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] INFO  SimpleMessageListenerContainer - Restarting Consumer@4d240caf: tags=[[]], channel=null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.20:31:53.504 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:53.508 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-03-09.20:31:53.508 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:58.513 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] INFO  SimpleMessageListenerContainer - Restarting Consumer@6de2668: tags=[[]], channel=null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.20:31:58.516 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] INFO  SimpleMessageListenerContainer - Restarting Consumer@56f83f4c: tags=[[]], channel=null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.20:31:58.516 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] INFO  SimpleMessageListenerContainer - Restarting Consumer@7be51280: tags=[[]], channel=null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.20:31:58.517 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-10] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.20:31:58.741 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-10] INFO  CachingConnectionFactory - Created new connection: rabbitConnectionFactory#46d0f89c:13/SimpleConnection@31044f1e [delegate=amqp://admin@43.142.157.145:5672/, localPort=49212]
+26-03-09.20:32:09.475 [HikariPool-1 housekeeper] WARN  HikariPool             - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h57m21s632ms283µs700ns).
+26-03-09.21:07:40.526 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
+26-03-09.21:07:40.548 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-12] INFO  SimpleMessageListenerContainer - Restarting Consumer@78fc6e85: tags=[[amq.ctag-AeGyMCOb0P-r4b8ePhlHAw]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,3), conn: Proxy@3eff6846 Shared Rabbit Connection: SimpleConnection@31044f1e [delegate=amqp://admin@43.142.157.145:5672/, localPort=49212], acknowledgeMode=MANUAL local queue size=0
+26-03-09.21:07:40.559 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.21:07:40.804 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] INFO  CachingConnectionFactory - Created new connection: rabbitConnectionFactory#46d0f89c:14/SimpleConnection@571c828f [delegate=amqp://admin@43.142.157.145:5672/, localPort=55007]
+26-03-09.21:07:41.043 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-10] INFO  SimpleMessageListenerContainer - Restarting Consumer@5561f606: tags=[[amq.ctag-NhxcKwBCLE_DEKnXBG3RaA]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,1), conn: Proxy@3eff6846 Shared Rabbit Connection: SimpleConnection@571c828f [delegate=amqp://admin@43.142.157.145:5672/, localPort=55007], acknowledgeMode=MANUAL local queue size=0
+26-03-09.21:07:41.261 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-11] INFO  SimpleMessageListenerContainer - Restarting Consumer@5e1af18b: tags=[[amq.ctag-Os2gWmMxL7ty8DxPPs5-9Q]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,2), conn: Proxy@3eff6846 Shared Rabbit Connection: SimpleConnection@571c828f [delegate=amqp://admin@43.142.157.145:5672/, localPort=55007], acknowledgeMode=MANUAL local queue size=0
+26-03-09.21:07:51.596 [HikariPool-1 housekeeper] WARN  HikariPool             - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=12m17s640ms271µs100ns).
+26-03-09.22:12:11.492 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] INFO  ProjectStatusSyncConsumer - 开始处理项目状态同步 bidId=2023249295125385216, projectId=2023249119094640640, teamId=2020476698205753344
+26-03-09.22:12:11.790 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] INFO  MilestoneTemplateService - 为项目初始化必须里程碑 projectId=2023249119094640640
+26-03-09.22:12:11.858 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] INFO  MilestoneTemplateService - 项目里程碑已存在，跳过初始化 projectId=2023249119094640640
+26-03-09.22:12:12.022 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] INFO  ProjectStatusSyncConsumer - 项目状态同步完成 projectId=2023249119094640640, acceptedTeamId=2020476698205753344
+26-03-09.22:13:46.118 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
+26-03-09.22:13:46.489 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-15] INFO  SimpleMessageListenerContainer - Restarting Consumer@249afa01: tags=[[amq.ctag-LPeyg3Q1QjNdkva1eXNEoA]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,3), conn: Proxy@3eff6846 Shared Rabbit Connection: SimpleConnection@571c828f [delegate=amqp://admin@43.142.157.145:5672/, localPort=55007], acknowledgeMode=MANUAL local queue size=0
+26-03-09.22:13:46.662 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-14] INFO  SimpleMessageListenerContainer - Restarting Consumer@70394525: tags=[[amq.ctag-s4gWCc-BYhX5dPmD2-_e4A]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,2), conn: Proxy@3eff6846 Shared Rabbit Connection: SimpleConnection@571c828f [delegate=amqp://admin@43.142.157.145:5672/, localPort=55007], acknowledgeMode=MANUAL local queue size=0
+26-03-09.22:13:46.765 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-16] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.22:13:47.116 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-16] INFO  CachingConnectionFactory - Created new connection: rabbitConnectionFactory#46d0f89c:15/SimpleConnection@76e7890c [delegate=amqp://admin@43.142.157.145:5672/, localPort=52124]
+26-03-09.22:13:47.122 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] INFO  SimpleMessageListenerContainer - Restarting Consumer@6f1ca6bd: tags=[[amq.ctag-xyAucSOMA_Omv-4GsfLn2w]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,1), conn: Proxy@3eff6846 Shared Rabbit Connection: SimpleConnection@76e7890c [delegate=amqp://admin@43.142.157.145:5672/, localPort=52124], acknowledgeMode=MANUAL local queue size=0
+26-03-09.22:15:24.013 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
+26-03-09.22:15:24.077 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-18] INFO  SimpleMessageListenerContainer - Restarting Consumer@2f77934d: tags=[[amq.ctag-IBL8V5v5AMcSII9olnIeUw]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,3), conn: Proxy@3eff6846 Shared Rabbit Connection: SimpleConnection@76e7890c [delegate=amqp://admin@43.142.157.145:5672/, localPort=52124], acknowledgeMode=MANUAL local queue size=0
+26-03-09.22:15:24.118 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-19] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.22:15:24.157 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-19] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.net.SocketException: Network is unreachable: no further information
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:70)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:632)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:726)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createBareChannel(CachingConnectionFactory.java:671)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getCachedChannelProxy(CachingConnectionFactory.java:644)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getChannel(CachingConnectionFactory.java:533)
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory$ChannelCachingConnectionProxy.createChannel(CachingConnectionFactory.java:1484)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2268)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2235)
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2215)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:467)
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:451)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1972)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1936)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1483)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1324)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.net.SocketException: Network is unreachable: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:547)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:602)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:633)
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:61)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1249)
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1198)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectAddresses(AbstractConnectionFactory.java:678)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:647)
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:593)
+	... 15 common frames omitted
+26-03-09.22:15:24.182 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-19] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.22:15:24.859 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-16] INFO  SimpleMessageListenerContainer - Restarting Consumer@2455d92: tags=[[amq.ctag-d7nEKbqsH8Zv8z85XbkeEA]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,1), conn: Proxy@3eff6846 Shared Rabbit Connection: null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.22:15:24.870 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-20] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.22:15:24.936 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-17] INFO  SimpleMessageListenerContainer - Restarting Consumer@5e61ae8: tags=[[amq.ctag-HWRS7MOhG9xtuOB6WYcAuA]], channel=Cached Rabbit Channel: PublisherCallbackChannelImpl: AMQChannel(amqp://admin@43.142.157.145:5672/,2), conn: Proxy@3eff6846 Shared Rabbit Connection: null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.22:15:25.214 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-20] INFO  CachingConnectionFactory - Created new connection: rabbitConnectionFactory#46d0f89c:18/SimpleConnection@119c918b [delegate=amqp://admin@43.142.157.145:5672/, localPort=53039]
+26-03-09.22:15:29.206 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-19] INFO  SimpleMessageListenerContainer - Restarting Consumer@64aab7ca: tags=[[]], channel=null, acknowledgeMode=MANUAL local queue size=0
+26-03-09.23:07:05.265 [http-nio-8091-exec-9] INFO  TeamHttpController     - student 2018608120762339328 query my team
+26-03-09.23:07:20.500 [http-nio-8091-exec-5] INFO  TeamHttpController     - user 2018608120762339328 query team detail, teamId 2020476698205753344
+26-03-09.23:26:16.009 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-23] INFO  SimpleMessageListenerContainer - Waiting for workers to finish.
+26-03-09.23:26:16.764 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-23] INFO  SimpleMessageListenerContainer - Successfully waited for workers to finish.
+26-03-09.23:26:16.773 [SpringApplicationShutdownHook] INFO  GracefulShutdown       - Commencing graceful shutdown. Waiting for active requests to complete
+26-03-09.23:26:17.103 [tomcat-shutdown ] INFO  GracefulShutdown       - Graceful shutdown complete
+26-03-09.23:26:17.197 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown initiated...
+26-03-09.23:26:17.749 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown completed.
+26-03-09.23:26:30.342 [main            ] INFO  Application            - Starting Application using Java 17.0.16 with PID 36964 (E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes started by 32934 in E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge)
+26-03-09.23:26:30.344 [main            ] INFO  Application            - The following 1 profile is active: "prod"
+26-03-09.23:26:32.285 [main            ] INFO  TomcatWebServer        - Tomcat initialized with port 8091 (http)
+26-03-09.23:26:32.305 [main            ] INFO  Http11NioProtocol      - Initializing ProtocolHandler ["http-nio-8091"]
+26-03-09.23:26:32.308 [main            ] INFO  StandardService        - Starting service [Tomcat]
+26-03-09.23:26:32.308 [main            ] INFO  StandardEngine         - Starting Servlet engine: [Apache Tomcat/10.1.36]
+26-03-09.23:26:32.396 [main            ] INFO  [/]                    - Initializing Spring embedded WebApplicationContext
+26-03-09.23:26:32.396 [main            ] INFO  ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1978 ms
+26-03-09.23:26:33.750 [main            ] INFO  OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+26-03-09.23:26:33.967 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
+26-03-09.23:26:34.381 [main            ] INFO  Http11NioProtocol      - Starting ProtocolHandler ["http-nio-8091"]
+26-03-09.23:26:34.405 [main            ] INFO  TomcatWebServer        - Tomcat started on port 8091 (http) with context path '/'
+26-03-09.23:26:34.407 [main            ] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-03-09.23:26:34.692 [main            ] INFO  CachingConnectionFactory - Created new connection: rabbitConnectionFactory#609b041c:0/SimpleConnection@4119346d [delegate=amqp://admin@43.142.157.145:5672/, localPort=57914]
+26-03-09.23:26:35.589 [main            ] INFO  Application            - Started Application in 6.134 seconds (process running for 7.127)
+26-03-09.23:26:35.594 [main            ] INFO  MilestoneTemplateInitializer - 开始初始化默认里程碑模板...
+26-03-09.23:26:35.594 [main            ] INFO  MilestoneTemplateService - 开始初始化默认里程碑模板
+26-03-09.23:26:35.615 [main            ] INFO  HikariDataSource       - HikariPool-1 - Starting...
+26-03-09.23:26:36.523 [main            ] INFO  HikariPool             - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5c0272e0
+26-03-09.23:26:36.525 [main            ] INFO  HikariDataSource       - HikariPool-1 - Start completed.
+26-03-09.23:26:36.634 [main            ] INFO  MilestoneTemplateService - 里程碑模板已存在，跳过初始化
+26-03-09.23:26:36.634 [main            ] INFO  MilestoneTemplateInitializer - 默认里程碑模板初始化成功
+26-03-09.23:27:13.497 [http-nio-8091-exec-2] INFO  [/]                    - Initializing Spring DispatcherServlet 'dispatcherServlet'
+26-03-09.23:27:13.497 [http-nio-8091-exec-2] INFO  DispatcherServlet      - Initializing Servlet 'dispatcherServlet'
+26-03-09.23:27:13.499 [http-nio-8091-exec-2] INFO  DispatcherServlet      - Completed initialization in 2 ms
+26-03-09.23:27:13.659 [http-nio-8091-exec-2] INFO  TeamHttpController     - student 2018608120762339328 query my team
+26-03-09.23:27:14.017 [http-nio-8091-exec-2] ERROR GlobalExceptionHandler - 系统异常: 
+### Error querying database.  Cause: java.sql.SQLException: Illegal mix of collations (utf8mb4_0900_ai_ci,IMPLICIT) and (utf8mb4_unicode_ci,IMPLICIT) for operation '='
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\team_member_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT             tm.user_id,             u.nickname,             u.avatar_url,             tm.role         FROM team_member tm         LEFT JOIN user u ON tm.user_id = u.user_id         WHERE tm.team_id = ?         ORDER BY FIELD(tm.role, 'leader', 'member'), tm.join_time ASC
+### Cause: java.sql.SQLException: Illegal mix of collations (utf8mb4_0900_ai_ci,IMPLICIT) and (utf8mb4_unicode_ci,IMPLICIT) for operation '='
+; uncategorized SQLException; SQL state [HY000]; error code [1267]; Illegal mix of collations (utf8mb4_0900_ai_ci,IMPLICIT) and (utf8mb4_unicode_ci,IMPLICIT) for operation '='
+org.springframework.jdbc.UncategorizedSQLException: 
+### Error querying database.  Cause: java.sql.SQLException: Illegal mix of collations (utf8mb4_0900_ai_ci,IMPLICIT) and (utf8mb4_unicode_ci,IMPLICIT) for operation '='
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\team_member_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT             tm.user_id,             u.nickname,             u.avatar_url,             tm.role         FROM team_member tm         LEFT JOIN user u ON tm.user_id = u.user_id         WHERE tm.team_id = ?         ORDER BY FIELD(tm.role, 'leader', 'member'), tm.join_time ASC
+### Cause: java.sql.SQLException: Illegal mix of collations (utf8mb4_0900_ai_ci,IMPLICIT) and (utf8mb4_unicode_ci,IMPLICIT) for operation '='
+; uncategorized SQLException; SQL state [HY000]; error code [1267]; Illegal mix of collations (utf8mb4_0900_ai_ci,IMPLICIT) and (utf8mb4_unicode_ci,IMPLICIT) for operation '='
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:94)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347)
+	at jdk.proxy2/jdk.proxy2.$Proxy77.selectList(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:194)
+	at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:147)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:80)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at jdk.proxy2/jdk.proxy2.$Proxy91.selectMembersByTeamId(Unknown Source)
+	at cn.hgy.infrastructure.persistent.repository.TeamRepository.queryMembersByTeamId(TeamRepository.java:94)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:138)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:727)
+	at cn.hgy.infrastructure.persistent.repository.TeamRepository$$SpringCGLIB$$0.queryMembersByTeamId(<generated>)
+	at cn.hgy.domain.team.service.TeamService.getTeamMembers(TeamService.java:159)
+	at cn.hgy.trigger.http.TeamHttpController.convertToResponseDTO(TeamHttpController.java:152)
+	at cn.hgy.trigger.http.TeamHttpController.getMyTeam(TeamHttpController.java:106)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.sql.SQLException: Illegal mix of collations (utf8mb4_0900_ai_ci,IMPLICIT) and (utf8mb4_unicode_ci,IMPLICIT) for operation '='
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:953)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:371)
+	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44)
+	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java)
+	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:65)
+	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:80)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:65)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333)
+	... 72 common frames omitted
