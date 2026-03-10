@@ -24,5 +24,8 @@ public interface ITeamService {
 
     /** 查询团队成员列表 */
     List<TeamMemberItemDTO> getTeamMembers(String teamId);
+
+    /** 判断用户是否为团队成员（不含队长，仅普通成员） */
+    boolean isTeamMember(String teamId, String userId);
 }
 

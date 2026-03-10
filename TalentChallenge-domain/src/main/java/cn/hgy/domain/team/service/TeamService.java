@@ -159,6 +159,14 @@ public class TeamService implements ITeamService {
         return teamRepository.queryMembersByTeamId(teamId);
     }
 
+    @Override
+    public boolean isTeamMember(String teamId, String userId) {
+        if (StrUtil.isBlank(teamId) || StrUtil.isBlank(userId)) {
+            return false;
+        }
+        return teamRepository.existsMember(teamId, userId);
+    }
+
     private TeamEntity loadTeam(String teamId) {
         if (StrUtil.isBlank(teamId)) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());

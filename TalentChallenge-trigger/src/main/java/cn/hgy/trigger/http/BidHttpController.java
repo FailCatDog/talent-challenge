@@ -185,7 +185,7 @@ public class BidHttpController implements IBidHttpService {
     public Response<cn.hgy.api.dto.BidDetailResponseDTO> getBidDetail(@PathVariable("bidId") String bidId, HttpServletRequest request) {
         String userId = requireUserId();
         log.info("user {} query bid detail {}", userId, bidId);
-        cn.hgy.api.dto.BidDetailResponseDTO result = bidService.getBidDetail(bidId);
+        cn.hgy.api.dto.BidDetailResponseDTO result = bidService.getBidDetail(bidId, userId);
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
     }
 

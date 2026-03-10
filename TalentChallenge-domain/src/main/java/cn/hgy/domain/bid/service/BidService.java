@@ -178,12 +178,21 @@ public class BidService implements IBidService {
     }
 
     @Override
-    public BidDetailResponseDTO getBidDetail(String bidId) {
+    public BidDetailResponseDTO getBidDetail(String bidId, String currentUserId) {
         BidEntity bid = loadBid(bidId);
         ProjectEntity project = requireProject(bid.getProjectId());
         TeamEntity team = teamRepository.queryByTeamId(bid.getTeamId())
                 .orElseThrow(() -> new AppException(ResponseCode.BID_TEAM_NOT_FOUND.getCode(), ResponseCode.BID_TEAM_NOT_FOUND.getInfo()));
-        List<TeamMemberItemDTO> members = teamService.getTeamMembers(bid.getTeamId());
+
+        // 判断当前用户在团队中的角色
+        String currentUserRole;
+        if (StrUtil.equals(team.getLeaderId(), currentUserId)) {
+            currentUserRole = "leader";
+        } else if (teamService.isTeamMember(bid.getTeamId(), currentUserId)) {
+            currentUserRole = "member";
+        } else {
+            currentUserRole = "none";
+        }
 
         return BidDetailResponseDTO.builder()
                 .bidId(bid.getBidId())
@@ -193,18 +202,11 @@ public class BidService implements IBidService {
                 .remark(bid.getRemark())
                 .createdAt(bid.getCreatedAt())
                 .updatedAt(bid.getUpdatedAt())
-                .project(BidDetailResponseDTO.ProjectInfo.builder()
-                        .projectId(project.getProjectId())
-                        .projectTitle(project.getTitle())
-                        .projectDescription(project.getDescription())
-                        .publisherId(project.getPublisherId())
-                        .publisherName(project.getPublisherName())
-                        .build())
-                .team(BidDetailResponseDTO.TeamInfo.builder()
-                        .teamId(team.getTeamId())
-                        .teamName(team.getTeamName())
-                        .members(members)
-                        .build())
+                .projectId(project.getProjectId())
+                .projectTitle(project.getTitle())
+                .teamId(team.getTeamId())
+                .teamName(team.getTeamName())
+                .currentUserRole(currentUserRole)
                 .build();
     }
 

@@ -94,6 +94,11 @@ public class TeamRepository implements ITeamRepository {
         return teamMemberDao.selectMembersByTeamId(teamId);
     }
 
+    @Override
+    public boolean existsMember(String teamId, String userId) {
+        return teamMemberDao.existsByTeamIdAndUserId(teamId, userId) > 0;
+    }
+
     private Team convertToPo(TeamEntity entity) {
         Team team = new Team();
         team.setTeamId(entity.getTeamId());

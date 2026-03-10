@@ -24,5 +24,8 @@ public interface ITeamRepository {
 
     /** 查询团队成员列表（含昵称、头像、角色） */
     List<TeamMemberItemDTO> queryMembersByTeamId(String teamId);
+
+    /** 判断用户是否为团队成员（不含队长） */
+    boolean existsMember(String teamId, String userId);
 }
 

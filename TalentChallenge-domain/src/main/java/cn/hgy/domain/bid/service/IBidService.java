@@ -37,7 +37,9 @@ public interface IBidService {
 
     /**
      * 查询揭榜详情
+     * @param bidId 揭榜ID
+     * @param currentUserId 当前请求用户ID，用于判断在团队中的角色
      */
-    BidDetailResponseDTO getBidDetail(String bidId);
+    BidDetailResponseDTO getBidDetail(String bidId, String currentUserId);
 }
 
