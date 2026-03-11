@@ -9,6 +9,7 @@ import cn.hgy.domain.user.model.entity.UserLoginEntity;
 import cn.hgy.domain.user.model.valobj.UserStatusEnum;
 import cn.hgy.domain.user.model.valobj.UserTypeEnum;
 import cn.hgy.domain.user.repository.IUserManagementRepository;
+import cn.hgy.types.enums.CertificationStatusEnum;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -251,9 +253,42 @@ public class UserManagementServiceImpl implements IUserManagementService{
                 dto.setContactPhone(companyProfile.getContactPhone());
                 dto.setContactEmail(companyProfile.getContactEmail());
                 dto.setQualificationFiles(companyProfile.getQualificationFiles());
+                dto.setCertificationStatus(companyProfile.getCertificationStatus());
+                dto.setRejectReason(companyProfile.getRejectReason());
+                dto.setCertifiedAt(companyProfile.getCertifiedAt());
             }
         }
 
         return dto;
+    }
+
+    @Override
+    public void submitCompanyQualification(String userId, List<String> fileUrls) {
+        // 更新资质文件并将状态改为待审核
+        repository.updateCompanyQualificationFiles(userId, fileUrls);
+        repository.updateCompanyCertificationStatus(userId, CertificationStatusEnum.PENDING_REVIEW.getCode(), null);
+        log.info("企业提交资质审核 userId={}", userId);
+    }
+
+    @Override
+    public void approveCompanyCertification(String targetUserId) {
+        repository.updateCompanyCertificationStatus(targetUserId, CertificationStatusEnum.CERTIFIED.getCode(), null);
+        log.info("管理员通过企业认证 targetUserId={}", targetUserId);
+    }
+
+    @Override
+    public void rejectCompanyCertification(String targetUserId, String reason) {
+        repository.updateCompanyCertificationStatus(targetUserId, CertificationStatusEnum.REJECTED.getCode(), reason);
+        log.info("管理员拒绝企业认证 targetUserId={}, reason={}", targetUserId, reason);
+    }
+
+    @Override
+    public List<CompanyProfileEntity> queryCompaniesByCertificationStatus(String status, int page, int pageSize) {
+        return repository.queryCompaniesByCertificationStatus(status, page, pageSize);
+    }
+
+    @Override
+    public long countCompaniesByCertificationStatus(String status) {
+        return repository.countCompaniesByCertificationStatus(status);
     }
 }

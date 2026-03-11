@@ -13,6 +13,7 @@ import cn.hgy.infrastructure.persistent.po.CompanyProfile;
 import cn.hgy.infrastructure.persistent.po.StudentProfile;
 import cn.hgy.infrastructure.persistent.po.User;
 import cn.hgy.infrastructure.persistent.po.UserAuthCredential;
+import cn.hgy.types.enums.CertificationStatusEnum;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSON;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: 黄光宇
@@ -178,6 +180,44 @@ public class UserManagementRepository implements IUserManagementRepository {
                 .contactEmail(companyProfile.getContactEmail())
                 .qualificationFiles(StrUtil.isNotBlank(companyProfile.getQualificationFiles()) ?
                     JSON.parseArray(companyProfile.getQualificationFiles(), String.class) : null)
+                .certificationStatus(companyProfile.getCertificationStatus())
+                .rejectReason(companyProfile.getRejectReason())
+                .certifiedAt(companyProfile.getCertifiedAt())
                 .build();
+    }
+
+    @Override
+    public void updateCompanyQualificationFiles(String userId, List<String> fileUrls) {
+        String json = JSON.toJSONString(fileUrls);
+        companyProfileDao.updateQualificationFiles(userId, json);
+    }
+
+    @Override
+    public void updateCompanyCertificationStatus(String userId, String status, String rejectReason) {
+        LocalDateTime certifiedAt = CertificationStatusEnum.CERTIFIED.getCode().equals(status)
+                ? LocalDateTime.now() : null;
+        companyProfileDao.updateCertificationStatus(userId, status, rejectReason, certifiedAt);
+    }
+
+    @Override
+    public List<CompanyProfileEntity> queryCompaniesByCertificationStatus(String status, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        List<CompanyProfile> list = companyProfileDao.selectByCertificationStatus(status, offset, pageSize);
+        return list.stream().map(cp -> CompanyProfileEntity.builder()
+                .userId(cp.getUserId())
+                .creditCode(cp.getCreditCode())
+                .qualificationFiles(StrUtil.isNotBlank(cp.getQualificationFiles()) ?
+                    JSON.parseArray(cp.getQualificationFiles(), String.class) : null)
+                .certificationStatus(cp.getCertificationStatus())
+                .rejectReason(cp.getRejectReason())
+                .certifiedAt(cp.getCertifiedAt())
+                .updateTime(cp.getUpdateTime())
+                .build()
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public long countCompaniesByCertificationStatus(String status) {
+        return companyProfileDao.countByCertificationStatus(status);
     }
 }

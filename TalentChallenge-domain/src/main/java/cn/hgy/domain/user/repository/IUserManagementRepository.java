@@ -6,6 +6,8 @@ import cn.hgy.domain.user.model.entity.UserAuthCredentialEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
 
+import java.util.List;
+
 /**
  * @Author: 黄光宇
  * @CreateTime: 2025-09-24
@@ -71,4 +73,33 @@ public interface IUserManagementRepository {
      * @return 企业资料实体
      */
     CompanyProfileEntity queryCompanyProfileByUserId(String userId);
+
+    /**
+     * 更新企业认证状态
+     * @param userId 用户ID
+     * @param status 认证状态
+     * @param rejectReason 拒绝原因（通过时传null）
+     */
+    void updateCompanyCertificationStatus(String userId, String status, String rejectReason);
+
+    /**
+     * 更新企业资质文件列表
+     * @param userId 用户ID
+     * @param fileUrls 文件URL列表
+     */
+    void updateCompanyQualificationFiles(String userId, List<String> fileUrls);
+
+    /**
+     * 按认证状态分页查询企业列表
+     * @param status 认证状态
+     * @param page 页码（从1开始）
+     * @param pageSize 每页数量
+     * @return 企业资料实体列表
+     */
+    List<CompanyProfileEntity> queryCompaniesByCertificationStatus(String status, int page, int pageSize);
+
+    /**
+     * 按认证状态统计企业数量
+     */
+    long countCompaniesByCertificationStatus(String status);
 }

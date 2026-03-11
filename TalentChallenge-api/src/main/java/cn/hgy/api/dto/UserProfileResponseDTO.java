@@ -52,5 +52,10 @@ public class UserProfileResponseDTO {
     private String contactPhone;
     private String contactEmail;
     private List<String> qualificationFiles;
+
+    // 企业认证信息
+    private String certificationStatus;
+    private String rejectReason;
+    private LocalDateTime certifiedAt;
 }
 

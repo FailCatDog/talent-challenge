@@ -2,15 +2,18 @@ package cn.hgy.trigger.http;
 
 import cn.hgy.api.IUserManagementHttpService;
 import cn.hgy.api.dto.AdminCreateRequestDTO;
+import cn.hgy.api.dto.CompanyPendingReviewDTO;
 import cn.hgy.api.dto.UserLoginRequestDTO;
 import cn.hgy.api.dto.UserLoginResponseDTO;
 import cn.hgy.api.dto.UserProfileResponseDTO;
 import cn.hgy.api.dto.UserProfileUpdateRequestDTO;
 import cn.hgy.api.dto.UserRegisterRequestDTO;
 import cn.hgy.api.response.Response;
+import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
 import cn.hgy.domain.user.service.IUserManagementService;
+import cn.hgy.infrastructure.storage.StorageService;
 import cn.hgy.trigger.interceptor.UserContextDynamic;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.exception.AppException;
@@ -24,7 +27,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author: 黄光宇
@@ -38,6 +49,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserManagementHttpController implements IUserManagementHttpService {
 
     private final IUserManagementService userManagementService;
+    private final StorageService storageService;
 
     @PostMapping(value = "/user_register")
     @Override
@@ -131,9 +143,90 @@ public class UserManagementHttpController implements IUserManagementHttpService 
     @GetMapping(value = "/profile/{userId}")
     public Response<UserProfileResponseDTO> getUserProfile(@PathVariable("userId") String userId) {
         log.info("查看用户资料 userId={}", userId);
-
         UserProfileResponseDTO profileDTO = userManagementService.getUserProfile(userId);
-
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), profileDTO);
+    }
+
+    /**
+     * 企业上传资质文件（单文件）
+     */
+    @PostMapping(value = "/company/upload_qualification")
+    public Response<String> uploadQualificationFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        String userId = UserContextDynamic.getUserContextDynamic();
+        if (StrUtil.isBlank(userId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        try {
+            String url = storageService.storeQualificationFile(userId, file);
+            log.info("企业上传资质文件 userId={}, url={}", userId, url);
+            return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), url);
+        } catch (IOException e) {
+            log.error("企业上传资质文件失败 userId={}", userId, e);
+            throw new AppException(ResponseCode.UN_ERROR.getCode(), "文件上传失败");
+        }
+    }
+
+    /**
+     * 企业提交资质审核
+     */
+    @PostMapping(value = "/company/submit_qualification")
+    public Response<Boolean> submitQualification(@RequestBody Map<String, List<String>> body, HttpServletRequest request) {
+        String userId = UserContextDynamic.getUserContextDynamic();
+        if (StrUtil.isBlank(userId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        List<String> fileUrls = body.get("fileUrls");
+        userManagementService.submitCompanyQualification(userId, fileUrls);
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), true);
+    }
+
+    /**
+     * 管理员查询待审核企业列表
+     */
+    @GetMapping(value = "/admin/company/pending_review")
+    public Response<Map<String, Object>> getPendingReviewCompanies(
+            @RequestParam(value = "status", defaultValue = "pending_review") String status,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            HttpServletRequest request) {
+        log.info("管理员查询企业列表 status={}, page={}, pageSize={}", status, page, pageSize);
+        List<CompanyProfileEntity> list = userManagementService.queryCompaniesByCertificationStatus(status, page, pageSize);
+        long total = userManagementService.countCompaniesByCertificationStatus(status);
+        List<CompanyPendingReviewDTO> dtoList = list.stream().map(e -> CompanyPendingReviewDTO.builder()
+                .userId(e.getUserId())
+                .creditCode(e.getCreditCode())
+                .qualificationFiles(e.getQualificationFiles())
+                .certificationStatus(e.getCertificationStatus())
+                .rejectReason(e.getRejectReason())
+                .submitTime(e.getUpdateTime())
+                .build()
+        ).collect(Collectors.toList());
+        Map<String, Object> result = new HashMap<>();
+        result.put("list", dtoList);
+        result.put("total", total);
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
+    }
+
+    /**
+     * 管理员通过企业认证
+     */
+    @PostMapping(value = "/admin/company/approve/{userId}")
+    public Response<Boolean> approveCompany(@PathVariable("userId") String targetUserId, HttpServletRequest request) {
+        log.info("管理员通过企业认证 targetUserId={}", targetUserId);
+        userManagementService.approveCompanyCertification(targetUserId);
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), true);
+    }
+
+    /**
+     * 管理员拒绝企业认证
+     */
+    @PostMapping(value = "/admin/company/reject/{userId}")
+    public Response<Boolean> rejectCompany(@PathVariable("userId") String targetUserId,
+                                            @RequestBody Map<String, String> body,
+                                            HttpServletRequest request) {
+        String reason = body.getOrDefault("reason", "");
+        log.info("管理员拒绝企业认证 targetUserId={}, reason=", targetUserId, reason);
+        userManagementService.rejectCompanyCertification(targetUserId, reason);
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), true);
     }
 }

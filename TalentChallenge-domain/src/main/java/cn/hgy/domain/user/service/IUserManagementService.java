@@ -1,8 +1,11 @@
 package cn.hgy.domain.user.service;
 
 import cn.hgy.api.dto.UserProfileResponseDTO;
+import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
+
+import java.util.List;
 
 /**
  * @Author: 黄光宇
@@ -60,5 +63,39 @@ public interface IUserManagementService {
      * @return 用户完整资料DTO
      */
     UserProfileResponseDTO getUserProfile(String userId);
+
+    /**
+     * 企业提交资质文件，状态变为 pending_review
+     * @param userId 企业用户ID
+     * @param fileUrls 资质文件URL列表
+     */
+    void submitCompanyQualification(String userId, List<String> fileUrls);
+
+    /**
+     * 管理员通过企业认证
+     * @param targetUserId 目标企业用户ID
+     */
+    void approveCompanyCertification(String targetUserId);
+
+    /**
+     * 管理员拒绝企业认证
+     * @param targetUserId 目标企业用户ID
+     * @param reason 拒绝原因
+     */
+    void rejectCompanyCertification(String targetUserId, String reason);
+
+    /**
+     * 管理员分页查询待审核企业列表
+     * @param status 认证状态
+     * @param page 页码
+     * @param pageSize 每页数量
+     * @return 企业资料列表
+     */
+    List<CompanyProfileEntity> queryCompaniesByCertificationStatus(String status, int page, int pageSize);
+
+    /**
+     * 统计指定认证状态的企业数量
+     */
+    long countCompaniesByCertificationStatus(String status);
 
 }

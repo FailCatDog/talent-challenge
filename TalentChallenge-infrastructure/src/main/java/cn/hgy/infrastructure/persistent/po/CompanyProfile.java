@@ -83,6 +83,21 @@ public class CompanyProfile {
     private String qualificationFiles;
 
     /**
+     * 认证状态: uncertified/pending_review/certified/rejected
+     */
+    private String certificationStatus;
+
+    /**
+     * 拒绝原因
+     */
+    private String rejectReason;
+
+    /**
+     * 认证通过时间
+     */
+    private LocalDateTime certifiedAt;
+
+    /**
      * 记录创建时间
      */
     private LocalDateTime createTime;

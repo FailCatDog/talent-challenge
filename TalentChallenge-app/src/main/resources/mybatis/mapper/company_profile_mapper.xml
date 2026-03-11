@@ -17,6 +17,9 @@
         <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR"/>
         <result column="contact_email" property="contactEmail" jdbcType="VARCHAR"/>
         <result column="qualification_files" property="qualificationFiles" jdbcType="VARCHAR"/>
+        <result column="certification_status" property="certificationStatus" jdbcType="VARCHAR"/>
+        <result column="reject_reason" property="rejectReason" jdbcType="VARCHAR"/>
+        <result column="certified_at" property="certifiedAt" jdbcType="TIMESTAMP"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -24,7 +27,8 @@
     <sql id="Base_Column_List">
         id, user_id, company_intro, company_tags, credit_code, company_industry,
         company_scale, company_region, company_website, contact_person, contact_position,
-        contact_phone, contact_email, qualification_files, create_time, update_time
+        contact_phone, contact_email, qualification_files, certification_status, reject_reason,
+        certified_at, create_time, update_time
     </sql>
 
     <select id="queryByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -61,5 +65,31 @@
             qualification_files = #{qualificationFiles}
         WHERE user_id = #{userId}
     </update>
+
+    <update id="updateQualificationFiles">
+        UPDATE company_profile SET qualification_files = #{qualificationFiles}
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updateCertificationStatus">
+        UPDATE company_profile SET
+            certification_status = #{status},
+            reject_reason = #{rejectReason},
+            certified_at = #{certifiedAt}
+        WHERE user_id = #{userId}
+    </update>
+
+    <select id="selectByCertificationStatus" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM company_profile
+        WHERE certification_status = #{status}
+        ORDER BY update_time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countByCertificationStatus" resultType="long">
+        SELECT COUNT(*) FROM company_profile
+        WHERE certification_status = #{status}
+    </select>
 
 </mapper>

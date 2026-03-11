@@ -50,6 +50,37 @@ public class StorageService {
         return url;
     }
 
+    /**
+     * 存储企业资质文件，返回可访问的相对 URL
+     */
+    public String storeQualificationFile(String userId, MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) {
+            throw new IOException("文件为空");
+        }
+        String originalName = file.getOriginalFilename();
+        if (originalName == null || originalName.trim().isEmpty()) {
+            originalName = generateDefaultName(file.getName());
+        }
+        String sanitizedName = sanitizeFileName(originalName);
+
+        String osName = System.getProperty("os.name", "").toLowerCase();
+        boolean isWindows = osName.startsWith(WINDOWS_PREFIX);
+        String baseDir = isWindows
+                ? Paths.get(System.getProperty("user.dir"), "data", "qualifications").toString()
+                : Paths.get("/data", "qualifications").toString();
+
+        Path targetDir = Paths.get(baseDir, userId);
+        if (!Files.exists(targetDir)) {
+            Files.createDirectories(targetDir);
+        }
+        Path targetFile = targetDir.resolve(sanitizedName);
+        Files.copy(file.getInputStream(), targetFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+        String url = String.format("/static/qualifications/%s/%s", userId, sanitizedName);
+        log.info("资质文件已保存 path={}, url={}", targetFile, url);
+        return url;
+    }
+
     private String resolveBaseDir() {
         String osName = System.getProperty("os.name", "").toLowerCase();
         boolean isWindows = osName.startsWith(WINDOWS_PREFIX);
