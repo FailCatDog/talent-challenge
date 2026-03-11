@@ -84,10 +84,21 @@ public interface IUserManagementRepository {
 
     /**
      * 更新企业资质文件列表
-     * @param userId 用户ID
-     * @param fileUrls 文件URL列表
      */
     void updateCompanyQualificationFiles(String userId, List<String> fileUrls);
+
+    /**
+     * 更新企业认证核心字段
+     */
+    void updateCompanyCoreFields(String userId, String creditCode, String companyIndustry,
+                                  String companyScale, String contactPerson, String contactPosition,
+                                  String contactPhone, String contactEmail);
+
+    /**
+     * 更新企业可自由修改字段
+     */
+    void updateCompanyFreeFields(String userId, String companyIntro, List<String> companyTags,
+                                  String companyWebsite, String companyRegion);
 
     /**
      * 按认证状态分页查询企业列表

@@ -193,6 +193,21 @@ public class UserManagementRepository implements IUserManagementRepository {
     }
 
     @Override
+    public void updateCompanyCoreFields(String userId, String creditCode, String companyIndustry,
+                                         String companyScale, String contactPerson, String contactPosition,
+                                         String contactPhone, String contactEmail) {
+        companyProfileDao.updateCoreFields(userId, creditCode, companyIndustry, companyScale,
+                contactPerson, contactPosition, contactPhone, contactEmail);
+    }
+
+    @Override
+    public void updateCompanyFreeFields(String userId, String companyIntro, List<String> companyTags,
+                                         String companyWebsite, String companyRegion) {
+        String tagsJson = companyTags != null ? JSON.toJSONString(companyTags) : null;
+        companyProfileDao.updateFreeFields(userId, companyIntro, tagsJson, companyWebsite, companyRegion);
+    }
+
+    @Override
     public void updateCompanyCertificationStatus(String userId, String status, String rejectReason) {
         LocalDateTime certifiedAt = CertificationStatusEnum.CERTIFIED.getCode().equals(status)
                 ? LocalDateTime.now() : null;

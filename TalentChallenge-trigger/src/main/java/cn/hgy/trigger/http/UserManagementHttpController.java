@@ -3,6 +3,8 @@ package cn.hgy.trigger.http;
 import cn.hgy.api.IUserManagementHttpService;
 import cn.hgy.api.dto.AdminCreateRequestDTO;
 import cn.hgy.api.dto.CompanyPendingReviewDTO;
+import cn.hgy.api.dto.CompanyProfileUpdateRequestDTO;
+import cn.hgy.api.dto.CompanyQualificationSubmitRequestDTO;
 import cn.hgy.api.dto.UserLoginRequestDTO;
 import cn.hgy.api.dto.UserLoginResponseDTO;
 import cn.hgy.api.dto.UserProfileResponseDTO;
@@ -167,16 +169,35 @@ public class UserManagementHttpController implements IUserManagementHttpService 
     }
 
     /**
-     * 企业提交资质审核
+     * 企业更新可自由修改字段（简介、标签、官网、地区）
      */
-    @PostMapping(value = "/company/submit_qualification")
-    public Response<Boolean> submitQualification(@RequestBody Map<String, List<String>> body, HttpServletRequest request) {
+    @PostMapping(value = "/company/update_profile")
+    public Response<Boolean> updateCompanyProfile(@RequestBody CompanyProfileUpdateRequestDTO req,
+                                                   HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
         if (StrUtil.isBlank(userId)) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
         }
-        List<String> fileUrls = body.get("fileUrls");
-        userManagementService.submitCompanyQualification(userId, fileUrls);
+        userManagementService.updateCompanyFreeFields(userId, req.getCompanyIntro(),
+                req.getCompanyTags(), req.getCompanyWebsite(), req.getCompanyRegion());
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), true);
+    }
+
+    /**
+     * 企业提交资质审核（含核心字段 + 文件URL）
+     * 已认证状态下拒绝修改核心字段
+     */
+    @PostMapping(value = "/company/submit_qualification")
+    public Response<Boolean> submitQualification(@RequestBody CompanyQualificationSubmitRequestDTO req,
+                                                  HttpServletRequest request) {
+        String userId = UserContextDynamic.getUserContextDynamic();
+        if (StrUtil.isBlank(userId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        userManagementService.submitCompanyQualification(userId, req.getFileUrls(),
+                req.getCreditCode(), req.getCompanyIndustry(), req.getCompanyScale(),
+                req.getContactPerson(), req.getContactPosition(),
+                req.getContactPhone(), req.getContactEmail());
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), true);
     }
 

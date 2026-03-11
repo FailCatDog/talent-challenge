@@ -45,6 +45,27 @@ public interface CompanyProfileDao {
                                   @Param("qualificationFiles") String qualificationFiles);
 
     /**
+     * 更新企业认证核心字段（社会信用代码、行业、规模、联系人等）
+     */
+    int updateCoreFields(@Param("userId") String userId,
+                          @Param("creditCode") String creditCode,
+                          @Param("companyIndustry") String companyIndustry,
+                          @Param("companyScale") String companyScale,
+                          @Param("contactPerson") String contactPerson,
+                          @Param("contactPosition") String contactPosition,
+                          @Param("contactPhone") String contactPhone,
+                          @Param("contactEmail") String contactEmail);
+
+    /**
+     * 更新企业可自由修改字段（简介、标签、官网、地区）
+     */
+    int updateFreeFields(@Param("userId") String userId,
+                          @Param("companyIntro") String companyIntro,
+                          @Param("companyTags") String companyTags,
+                          @Param("companyWebsite") String companyWebsite,
+                          @Param("companyRegion") String companyRegion);
+
+    /**
      * 按认证状态分页查询企业列表
      */
     List<CompanyProfile> selectByCertificationStatus(@Param("status") String status,

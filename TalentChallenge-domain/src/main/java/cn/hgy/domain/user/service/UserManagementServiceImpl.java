@@ -263,11 +263,31 @@ public class UserManagementServiceImpl implements IUserManagementService{
     }
 
     @Override
-    public void submitCompanyQualification(String userId, List<String> fileUrls) {
-        // 更新资质文件并将状态改为待审核
+    public void submitCompanyQualification(String userId, List<String> fileUrls,
+                                            String creditCode, String companyIndustry, String companyScale,
+                                            String contactPerson, String contactPosition,
+                                            String contactPhone, String contactEmail) {
+        // 检查当前认证状态，已认证则拒绝修改核心字段
+        CompanyProfileEntity profile = repository.queryCompanyProfileByUserId(userId);
+        if (profile != null && CertificationStatusEnum.CERTIFIED.getCode().equals(profile.getCertificationStatus())) {
+            throw new AppException(ResponseCode.UN_ERROR.getCode(), "企业已认证，核心信息不可修改");
+        }
+
+        // 更新核心字段
+        repository.updateCompanyCoreFields(userId, creditCode, companyIndustry, companyScale,
+                contactPerson, contactPosition, contactPhone, contactEmail);
+        // 更新资质文件
         repository.updateCompanyQualificationFiles(userId, fileUrls);
+        // 状态变为待审核
         repository.updateCompanyCertificationStatus(userId, CertificationStatusEnum.PENDING_REVIEW.getCode(), null);
         log.info("企业提交资质审核 userId={}", userId);
+    }
+
+    @Override
+    public void updateCompanyFreeFields(String userId, String companyIntro, List<String> companyTags,
+                                         String companyWebsite, String companyRegion) {
+        repository.updateCompanyFreeFields(userId, companyIntro, companyTags, companyWebsite, companyRegion);
+        log.info("企业更新自由字段 userId={}", userId);
     }
 
     @Override

@@ -65,11 +65,19 @@ public interface IUserManagementService {
     UserProfileResponseDTO getUserProfile(String userId);
 
     /**
-     * 企业提交资质文件，状态变为 pending_review
-     * @param userId 企业用户ID
-     * @param fileUrls 资质文件URL列表
+     * 企业提交资质文件及核心字段，状态变为 pending_review
+     * 若已认证（certified），拒绝修改核心字段
      */
-    void submitCompanyQualification(String userId, List<String> fileUrls);
+    void submitCompanyQualification(String userId, List<String> fileUrls,
+                                     String creditCode, String companyIndustry, String companyScale,
+                                     String contactPerson, String contactPosition,
+                                     String contactPhone, String contactEmail);
+
+    /**
+     * 更新企业可自由修改字段（简介、标签、官网、地区）
+     */
+    void updateCompanyFreeFields(String userId, String companyIntro, List<String> companyTags,
+                                  String companyWebsite, String companyRegion);
 
     /**
      * 管理员通过企业认证

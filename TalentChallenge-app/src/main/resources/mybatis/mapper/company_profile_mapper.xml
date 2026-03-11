@@ -71,6 +71,27 @@
         WHERE user_id = #{userId}
     </update>
 
+    <update id="updateCoreFields">
+        UPDATE company_profile SET
+            credit_code = #{creditCode},
+            company_industry = #{companyIndustry},
+            company_scale = #{companyScale},
+            contact_person = #{contactPerson},
+            contact_position = #{contactPosition},
+            contact_phone = #{contactPhone},
+            contact_email = #{contactEmail}
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updateFreeFields">
+        UPDATE company_profile SET
+            company_intro = #{companyIntro},
+            company_tags = #{companyTags},
+            company_website = #{companyWebsite},
+            company_region = #{companyRegion}
+        WHERE user_id = #{userId}
+    </update>
+
     <update id="updateCertificationStatus">
         UPDATE company_profile SET
             certification_status = #{status},
