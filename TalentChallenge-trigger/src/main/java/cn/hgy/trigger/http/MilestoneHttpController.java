@@ -9,6 +9,9 @@ import cn.hgy.infrastructure.storage.StorageService;
 import cn.hgy.trigger.interceptor.UserContextDynamic;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -236,7 +239,108 @@ public class MilestoneHttpController implements IMilestoneHttpService {
             return new Response<>(ResponseCode.MILESTONE_CREATE_FAIL.getCode(), e.getMessage(), false);
         }
     }
-    
+
+    /**
+     * 学生上传里程碑交付物文件（支持多文件）
+     * Content-Type: multipart/form-data
+     * 参数：milestoneId（表单字段）、file（文件字段）
+     */
+    @PostMapping(value = "deliverable/files/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Response<String> uploadMilestoneDeliverableFile(
+            @RequestParam("milestoneId") String milestoneId,
+            @RequestParam("file") MultipartFile file,
+            HttpServletRequest request) {
+        try {
+            String userId = UserContextDynamic.getUserContextDynamic();
+            ensureLogin(userId);
+
+            if (StrUtil.isBlank(milestoneId)) {
+                return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑ID不能为空", null);
+            }
+
+            ProjectMilestoneEntity milestone = milestoneService.getMilestoneById(milestoneId);
+            if (milestone == null) {
+                return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑不存在", null);
+            }
+
+            String fileUrl = storageService.storeProposalFile(milestone.getProjectId(), milestoneId, file);
+
+            JSONArray fileList;
+            String existingFiles = milestone.getDeliverableFiles();
+            if (StrUtil.isBlank(existingFiles)) {
+                fileList = new JSONArray();
+            } else {
+                fileList = JSON.parseArray(existingFiles);
+            }
+
+            JSONObject fileInfo = new JSONObject();
+            fileInfo.put("fileName", file.getOriginalFilename());
+            fileInfo.put("fileUrl", fileUrl);
+            fileInfo.put("fileSize", file.getSize());
+            fileInfo.put("uploadTime", java.time.LocalDateTime.now().toString());
+            fileList.add(fileInfo);
+
+            milestone.setDeliverableFiles(fileList.toJSONString());
+            milestoneService.updateMilestone(milestone);
+
+            log.info("上传里程碑交付物文件成功 milestoneId={}, fileUrl={}, 当前文件数={}", milestoneId, fileUrl, fileList.size());
+            return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), fileUrl);
+        } catch (Exception e) {
+            log.error("上传里程碑交付物文件失败 milestoneId={}", milestoneId, e);
+            return new Response<>(ResponseCode.UN_ERROR.getCode(), "上传失败：" + e.getMessage(), null);
+        }
+    }
+
+    /**
+     * 企业上传里程碑参考文件（要求文档、规范文件等）
+     * 自动将文件信息追加到里程碑的 referenceFiles 字段
+     */
+    @PostMapping(value = "reference/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Response<String> uploadMilestoneReferenceFile(
+            @RequestParam("milestoneId") String milestoneId,
+            @RequestParam("file") MultipartFile file,
+            HttpServletRequest request) {
+        try {
+            String userId = UserContextDynamic.getUserContextDynamic();
+            ensureLogin(userId);
+
+            if (StrUtil.isBlank(milestoneId)) {
+                return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑ID不能为空", null);
+            }
+
+            ProjectMilestoneEntity milestone = milestoneService.getMilestoneById(milestoneId);
+            if (milestone == null) {
+                return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑不存在", null);
+            }
+
+            String fileUrl = storageService.storeMilestoneReferenceFile(milestone.getProjectId(), milestoneId, file);
+
+            JSONArray fileList;
+            String existingFiles = milestone.getReferenceFiles();
+            if (StrUtil.isBlank(existingFiles)) {
+                fileList = new JSONArray();
+            } else {
+                fileList = JSON.parseArray(existingFiles);
+            }
+
+            JSONObject fileInfo = new JSONObject();
+            fileInfo.put("fileName", file.getOriginalFilename());
+            fileInfo.put("fileUrl", fileUrl);
+            fileInfo.put("fileSize", file.getSize());
+            fileInfo.put("uploadTime", java.time.LocalDateTime.now().toString());
+            fileList.add(fileInfo);
+
+            milestone.setReferenceFiles(fileList.toJSONString());
+            milestoneService.updateMilestone(milestone);
+
+            log.info("上传里程碑参考文件成功 milestoneId={}, fileUrl={}, 当前文件数={}", milestoneId, fileUrl, fileList.size());
+            return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), fileUrl);
+        } catch (Exception e) {
+            log.error("上传里程碑参考文件失败 milestoneId={}", milestoneId, e);
+            return new Response<>(ResponseCode.UN_ERROR.getCode(), "上传失败：" + e.getMessage(), null);
+        }
+    }
+
     private MilestoneResponseDTO convertToDTO(ProjectMilestoneEntity entity) {
         return MilestoneResponseDTO.builder()
                 .milestoneId(entity.getMilestoneId())
@@ -248,6 +352,8 @@ public class MilestoneHttpController implements IMilestoneHttpService {
                 .status(entity.getStatus())
                 .progressPercent(entity.getProgressPercent())
                 .deliverableUrl(entity.getDeliverableUrl())
+                .deliverableFiles(entity.getDeliverableFiles())
+                .referenceFiles(entity.getReferenceFiles())
                 .approvalStatus(entity.getApprovalStatus())
                 .currentOwnerId(entity.getCurrentOwnerId())
                 .plannedStartTime(entity.getPlannedStartTime())

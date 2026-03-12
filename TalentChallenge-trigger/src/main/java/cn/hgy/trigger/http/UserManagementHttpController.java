@@ -22,6 +22,9 @@ import cn.hgy.trigger.interceptor.UserContextDynamic;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.exception.AppException;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -153,21 +156,46 @@ public class UserManagementHttpController implements IUserManagementHttpService 
     }
 
     /**
-     * 企业上传资质文件（单文件）
+     * 企业上传资质文件（支持多文件，自动追加到JSON数组）
      */
     @PostMapping(value = "/company/upload_qualification")
     public Response<String> uploadQualificationFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
-        String userId = UserContextDynamic.getUserContextDynamic();
-        if (StrUtil.isBlank(userId)) {
-            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
-        }
         try {
-            String url = storageService.storeQualificationFile(userId, file);
-            log.info("企业上传资质文件 userId={}, url={}", userId, url);
-            return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), url);
-        } catch (IOException e) {
-            log.error("企业上传资质文件失败 userId={}", userId, e);
-            throw new AppException(ResponseCode.UN_ERROR.getCode(), "文件上传失败");
+            String userId = UserContextDynamic.getUserContextDynamic();
+            if (StrUtil.isBlank(userId)) {
+                throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+            }
+
+            String fileUrl = storageService.storeQualificationFile(userId, file);
+
+            CompanyProfileEntity companyProfile = userManagementRepository.queryCompanyProfile(userId);
+            if (companyProfile == null) {
+                return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), "企业资料不存在", null);
+            }
+
+            JSONArray fileList;
+            String existingFiles = companyProfile.getQualificationFiles();
+            if (StrUtil.isBlank(existingFiles)) {
+                fileList = new JSONArray();
+            } else {
+                fileList = JSON.parseArray(existingFiles);
+            }
+
+            JSONObject fileInfo = new JSONObject();
+            fileInfo.put("fileName", file.getOriginalFilename());
+            fileInfo.put("fileUrl", fileUrl);
+            fileInfo.put("fileSize", file.getSize());
+            fileInfo.put("uploadTime", java.time.LocalDateTime.now().toString());
+            fileList.add(fileInfo);
+
+            companyProfile.setQualificationFiles(fileList.toJSONString());
+            userManagementRepository.updateCompanyProfile(companyProfile);
+
+            log.info("企业上传资质文件成功 userId=, fileUrl={}, 当前文件数={}", userId, fileUrl, fileList.size());
+            return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), fileUrl);
+        } catch (Exception e) {
+            log.error("企业上传资质文件失败", e);
+            return new Response<>(ResponseCode.UN_ERROR.getCode(), "上传失败：" + e.getMessage(), null);
         }
     }
 

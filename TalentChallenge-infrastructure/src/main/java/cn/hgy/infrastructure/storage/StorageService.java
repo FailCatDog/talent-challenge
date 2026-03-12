@@ -1,6 +1,9 @@
 package cn.hgy.infrastructure.storage;
 
+import cn.hgy.types.enums.ResponseCode;
+import cn.hgy.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,6 +13,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -21,7 +26,18 @@ import java.util.Objects;
 @Service
 public class StorageService {
 
-    private static final String WINDOWS_PREFIX = "win";
+    @Value("${file.upload.path.milestones}")
+    private String milestonesBasePath;
+
+    @Value("${file.upload.path.qualifications}")
+    private String qualificationsBasePath;
+
+    @Value("${file.upload.path.bids}")
+    private String bidsBasePath;
+
+    @Value("${file.upload.allowed-types}")
+    private String allowedTypesConfig;
+
     private static final String STATIC_PREFIX = "/static/milestones";
 
     /**
@@ -31,14 +47,17 @@ public class StorageService {
         if (file == null || file.isEmpty()) {
             throw new IOException("文件为空");
         }
-        String baseDir = resolveBaseDir();
         String originalName = file.getOriginalFilename();
         if (originalName == null || originalName.trim().isEmpty()) {
             originalName = generateDefaultName(file.getName());
         }
+
+        // 验证文件类型
+        validateFileType(originalName);
+
         String sanitizedName = sanitizeFileName(originalName);
 
-        Path targetDir = Paths.get(baseDir, projectId, milestoneId);
+        Path targetDir = Paths.get(milestonesBasePath, projectId, milestoneId);
         if (!Files.exists(targetDir)) {
             Files.createDirectories(targetDir);
         }
@@ -61,15 +80,13 @@ public class StorageService {
         if (originalName == null || originalName.trim().isEmpty()) {
             originalName = generateDefaultName(file.getName());
         }
+
+        // 验证文件类型
+        validateFileType(originalName);
+
         String sanitizedName = sanitizeFileName(originalName);
 
-        String osName = System.getProperty("os.name", "").toLowerCase();
-        boolean isWindows = osName.startsWith(WINDOWS_PREFIX);
-        String baseDir = isWindows
-                ? Paths.get(System.getProperty("user.dir"), "data", "qualifications").toString()
-                : Paths.get("/data", "qualifications").toString();
-
-        Path targetDir = Paths.get(baseDir, userId);
+        Path targetDir = Paths.get(qualificationsBasePath, userId);
         if (!Files.exists(targetDir)) {
             Files.createDirectories(targetDir);
         }
@@ -81,13 +98,60 @@ public class StorageService {
         return url;
     }
 
-    private String resolveBaseDir() {
-        String osName = System.getProperty("os.name", "").toLowerCase();
-        boolean isWindows = osName.startsWith(WINDOWS_PREFIX);
-        if (isWindows) {
-            return Paths.get(System.getProperty("user.dir"), "data", "milestones").toString();
+    /**
+     * 存储揭榜申请附件，返回可访问的相对 URL
+     */
+    public String storeBidAttachment(String bidId, MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) {
+            throw new IOException("文件为空");
         }
-        return Paths.get("/data", "milestones").toString();
+        String originalName = file.getOriginalFilename();
+        if (originalName == null || originalName.trim().isEmpty()) {
+            originalName = generateDefaultName(file.getName());
+        }
+
+        // 验证文件类型
+        validateFileType(originalName);
+
+        String sanitizedName = sanitizeFileName(originalName);
+
+        Path targetDir = Paths.get(bidsBasePath, bidId);
+        if (!Files.exists(targetDir)) {
+            Files.createDirectories(targetDir);
+        }
+        Path targetFile = targetDir.resolve(sanitizedName);
+        Files.copy(file.getInputStream(), targetFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+        String url = String.format("/static/bids/%s/%s", bidId, sanitizedName);
+        log.info("揭榜附件已保存 path={}, url={}", targetFile, url);
+        return url;
+    }
+
+    /**
+     * 存储里程碑参考文件（企业上传的要求文档、规范文件等），返回可访问的相对 URL
+     */
+    public String storeMilestoneReferenceFile(String projectId, String milestoneId, MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) {
+            throw new IOException("文件为空");
+        }
+        String originalName = file.getOriginalFilename();
+        if (originalName == null || originalName.trim().isEmpty()) {
+            originalName = generateDefaultName(file.getName());
+        }
+
+        validateFileType(originalName);
+        String sanitizedName = sanitizeFileName(originalName);
+
+        Path targetDir = Paths.get(milestonesBasePath, "references", projectId, milestoneId);
+        if (!Files.exists(targetDir)) {
+            Files.createDirectories(targetDir);
+        }
+        Path targetFile = targetDir.resolve(sanitizedName);
+        Files.copy(file.getInputStream(), targetFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+        String url = String.format("/static/milestones/references/%s/%s/%s", projectId, milestoneId, sanitizedName);
+        log.info("里程碑参考文件已保存 path={}, url={}", targetFile, url);
+        return url;
     }
 
     private String generateDefaultName(String seed) {
@@ -99,6 +163,29 @@ public class StorageService {
         // 去除路径分隔符，防止目录穿越
         String replaced = name.replace("\\", "_").replace("/", "_");
         return replaced.trim();
+    }
+
+    /**
+     * 验证文件类型
+     */
+    private void validateFileType(String fileName) {
+        String extension = getFileExtension(fileName);
+        List<String> allowedTypes = Arrays.asList(allowedTypesConfig.split(","));
+
+        if (!allowedTypes.contains(extension.toLowerCase())) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                "不支持的文件类型，仅支持：" + allowedTypesConfig);
+        }
+    }
+
+    /**
+     * 获取文件扩展名
+     */
+    private String getFileExtension(String fileName) {
+        if (fileName == null || !fileName.contains(".")) {
+            return "";
+        }
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }
 

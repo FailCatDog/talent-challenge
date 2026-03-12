@@ -13,6 +13,7 @@ import cn.hgy.domain.project.model.entity.ProjectEntity;
 import cn.hgy.domain.project.service.IProjectService;
 import cn.hgy.domain.team.model.entity.TeamEntity;
 import cn.hgy.domain.team.repository.ITeamRepository;
+import cn.hgy.infrastructure.storage.StorageService;
 import cn.hgy.trigger.interceptor.UserContextDynamic;
 import cn.hgy.types.common.BidCommand;
 import cn.hgy.types.enums.ResponseCode;
@@ -22,6 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,7 @@ public class BidHttpController implements IBidHttpService {
     private final IBidService bidService;
     private final IProjectService projectService;
     private final ITeamRepository teamRepository;
+    private final StorageService storageService;
 
     private static final int STUDENT_TYPE = 1;
     private static final int COMPANY_TYPE = 2;
@@ -187,6 +190,45 @@ public class BidHttpController implements IBidHttpService {
         log.info("user {} query bid detail {}", userId, bidId);
         cn.hgy.api.dto.BidDetailResponseDTO result = bidService.getBidDetail(bidId, userId);
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
+    }
+
+    /**
+     * 学生上传揭榜申请附件
+     */
+    @PostMapping("attachment/upload")
+    public Response<String> uploadBidAttachment(
+            @RequestParam("bidId") String bidId,
+            @RequestParam("file") MultipartFile file,
+            HttpServletRequest request) {
+        try {
+            ensureStudent(UserContextDynamic.getUserType());
+            String userId = requireUserId();
+
+            // 验证揭榜申请是否存在且属于当前用户的团队
+            BidEntity bid = bidService.queryBidById(bidId);
+            if (bid == null) {
+                throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "揭榜申请不存在");
+            }
+
+            TeamEntity team = teamRepository.queryByLeaderId(userId)
+                    .orElseThrow(() -> new AppException(ResponseCode.BID_TEAM_REQUIRED.getCode(), ResponseCode.BID_TEAM_REQUIRED.getInfo()));
+
+            if (!StrUtil.equals(bid.getTeamId(), team.getTeamId())) {
+                throw new AppException(ResponseCode.BID_PERMISSION_DENIED.getCode(), "无权操作此揭榜申请");
+            }
+
+            // 存储文件
+            String fileUrl = storageService.storeBidAttachment(bidId, file);
+
+            // 更新揭榜申请的附件URL
+            bidService.updateBidAttachment(bidId, fileUrl);
+
+            log.info("上传揭榜附件成功 bidId={}, fileUrl={}", bidId, fileUrl);
+            return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), fileUrl);
+        } catch (Exception e) {
+            log.error("上传揭榜附件失败 bidId={}", bidId, e);
+            return new Response<>(ResponseCode.UN_ERROR.getCode(), "上传失败：" + e.getMessage(), null);
+        }
     }
 
     private void ensureStudent(Integer userType) {

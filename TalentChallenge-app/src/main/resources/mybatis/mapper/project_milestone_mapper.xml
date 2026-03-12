@@ -13,6 +13,8 @@
         <result column="status" property="status" jdbcType="VARCHAR"/>
         <result column="progress_percent" property="progressPercent" jdbcType="TINYINT"/>
         <result column="deliverable_url" property="deliverableUrl" jdbcType="VARCHAR"/>
+        <result column="deliverable_files" property="deliverableFiles" jdbcType="VARCHAR"/>
+        <result column="reference_files" property="referenceFiles" jdbcType="VARCHAR"/>
         <result column="approval_rule" property="approvalRule" jdbcType="VARCHAR"/>
         <result column="approval_status" property="approvalStatus" jdbcType="VARCHAR"/>
         <result column="current_owner_id" property="currentOwnerId" jdbcType="VARCHAR"/>
@@ -32,7 +34,7 @@
 
     <sql id="Base_Column_List">
         id, milestone_id, project_id, milestone_code, name, description, sequence_order, status,
-        progress_percent, deliverable_url, approval_rule, approval_status, current_owner_id,
+        progress_percent, deliverable_url, deliverable_files, reference_files, approval_rule, approval_status, current_owner_id,
         planned_start_time, planned_end_time, actual_start_time, actual_end_time, auto_extended_count,
         remind_before_hours, is_skipped, skip_reason, remark, create_time, update_time, version
     </sql>
@@ -40,12 +42,12 @@
     <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.ProjectMilestone">
         INSERT INTO project_milestone (
             milestone_id, project_id, milestone_code, name, description, sequence_order, status,
-            progress_percent, deliverable_url, approval_rule, approval_status, current_owner_id,
+            progress_percent, deliverable_url, deliverable_files, reference_files, approval_rule, approval_status, current_owner_id,
             planned_start_time, planned_end_time, actual_start_time, actual_end_time, auto_extended_count,
             remind_before_hours, is_skipped, skip_reason, remark, create_time, update_time, version
         ) VALUES (
             #{milestoneId}, #{projectId}, #{milestoneCode}, #{name}, #{description}, #{sequenceOrder},
-            #{status}, #{progressPercent}, #{deliverableUrl}, #{approvalRule}, #{approvalStatus}, #{currentOwnerId},
+            #{status}, #{progressPercent}, #{deliverableUrl}, #{deliverableFiles}, #{referenceFiles}, #{approvalRule}, #{approvalStatus}, #{currentOwnerId},
             #{plannedStartTime}, #{plannedEndTime}, #{actualStartTime}, #{actualEndTime}, #{autoExtendedCount},
             #{remindBeforeHours}, #{isSkipped}, #{skipReason}, #{remark}, #{createTime}, #{updateTime}, #{version}
         )
@@ -54,7 +56,7 @@
     <insert id="batchInsert" parameterType="java.util.List">
         INSERT INTO project_milestone (
             milestone_id, project_id, milestone_code, name, description, sequence_order, status,
-            progress_percent, deliverable_url, approval_rule, approval_status, current_owner_id,
+            progress_percent, deliverable_url, deliverable_files, reference_files, approval_rule, approval_status, current_owner_id,
             planned_start_time, planned_end_time, actual_start_time, actual_end_time, auto_extended_count,
             remind_before_hours, is_skipped, skip_reason, remark, create_time, update_time, version
         ) VALUES
@@ -62,7 +64,7 @@
             (
                 #{item.milestoneId}, #{item.projectId}, #{item.milestoneCode}, #{item.name}, #{item.description},
                 #{item.sequenceOrder}, #{item.status}, #{item.progressPercent}, #{item.deliverableUrl},
-                #{item.approvalRule}, #{item.approvalStatus}, #{item.currentOwnerId}, #{item.plannedStartTime},
+                #{item.deliverableFiles}, #{item.referenceFiles}, #{item.approvalRule}, #{item.approvalStatus}, #{item.currentOwnerId}, #{item.plannedStartTime},
                 #{item.plannedEndTime}, #{item.actualStartTime}, #{item.actualEndTime}, #{item.autoExtendedCount},
                 #{item.remindBeforeHours}, #{item.isSkipped}, #{item.skipReason}, #{item.remark},
                 #{item.createTime}, #{item.updateTime}, #{item.version}
@@ -79,6 +81,8 @@
             status = #{status},
             progress_percent = #{progressPercent},
             deliverable_url = #{deliverableUrl},
+            deliverable_files = #{deliverableFiles},
+            reference_files = #{referenceFiles},
             approval_rule = #{approvalRule},
             approval_status = #{approvalStatus},
             current_owner_id = #{currentOwnerId},

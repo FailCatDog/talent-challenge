@@ -114,6 +114,11 @@ public class BidRepository implements IBidRepository {
         return bidDao.selectStudentBids(userId);
     }
 
+    @Override
+    public void updateBidAttachment(String bidId, String attachmentUrl) {
+        bidDao.updateBidAttachment(bidId, attachmentUrl);
+    }
+
     private Bid convertToPo(BidEntity entity) {
         Bid bid = new Bid();
         bid.setBidId(entity.getBidId());

@@ -41,5 +41,12 @@ public interface IBidRepository {
      * @return 学生揭榜列表
      */
     List<StudentBidListResponseDTO> queryStudentBids(String userId);
+
+    /**
+     * 更新揭榜申请附件URL
+     * @param bidId 揭榜ID
+     * @param attachmentUrl 附件URL
+     */
+    void updateBidAttachment(String bidId, String attachmentUrl);
 }
 

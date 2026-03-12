@@ -79,9 +79,9 @@ public class CompanyProfileEntity {
     private String contactEmail;
 
     /**
-     * 资质文件URL数组
+     * 资质文件列表，JSON数组格式，包含文件元数据
      */
-    private List<String> qualificationFiles;
+    private String qualificationFiles;
 
     /**
      * 认证状态: uncertified/pending_review/certified/rejected

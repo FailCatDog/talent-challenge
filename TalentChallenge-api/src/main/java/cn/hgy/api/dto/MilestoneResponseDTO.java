@@ -27,6 +27,8 @@ public class MilestoneResponseDTO {
     private String status;
     private Integer progressPercent;
     private String deliverableUrl;
+    private String deliverableFiles;
+    private String referenceFiles;
     private String approvalStatus;
     private String currentOwnerId;
     private LocalDateTime plannedStartTime;

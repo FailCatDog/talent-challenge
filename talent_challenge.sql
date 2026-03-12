@@ -229,6 +229,8 @@ CREATE TABLE `project_milestone`  (
   `status` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'planned' COMMENT '阶段状态：planned, in_progress, delivered, under_review, completed, rejected, expired, skipped',
   `progress_percent` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '阶段进度0-100',
   `deliverable_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '成果附件/链接',
+  `deliverable_files` json NULL COMMENT '学生提交的交付物文件列表，JSON数组格式',
+  `reference_files` json NULL COMMENT '企业上传的参考文件列表（要求文档、规范文件等），JSON数组格式',
   `approval_rule` json NULL COMMENT '审批规则配置（固定里程碑的角色/节点要求）',
   `approval_status` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'pending' COMMENT '审批状态：pending, partial, approved, rejected',
   `current_owner_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '当前负责人（如企业或获奖团队用户ID）',

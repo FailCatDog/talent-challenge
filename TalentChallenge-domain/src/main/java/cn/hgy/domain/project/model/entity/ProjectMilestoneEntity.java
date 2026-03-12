@@ -59,7 +59,17 @@ public class ProjectMilestoneEntity {
      * 成果附件/链接
      */
     private String deliverableUrl;
-    
+
+    /**
+     * 学生提交的交付物文件列表，JSON数组格式
+     */
+    private String deliverableFiles;
+
+    /**
+     * 企业上传的参考文件列表（要求文档、规范文件等），JSON数组格式
+     */
+    private String referenceFiles;
+
     /**
      * 审批规则配置（JSON格式）
      */

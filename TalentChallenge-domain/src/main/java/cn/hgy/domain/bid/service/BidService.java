@@ -239,5 +239,21 @@ public class BidService implements IBidService {
         }
         return true;
     }
+
+    @Override
+    public BidEntity queryBidById(String bidId) {
+        return loadBid(bidId);
+    }
+
+    @Override
+    public boolean updateBidAttachment(String bidId, String attachmentUrl) {
+        if (StrUtil.isBlank(bidId) || StrUtil.isBlank(attachmentUrl)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+
+        bidRepository.updateBidAttachment(bidId, attachmentUrl);
+        return true;
+    }
 }
 

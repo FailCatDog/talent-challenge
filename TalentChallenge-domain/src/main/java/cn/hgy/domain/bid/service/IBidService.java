@@ -41,5 +41,15 @@ public interface IBidService {
      * @param currentUserId 当前请求用户ID，用于判断在团队中的角色
      */
     BidDetailResponseDTO getBidDetail(String bidId, String currentUserId);
+
+    /**
+     * 根据ID查询揭榜申请
+     */
+    BidEntity queryBidById(String bidId);
+
+    /**
+     * 更新揭榜申请附件URL
+     */
+    boolean updateBidAttachment(String bidId, String attachmentUrl);
 }
 

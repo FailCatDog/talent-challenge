@@ -41,5 +41,11 @@ public interface BidDao {
      * 查询学生的揭榜列表
      */
     List<StudentBidListResponseDTO> selectStudentBids(@Param("userId") String userId);
+
+    /**
+     * 更新揭榜申请附件URL
+     */
+    void updateBidAttachment(@Param("bidId") String bidId,
+                            @Param("attachmentUrl") String attachmentUrl);
 }
 

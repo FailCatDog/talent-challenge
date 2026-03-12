@@ -160,5 +160,12 @@
         ORDER BY b.create_time DESC
     </select>
 
+    <update id="updateBidAttachment">
+        UPDATE bid
+        SET attachment_url = #{attachmentUrl},
+            update_time = NOW()
+        WHERE bid_id = #{bidId}
+    </update>
+
 </mapper>
 
