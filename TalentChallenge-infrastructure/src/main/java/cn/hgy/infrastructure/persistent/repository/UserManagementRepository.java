@@ -4,6 +4,7 @@ import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
 import cn.hgy.domain.user.model.entity.StudentProfileEntity;
 import cn.hgy.domain.user.model.entity.UserAuthCredentialEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
+import cn.hgy.domain.user.model.valobj.UserStatisticsVO;
 import cn.hgy.domain.user.repository.IUserManagementRepository;
 import cn.hgy.infrastructure.persistent.dao.CompanyProfileDao;
 import cn.hgy.infrastructure.persistent.dao.StudentProfileDao;
@@ -23,7 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -234,5 +237,43 @@ public class UserManagementRepository implements IUserManagementRepository {
     @Override
     public long countCompaniesByCertificationStatus(String status) {
         return companyProfileDao.countByCertificationStatus(status);
+    }
+
+    @Override
+    public UserStatisticsVO getUserStatistics() {
+        // 按用户类型分组统计
+        List<Map<String, Object>> typeList = userDao.countGroupByType();
+        long totalCount = 0;
+        long studentCount = 0;
+        long companyCount = 0;
+        long adminCount = 0;
+        for (Map<String, Object> item : typeList) {
+            int type = ((Number) item.get("type")).intValue();
+            long count = ((Number) item.get("count")).longValue();
+            totalCount += count;
+            switch (type) {
+                case 1 -> studentCount = count;
+                case 2 -> companyCount = count;
+                case 3 -> adminCount = count;
+            }
+        }
+
+        // 按认证状态分组统计
+        List<Map<String, Object>> certList = companyProfileDao.countGroupByCertificationStatus();
+        Map<String, Long> certStatusCount = new HashMap<>();
+        for (Map<String, Object> item : certList) {
+            String certStatus = String.valueOf(item.get("certificationStatus"));
+            long count = ((Number) item.get("count")).longValue();
+            certStatusCount.put(certStatus, count);
+        }
+
+        return UserStatisticsVO.builder()
+                .totalCount(totalCount)
+                .studentCount(studentCount)
+                .companyCount(companyCount)
+                .adminCount(adminCount)
+                .activeCount(null)
+                .certificationStatusCount(certStatusCount)
+                .build();
     }
 }

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户Dao接口
@@ -79,4 +80,9 @@ public interface UserDao {
      * @param user 用户对象
      */
     int updateProfileByUserId(User user);
+
+    /**
+     * 按用户类型分组统计
+     */
+    List<Map<String, Object>> countGroupByType();
 }

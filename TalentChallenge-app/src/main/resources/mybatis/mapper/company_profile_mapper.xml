@@ -113,4 +113,10 @@
         WHERE certification_status = #{status}
     </select>
 
+    <!-- 按认证状态分组统计 -->
+    <select id="countGroupByCertificationStatus" resultType="java.util.Map">
+        SELECT certification_status as certificationStatus, COUNT(*) as count
+        FROM company_profile GROUP BY certification_status
+    </select>
+
 </mapper>

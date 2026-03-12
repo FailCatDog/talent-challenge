@@ -404,8 +404,26 @@
     </select>
 
     <select id="countByAcceptedTeamIdAndStatus" resultType="long">
-        SELECT COUNT(1) FROM project 
+        SELECT COUNT(1) FROM project
         WHERE accepted_team_id = #{teamId} AND status = #{status}
+    </select>
+
+    <!-- 按状态分组统计项目数量 -->
+    <select id="countGroupByStatus" resultType="java.util.Map">
+        SELECT status, COUNT(*) as count FROM project GROUP BY status
+    </select>
+
+    <!-- 统计指定时间之后创建的项目数量 -->
+    <select id="countByCreateTimeAfter" resultType="long">
+        SELECT COUNT(*) FROM project WHERE create_time &gt;= #{startTime}
+    </select>
+
+    <!-- 按分类分组统计项目数量 -->
+    <select id="countGroupByCategory" resultType="java.util.Map">
+        SELECT p.category_id as categoryId, pc.name as categoryName, COUNT(*) as projectCount
+        FROM project p
+        LEFT JOIN project_category pc ON p.category_id = pc.project_category_id
+        GROUP BY p.category_id, pc.name
     </select>
 
 </mapper>

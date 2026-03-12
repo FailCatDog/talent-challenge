@@ -5,6 +5,7 @@ import cn.hgy.domain.user.model.entity.StudentProfileEntity;
 import cn.hgy.domain.user.model.entity.UserAuthCredentialEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
+import cn.hgy.domain.user.model.valobj.UserStatisticsVO;
 
 import java.util.List;
 
@@ -113,4 +114,10 @@ public interface IUserManagementRepository {
      * 按认证状态统计企业数量
      */
     long countCompaniesByCertificationStatus(String status);
+
+    /**
+     * 获取用户统计数据（各类型用户数、认证状态统计）
+     * @return 用户统计VO
+     */
+    UserStatisticsVO getUserStatistics();
 }

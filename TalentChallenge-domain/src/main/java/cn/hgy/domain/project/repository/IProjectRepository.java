@@ -1,6 +1,8 @@
 package cn.hgy.domain.project.repository;
 
 import cn.hgy.domain.project.model.entity.ProjectEntity;
+import cn.hgy.domain.project.model.valobj.CategoryDistributionVO;
+import cn.hgy.domain.project.model.valobj.ProjectStatisticsVO;
 
 import java.util.List;
 
@@ -220,4 +222,16 @@ public interface IProjectRepository {
      * @return 项目数量
      */
     Long countProjectsByAcceptedTeamId(String teamId, String status);
+
+    /**
+     * 获取项目统计数据（各状态数量、时间维度统计）
+     * @return 项目统计VO
+     */
+    ProjectStatisticsVO getProjectStatistics();
+
+    /**
+     * 获取项目分类分布统计
+     * @return 分类分布列表
+     */
+    List<CategoryDistributionVO> getCategoryDistribution();
 }

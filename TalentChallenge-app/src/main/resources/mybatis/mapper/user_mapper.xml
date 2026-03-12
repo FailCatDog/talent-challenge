@@ -117,4 +117,9 @@
         WHERE user_id = #{userId}
     </update>
 
+    <!-- 按用户类型分组统计 -->
+    <select id="countGroupByType" resultType="java.util.Map">
+        SELECT (type + 0) as type, COUNT(*) as count FROM user GROUP BY type
+    </select>
+
 </mapper>

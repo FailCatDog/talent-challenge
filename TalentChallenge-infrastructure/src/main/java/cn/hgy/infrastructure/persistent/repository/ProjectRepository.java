@@ -2,6 +2,8 @@ package cn.hgy.infrastructure.persistent.repository;
 
 import cn.hgy.domain.project.model.entity.ProjectCategoryEntity;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
+import cn.hgy.domain.project.model.valobj.CategoryDistributionVO;
+import cn.hgy.domain.project.model.valobj.ProjectStatisticsVO;
 import cn.hgy.domain.project.repository.IProjectRepository;
 import cn.hgy.infrastructure.persistent.dao.ProjectCategoryDao;
 import cn.hgy.infrastructure.persistent.dao.ProjectDao;
@@ -12,9 +14,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: 黄光宇
@@ -362,5 +369,55 @@ public class ProjectRepository implements IProjectRepository {
                 .publisherName(project.getPublisherName())
                 .acceptedTeamName(project.getAcceptedTeamName())
                 .build();
+    }
+
+    @Override
+    public ProjectStatisticsVO getProjectStatistics() {
+        // 按状态分组统计
+        List<Map<String, Object>> statusList = projectDao.countGroupByStatus();
+        Map<String, Long> statusCount = new HashMap<>();
+        long totalCount = 0;
+        for (Map<String, Object> item : statusList) {
+            String status = String.valueOf(item.get("status"));
+            long count = ((Number) item.get("count")).longValue();
+            statusCount.put(status, count);
+            totalCount += count;
+        }
+
+        // 按时间维度统计
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDate today = LocalDate.now();
+        String todayStart = today.atStartOfDay().format(fmt);
+        String weekStart = today.with(DayOfWeek.MONDAY).atStartOfDay().format(fmt);
+        String monthStart = today.withDayOfMonth(1).atStartOfDay().format(fmt);
+
+        long todayCount = projectDao.countByCreateTimeAfter(todayStart);
+        long weekCount = projectDao.countByCreateTimeAfter(weekStart);
+        long monthCount = projectDao.countByCreateTimeAfter(monthStart);
+
+        return ProjectStatisticsVO.builder()
+                .statusCount(statusCount)
+                .todayCount(todayCount)
+                .weekCount(weekCount)
+                .monthCount(monthCount)
+                .totalCount(totalCount)
+                .build();
+    }
+
+    @Override
+    public List<CategoryDistributionVO> getCategoryDistribution() {
+        List<Map<String, Object>> list = projectDao.countGroupByCategory();
+        List<CategoryDistributionVO> result = new ArrayList<>();
+        for (Map<String, Object> item : list) {
+            String categoryId = item.get("categoryId") != null ? String.valueOf(item.get("categoryId")) : null;
+            String categoryName = item.get("categoryName") != null ? String.valueOf(item.get("categoryName")) : "未分类";
+            long projectCount = ((Number) item.get("projectCount")).longValue();
+            result.add(CategoryDistributionVO.builder()
+                    .categoryId(categoryId)
+                    .categoryName(categoryName)
+                    .projectCount(projectCount)
+                    .build());
+        }
+        return result;
     }
 }

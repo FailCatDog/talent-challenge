@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 企业资料Dao接口
@@ -76,4 +77,9 @@ public interface CompanyProfileDao {
      * 按认证状态统计企业数量
      */
     long countByCertificationStatus(@Param("status") String status);
+
+    /**
+     * 按认证状态分组统计
+     */
+    List<Map<String, Object>> countGroupByCertificationStatus();
 }
