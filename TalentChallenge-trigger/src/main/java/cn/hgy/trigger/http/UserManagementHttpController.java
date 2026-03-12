@@ -222,8 +222,7 @@ public class UserManagementHttpController implements IUserManagementHttpService 
                 .creditCode((String) item.get("creditCode"))
                 .companyIndustry((String) item.get("companyIndustry"))
                 .certificationStatus((String) item.get("certificationStatus"))
-                .updateTime(item.get("updateTime") != null
-                        ? ((java.sql.Timestamp) item.get("updateTime")).toLocalDateTime() : null)
+                .updateTime((java.time.LocalDateTime) item.get("updateTime"))
                 .build()
         ).collect(Collectors.toList());
         Map<String, Object> result = new HashMap<>();

@@ -238,7 +238,7 @@ public class ProjectService implements IProjectService{
         }
 
         try {
-            repository.updateProjectStatus(projectId, ProjectStatusEnum.PENDING_REVIEW.getStatusCode());
+            repository.updateProjectStatusAndSubmittedAt(projectId, ProjectStatusEnum.PENDING_REVIEW.getStatusCode(), LocalDateTime.now());
         } catch (Exception e) {
             log.error("提交项目审核失败 原因:{}", e.getMessage());
             throw new AppException(ResponseCode.PROJECT_UPDATE_FAIL.getCode(), ResponseCode.PROJECT_UPDATE_FAIL.getInfo());
@@ -453,7 +453,7 @@ public class ProjectService implements IProjectService{
             }
         }
 
-        repository.updateProjectStatus(projectId, ProjectStatusEnum.PENDING_REVIEW.getStatusCode());
+        repository.updateProjectStatusAndSubmittedAt(projectId, ProjectStatusEnum.PENDING_REVIEW.getStatusCode(), LocalDateTime.now());
         log.info("企业发布项目，进入待审核状态 projectId={} publisherId={}", projectId, publisherId);
         return true;
     }

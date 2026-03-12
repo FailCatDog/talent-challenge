@@ -94,6 +94,11 @@ public class ProjectRepository implements IProjectRepository {
     }
 
     @Override
+    public void updateProjectStatusAndSubmittedAt(String projectId, String status, java.time.LocalDateTime submittedAt) {
+        projectDao.updateStatusAndSubmittedAt(projectId, status, submittedAt);
+    }
+
+    @Override
     public List<ProjectEntity> queryPublishedProjects(String categoryId, Integer offset, Integer limit) {
         List<Project> projects;
         if (StrUtil.isNotBlank(categoryId)) {
@@ -171,8 +176,9 @@ public class ProjectRepository implements IProjectRepository {
 
     @Override
     public List<ProjectEntity> queryProjectsByStatus(String status, Integer offset, Integer limit) {
+        // status 为 null 时查全部
         List<Project> projects = projectDao.selectByStatusAndPage(status, offset, limit);
-        
+
         List<ProjectEntity> entities = new ArrayList<>();
         for (Project project : projects) {
             entities.add(convertToEntity(project));
@@ -182,6 +188,10 @@ public class ProjectRepository implements IProjectRepository {
 
     @Override
     public Long countProjectsByStatus(String status) {
+        // status 为 null 时统计全部
+        if (StrUtil.isBlank(status)) {
+            return projectDao.count();
+        }
         return projectDao.countByStatus(status);
     }
 
@@ -237,6 +247,7 @@ public class ProjectRepository implements IProjectRepository {
         project.setBudgetAmount(projectEntity.getBudgetAmount());
         project.setCurrency(projectEntity.getCurrency());
         project.setPublishedAt(projectEntity.getPublishedAt());
+        project.setSubmittedAt(projectEntity.getSubmittedAt());
         project.setApplicationDeadline(projectEntity.getApplicationDeadline());
         project.setExpectedStartDate(projectEntity.getExpectedStartDate());
         project.setExpectedEndDate(projectEntity.getExpectedEndDate());
@@ -354,6 +365,7 @@ public class ProjectRepository implements IProjectRepository {
                 .budgetAmount(project.getBudgetAmount())
                 .currency(project.getCurrency())
                 .publishedAt(project.getPublishedAt())
+                .submittedAt(project.getSubmittedAt())
                 .applicationDeadline(project.getApplicationDeadline())
                 .expectedStartDate(project.getExpectedStartDate())
                 .expectedEndDate(project.getExpectedEndDate())

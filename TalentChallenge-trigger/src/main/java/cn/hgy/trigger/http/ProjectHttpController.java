@@ -265,14 +265,18 @@ public class ProjectHttpController implements IProjectHttpService {
 
     @GetMapping("admin/pending_review")
     @Override
-    public Response<ProjectListResponseDTO> getPendingReviewProjects(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                                      @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
-                                                                      HttpServletRequest request) {
+    public Response<ProjectListResponseDTO> getPendingReviewProjects(
+            @RequestParam(value = "status", defaultValue = "pending_review") String status,
+            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+            HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
-        logRequest("管理员获取待审核项目列表", userId, request);
+        // status 传 "all" 时查全部
+        String queryStatus = "all".equals(status) ? null : status;
+        logRequest("管理员获取项目列表 status=" + status, userId, request);
 
-        List<ProjectEntity> projects = projectService.getProjectsByStatus("pending_review", pageNum, pageSize);
-        Long total = projectService.countProjectsByStatus("pending_review");
+        List<ProjectEntity> projects = projectService.getProjectsByStatus(queryStatus, pageNum, pageSize);
+        Long total = projectService.countProjectsByStatus(queryStatus);
 
         List<ProjectListItemResponseDTO> projectDTOs = new ArrayList<>();
         for (ProjectEntity project : projects) {
@@ -287,6 +291,21 @@ public class ProjectHttpController implements IProjectHttpService {
                 .build();
 
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), listDTO);
+    }
+
+    @GetMapping("admin/detail/{projectId}")
+    @Override
+    public Response<ProjectDetailResponseDTO> getProjectReviewDetail(
+            @PathVariable("projectId") String projectId, HttpServletRequest request) {
+        String userId = UserContextDynamic.getUserContextDynamic();
+        logRequest("管理员查看项目审核详情", userId, request);
+
+        ProjectEntity projectEntity = projectService.getProjectDetail(projectId);
+        if (projectEntity == null) {
+            throw new AppException(ResponseCode.UN_ERROR.getCode(), "项目不存在");
+        }
+        ProjectDetailResponseDTO dto = convertToDetailDTO(projectEntity);
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), dto);
     }
 
     @PostMapping("admin/approve/{projectId}")
@@ -377,6 +396,7 @@ public class ProjectHttpController implements IProjectHttpService {
                 .publisherName(entity.getPublisherName())
                 .viewCount(entity.getViewCount())
                 .expectedEndDate(entity.getExpectedEndDate())
+                .submittedAt(entity.getSubmittedAt())
                 .build();
     }
 

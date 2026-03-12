@@ -33,6 +33,7 @@ public class Project {
     private BigDecimal budgetAmount;
     private String currency;
     private LocalDateTime publishedAt;
+    private LocalDateTime submittedAt;
     private LocalDateTime applicationDeadline;
     private LocalDate expectedStartDate;
     private LocalDate expectedEndDate;

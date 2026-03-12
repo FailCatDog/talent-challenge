@@ -64,6 +64,14 @@ public interface IProjectRepository {
     void updateProjectStatus(String projectId, String status);
 
     /**
+     * 更新项目状态和提交时间
+     * @param projectId 项目ID
+     * @param status 项目状态
+     * @param submittedAt 提交时间
+     */
+    void updateProjectStatusAndSubmittedAt(String projectId, String status, java.time.LocalDateTime submittedAt);
+
+    /**
      * 查询已发布项目列表
      * @param categoryId 分类ID（可选）
      * @param offset 偏移量

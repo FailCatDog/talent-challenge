@@ -142,6 +142,13 @@ public interface ProjectDao {
      */
     int updateStatus(@Param("projectId") String projectId,
                     @Param("status") String status);
+
+    /**
+     * 更新项目状态和提交时间
+     */
+    int updateStatusAndSubmittedAt(@Param("projectId") String projectId,
+                                    @Param("status") String status,
+                                    @Param("submittedAt") java.time.LocalDateTime submittedAt);
     
     /**
      * 统计热门项目（根据浏览量）

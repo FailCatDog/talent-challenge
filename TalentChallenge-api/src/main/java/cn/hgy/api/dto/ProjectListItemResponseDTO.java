@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @Author: 黄光宇
@@ -29,5 +30,6 @@ public class ProjectListItemResponseDTO {
     private String publisherName;
     private Integer viewCount;
     private LocalDate expectedEndDate;
+    private LocalDateTime submittedAt;
 }
 

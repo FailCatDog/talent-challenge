@@ -19,6 +19,7 @@
         <result column="budget_amount" property="budgetAmount" jdbcType="DECIMAL"/>
         <result column="currency" property="currency" jdbcType="CHAR"/>
         <result column="published_at" property="publishedAt" jdbcType="TIMESTAMP"/>
+        <result column="submitted_at" property="submittedAt" jdbcType="TIMESTAMP"/>
         <result column="application_deadline" property="applicationDeadline" jdbcType="TIMESTAMP"/>
         <result column="expected_start_date" property="expectedStartDate" jdbcType="DATE"/>
         <result column="expected_end_date" property="expectedEndDate" jdbcType="DATE"/>
@@ -40,7 +41,7 @@
     <sql id="Base_Column_List">
         id, project_id, serial_number, title, description, category_id, tags, requirements,
         skill_level, team_size_min, team_size_max, duration_days, budget_type, budget_amount,
-        currency, published_at, application_deadline, expected_start_date, expected_end_date,
+        currency, published_at, submitted_at, application_deadline, expected_start_date, expected_end_date,
         status, reject_reason, progress, publisher_id, accepted_team_id, application_count,
         view_count, favorite_count, create_time, update_time, version
     </sql>
@@ -49,13 +50,13 @@
         INSERT INTO project (
             project_id, serial_number, title, description, category_id, tags, requirements,
             skill_level, team_size_min, team_size_max, duration_days, budget_type, budget_amount,
-            currency, published_at, application_deadline, expected_start_date, expected_end_date,
+            currency, published_at, submitted_at, application_deadline, expected_start_date, expected_end_date,
             status, reject_reason, progress, publisher_id, accepted_team_id, application_count,
             view_count, favorite_count, create_time, update_time, version
         ) VALUES (
             #{projectId}, #{serialNumber}, #{title}, #{description}, #{categoryId}, #{tags}, #{requirements},
             #{skillLevel}, #{teamSizeMin}, #{teamSizeMax}, #{durationDays}, #{budgetType}, #{budgetAmount},
-            #{currency}, #{publishedAt}, #{applicationDeadline}, #{expectedStartDate}, #{expectedEndDate},
+            #{currency}, #{publishedAt}, #{submittedAt}, #{applicationDeadline}, #{expectedStartDate}, #{expectedEndDate},
             #{status}, #{rejectReason}, #{progress}, #{publisherId}, #{acceptedTeamId}, #{applicationCount},
             #{viewCount}, #{favoriteCount}, #{createTime}, #{updateTime}, #{version}
         )
@@ -77,6 +78,7 @@
             budget_amount = #{budgetAmount},
             currency = #{currency},
             published_at = #{publishedAt},
+            submitted_at = #{submittedAt},
             application_deadline = #{applicationDeadline},
             expected_start_date = #{expectedStartDate},
             expected_end_date = #{expectedEndDate},
@@ -99,10 +101,10 @@
     </select>
 
     <select id="selectByProjectIdWithNames" parameterType="java.lang.String" resultMap="BaseResultMap">
-        SELECT 
+        SELECT
             p.id, p.project_id, p.serial_number, p.title, p.description, p.category_id, p.tags, p.requirements,
             p.skill_level, p.team_size_min, p.team_size_max, p.duration_days, p.budget_type, p.budget_amount,
-            p.currency, p.published_at, p.application_deadline, p.expected_start_date, p.expected_end_date,
+            p.currency, p.published_at, p.submitted_at, p.application_deadline, p.expected_start_date, p.expected_end_date,
             p.status, p.reject_reason, p.progress, p.publisher_id, p.accepted_team_id, p.application_count,
             p.view_count, p.favorite_count, p.create_time, p.update_time, p.version,
             u.nickname AS publisher_name,
@@ -155,10 +157,21 @@
     </select>
 
     <select id="selectByStatusAndPage" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/>
-        FROM project
-        WHERE status = #{status}
-        ORDER BY create_time DESC
+        SELECT
+            p.id, p.project_id, p.serial_number, p.title, p.description, p.category_id, p.tags, p.requirements,
+            p.skill_level, p.team_size_min, p.team_size_max, p.duration_days, p.budget_type, p.budget_amount,
+            p.currency, p.published_at, p.submitted_at, p.application_deadline, p.expected_start_date, p.expected_end_date,
+            p.status, p.reject_reason, p.progress, p.publisher_id, p.accepted_team_id, p.application_count,
+            p.view_count, p.favorite_count, p.create_time, p.update_time, p.version,
+            u.nickname AS publisher_name
+        FROM project p
+        LEFT JOIN user u ON p.publisher_id = u.user_id
+        <where>
+            <if test="status != null and status != ''">
+                p.status = #{status}
+            </if>
+        </where>
+        ORDER BY p.create_time DESC
         LIMIT #{offset}, #{limit}
     </select>
 
@@ -238,6 +251,14 @@
     <update id="updateStatus">
         UPDATE project SET
             status = #{status},
+            update_time = NOW()
+        WHERE project_id = #{projectId}
+    </update>
+
+    <update id="updateStatusAndSubmittedAt">
+        UPDATE project SET
+            status = #{status},
+            submitted_at = #{submittedAt},
             update_time = NOW()
         WHERE project_id = #{projectId}
     </update>
