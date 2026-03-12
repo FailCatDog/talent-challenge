@@ -76,6 +76,12 @@ public interface IUserManagementRepository {
     CompanyProfileEntity queryCompanyProfileByUserId(String userId);
 
     /**
+     * 确保企业资料记录存在（不存在则创建空记录）
+     * @param userId 用户ID
+     */
+    void ensureCompanyProfileExists(String userId);
+
+    /**
      * 更新企业认证状态
      * @param userId 用户ID
      * @param status 认证状态
@@ -114,6 +120,20 @@ public interface IUserManagementRepository {
      * 按认证状态统计企业数量
      */
     long countCompaniesByCertificationStatus(String status);
+
+    /**
+     * 查询企业列表（可选状态筛选，包含企业名称）
+     * @param status 认证状态（null或空字符串查全部）
+     * @param page 页码
+     * @param pageSize 每页数量
+     * @return Map列表，包含userId、companyName、certificationStatus等
+     */
+    List<java.util.Map<String, Object>> queryCompanyList(String status, int page, int pageSize);
+
+    /**
+     * 统计企业数量（可选状态筛选）
+     */
+    long countCompanyList(String status);
 
     /**
      * 获取用户统计数据（各类型用户数、认证状态统计）

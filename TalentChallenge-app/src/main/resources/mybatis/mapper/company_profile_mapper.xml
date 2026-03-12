@@ -119,4 +119,30 @@
         FROM company_profile GROUP BY certification_status
     </select>
 
+    <!-- 查询企业列表（可选状态筛选，JOIN user表获取企业名称） -->
+    <select id="selectCompanyList" resultType="java.util.Map">
+        SELECT cp.user_id as userId, u.nickname as companyName,
+               cp.credit_code as creditCode, cp.certification_status as certificationStatus,
+               cp.company_industry as companyIndustry, cp.update_time as updateTime
+        FROM company_profile cp
+        LEFT JOIN user u ON cp.user_id = u.user_id
+        <where>
+            <if test="status != null and status != ''">
+                cp.certification_status = #{status}
+            </if>
+        </where>
+        ORDER BY cp.update_time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 统计企业数量（可选状态筛选） -->
+    <select id="countCompanyList" resultType="long">
+        SELECT COUNT(*) FROM company_profile
+        <where>
+            <if test="status != null and status != ''">
+                certification_status = #{status}
+            </if>
+        </where>
+    </select>
+
 </mapper>

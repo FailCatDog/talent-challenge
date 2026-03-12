@@ -453,8 +453,8 @@ public class ProjectService implements IProjectService{
             }
         }
 
-        repository.updateProjectStatus(projectId, ProjectStatusEnum.PUBLISHED.getStatusCode());
-        log.info("企业直接发布项目成功 projectId={} publisherId={}", projectId, publisherId);
+        repository.updateProjectStatus(projectId, ProjectStatusEnum.PENDING_REVIEW.getStatusCode());
+        log.info("企业发布项目，进入待审核状态 projectId={} publisherId={}", projectId, publisherId);
         return true;
     }
 

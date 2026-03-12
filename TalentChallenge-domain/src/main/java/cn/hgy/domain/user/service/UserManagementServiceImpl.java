@@ -267,6 +267,9 @@ public class UserManagementServiceImpl implements IUserManagementService{
                                             String creditCode, String companyIndustry, String companyScale,
                                             String contactPerson, String contactPosition,
                                             String contactPhone, String contactEmail) {
+        // 确保企业资料记录存在（兜底：注册时未创建的情况）
+        repository.ensureCompanyProfileExists(userId);
+
         // 检查当前认证状态，已认证则拒绝修改核心字段
         CompanyProfileEntity profile = repository.queryCompanyProfileByUserId(userId);
         if (profile != null && CertificationStatusEnum.CERTIFIED.getCode().equals(profile.getCertificationStatus())) {

@@ -5,6 +5,7 @@ import cn.hgy.domain.user.model.entity.StudentProfileEntity;
 import cn.hgy.domain.user.model.entity.UserAuthCredentialEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.valobj.UserStatisticsVO;
+import cn.hgy.domain.user.model.valobj.UserTypeEnum;
 import cn.hgy.domain.user.repository.IUserManagementRepository;
 import cn.hgy.infrastructure.persistent.dao.CompanyProfileDao;
 import cn.hgy.infrastructure.persistent.dao.StudentProfileDao;
@@ -72,6 +73,19 @@ public class UserManagementRepository implements IUserManagementRepository {
         // 插入数据库
         userDao.insert(user);
         userAuthCredentialDao.insert(userAuthCredential);
+
+        // 根据用户类型创建对应的profile记录
+        if (UserTypeEnum.COMPANY.getCode() == userEntity.getType()) {
+            CompanyProfile companyProfile = new CompanyProfile();
+            companyProfile.setUserId(userId);
+            companyProfileDao.insert(companyProfile);
+            log.info("注册企业用户，创建company_profile记录 userId={}", userId);
+        } else if (UserTypeEnum.STUDENT.getCode() == userEntity.getType()) {
+            StudentProfile studentProfile = new StudentProfile();
+            studentProfile.setUserId(userId);
+            studentProfileDao.insert(studentProfile);
+            log.info("注册学生用户，创建student_profile记录 userId={}", userId);
+        }
     }
 
     @Override
@@ -190,6 +204,17 @@ public class UserManagementRepository implements IUserManagementRepository {
     }
 
     @Override
+    public void ensureCompanyProfileExists(String userId) {
+        CompanyProfile existing = companyProfileDao.queryByUserId(userId);
+        if (existing == null) {
+            CompanyProfile profile = new CompanyProfile();
+            profile.setUserId(userId);
+            companyProfileDao.insert(profile);
+            log.info("为企业用户创建company_profile记录 userId={}", userId);
+        }
+    }
+
+    @Override
     public void updateCompanyQualificationFiles(String userId, List<String> fileUrls) {
         String json = JSON.toJSONString(fileUrls);
         companyProfileDao.updateQualificationFiles(userId, json);
@@ -237,6 +262,17 @@ public class UserManagementRepository implements IUserManagementRepository {
     @Override
     public long countCompaniesByCertificationStatus(String status) {
         return companyProfileDao.countByCertificationStatus(status);
+    }
+
+    @Override
+    public List<Map<String, Object>> queryCompanyList(String status, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        return companyProfileDao.selectCompanyList(status, offset, pageSize);
+    }
+
+    @Override
+    public long countCompanyList(String status) {
+        return companyProfileDao.countCompanyList(status);
     }
 
     @Override

@@ -82,4 +82,16 @@ public interface CompanyProfileDao {
      * 按认证状态分组统计
      */
     List<Map<String, Object>> countGroupByCertificationStatus();
+
+    /**
+     * 查询企业列表（可选状态筛选，JOIN user表获取企业名称）
+     */
+    List<Map<String, Object>> selectCompanyList(@Param("status") String status,
+                                                 @Param("offset") int offset,
+                                                 @Param("limit") int limit);
+
+    /**
+     * 统计企业数量（可选状态筛选）
+     */
+    long countCompanyList(@Param("status") String status);
 }

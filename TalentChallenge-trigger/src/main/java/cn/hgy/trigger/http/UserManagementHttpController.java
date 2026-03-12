@@ -4,6 +4,7 @@ import cn.hgy.api.IUserManagementHttpService;
 import cn.hgy.api.dto.AdminCreateRequestDTO;
 import cn.hgy.api.dto.CompanyPendingReviewDTO;
 import cn.hgy.api.dto.CompanyProfileUpdateRequestDTO;
+import cn.hgy.api.dto.CompanyQualificationDetailDTO;
 import cn.hgy.api.dto.CompanyQualificationSubmitRequestDTO;
 import cn.hgy.api.dto.UserLoginRequestDTO;
 import cn.hgy.api.dto.UserLoginResponseDTO;
@@ -14,6 +15,7 @@ import cn.hgy.api.response.Response;
 import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
+import cn.hgy.domain.user.repository.IUserManagementRepository;
 import cn.hgy.domain.user.service.IUserManagementService;
 import cn.hgy.infrastructure.storage.StorageService;
 import cn.hgy.trigger.interceptor.UserContextDynamic;
@@ -51,6 +53,7 @@ import java.util.stream.Collectors;
 public class UserManagementHttpController implements IUserManagementHttpService {
 
     private final IUserManagementService userManagementService;
+    private final IUserManagementRepository userManagementRepository;
     private final StorageService storageService;
 
     @PostMapping(value = "/user_register")
@@ -202,30 +205,68 @@ public class UserManagementHttpController implements IUserManagementHttpService 
     }
 
     /**
-     * 管理员查询待审核企业列表
+     * 管理员查询企业列表（可选状态筛选，默认查全部）
      */
     @GetMapping(value = "/admin/company/pending_review")
     public Response<Map<String, Object>> getPendingReviewCompanies(
-            @RequestParam(value = "status", defaultValue = "pending_review") String status,
+            @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
             HttpServletRequest request) {
         log.info("管理员查询企业列表 status={}, page={}, pageSize={}", status, page, pageSize);
-        List<CompanyProfileEntity> list = userManagementService.queryCompaniesByCertificationStatus(status, page, pageSize);
-        long total = userManagementService.countCompaniesByCertificationStatus(status);
-        List<CompanyPendingReviewDTO> dtoList = list.stream().map(e -> CompanyPendingReviewDTO.builder()
-                .userId(e.getUserId())
-                .creditCode(e.getCreditCode())
-                .qualificationFiles(e.getQualificationFiles())
-                .certificationStatus(e.getCertificationStatus())
-                .rejectReason(e.getRejectReason())
-                .submitTime(e.getUpdateTime())
+        List<Map<String, Object>> list = userManagementRepository.queryCompanyList(status, page, pageSize);
+        long total = userManagementRepository.countCompanyList(status);
+        List<CompanyPendingReviewDTO> dtoList = list.stream().map(item -> CompanyPendingReviewDTO.builder()
+                .userId((String) item.get("userId"))
+                .companyName((String) item.get("companyName"))
+                .creditCode((String) item.get("creditCode"))
+                .companyIndustry((String) item.get("companyIndustry"))
+                .certificationStatus((String) item.get("certificationStatus"))
+                .updateTime(item.get("updateTime") != null
+                        ? ((java.sql.Timestamp) item.get("updateTime")).toLocalDateTime() : null)
                 .build()
         ).collect(Collectors.toList());
         Map<String, Object> result = new HashMap<>();
         result.put("list", dtoList);
         result.put("total", total);
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
+    }
+
+    /**
+     * 管理员查看企业资质认证详情
+     */
+    @GetMapping(value = "/admin/company/{userId}/qualification_detail")
+    public Response<CompanyQualificationDetailDTO> getCompanyQualificationDetail(
+            @PathVariable("userId") String targetUserId, HttpServletRequest request) {
+        log.info("管理员查看企业资质详情 targetUserId={}", targetUserId);
+        CompanyProfileEntity profile = userManagementRepository.queryCompanyProfileByUserId(targetUserId);
+        if (profile == null) {
+            throw new AppException(ResponseCode.UN_ERROR.getCode(), "企业资料不存在");
+        }
+        // 查询企业名称
+        UserEntity user = userManagementRepository.queryUserBaseByUserId(targetUserId);
+        String companyName = user != null ? user.getNickname() : null;
+        CompanyQualificationDetailDTO dto = CompanyQualificationDetailDTO.builder()
+                .userId(profile.getUserId())
+                .companyName(companyName)
+                .companyIntro(profile.getCompanyIntro())
+                .companyTags(profile.getCompanyTags())
+                .creditCode(profile.getCreditCode())
+                .companyIndustry(profile.getCompanyIndustry())
+                .companyScale(profile.getCompanyScale())
+                .companyRegion(profile.getCompanyRegion())
+                .companyWebsite(profile.getCompanyWebsite())
+                .contactPerson(profile.getContactPerson())
+                .contactPosition(profile.getContactPosition())
+                .contactPhone(profile.getContactPhone())
+                .contactEmail(profile.getContactEmail())
+                .qualificationFiles(profile.getQualificationFiles())
+                .certificationStatus(profile.getCertificationStatus())
+                .rejectReason(profile.getRejectReason())
+                .certifiedAt(profile.getCertifiedAt())
+                .updateTime(profile.getUpdateTime())
+                .build();
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), dto);
     }
 
     /**

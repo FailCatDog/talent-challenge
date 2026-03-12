@@ -9,7 +9,11 @@ import cn.hgy.domain.project.service.IProjectService;
 import cn.hgy.infrastructure.persistent.jwt.JWTServiceImpl;
 import cn.hgy.trigger.interceptor.UserContextDynamic;
 import cn.hgy.types.common.ProjectComment;
+import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
+import cn.hgy.domain.user.repository.IUserManagementRepository;
+import cn.hgy.types.enums.CertificationStatusEnum;
 import cn.hgy.types.enums.ResponseCode;
+import cn.hgy.types.exception.AppException;
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,7 @@ public class ProjectHttpController implements IProjectHttpService {
     private final IProjectService projectService;
     private final JWTServiceImpl jwtService;
     private final cn.hgy.domain.team.repository.ITeamRepository teamRepository;
+    private final IUserManagementRepository userManagementRepository;
 
     @PostMapping("create_project")
     @Override
@@ -51,6 +56,9 @@ public class ProjectHttpController implements IProjectHttpService {
     public Response<Boolean> saveDraft(@RequestBody ProjectCreateRequestDTO dto, HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
         logRequest("企业保存项目草稿", userId, request);
+
+        // 校验企业认证状态
+        checkCompanyCertified(userId);
 
         ProjectComment projectComment = buildProjectComment(dto, userId);
         boolean result = projectService.saveDraft(projectComment);
@@ -481,6 +489,9 @@ public class ProjectHttpController implements IProjectHttpService {
         String userId = UserContextDynamic.getUserContextDynamic();
         logRequest("企业直接发布草稿项目", userId, request);
 
+        // 校验企业认证状态
+        checkCompanyCertified(userId);
+
         boolean result = projectService.publishDraftDirectly(projectId, userId);
 
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
@@ -544,6 +555,16 @@ public class ProjectHttpController implements IProjectHttpService {
             log.info("{} userId={} userType={}", action, userId, userType);
         } else {
             log.info("{}", action);
+        }
+    }
+
+    /**
+     * 校验企业是否已通过认证，未认证则抛出异常
+     */
+    private void checkCompanyCertified(String userId) {
+        CompanyProfileEntity profile = userManagementRepository.queryCompanyProfileByUserId(userId);
+        if (profile == null || !CertificationStatusEnum.CERTIFIED.getCode().equals(profile.getCertificationStatus())) {
+            throw new AppException(ResponseCode.UN_ERROR.getCode(), "企业未通过资质认证，无法操作项目");
         }
     }
 }
