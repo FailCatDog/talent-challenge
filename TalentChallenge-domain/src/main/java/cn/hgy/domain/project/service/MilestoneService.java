@@ -198,7 +198,16 @@ public class MilestoneService implements IMilestoneService {
                     String.format("状态流转不合法：%s -> %s", entity.getStatus(), status));
         }
         
-        milestoneRepository.updateMilestoneStatus(milestoneId, status);
+        entity.setStatus(status);
+        // 若转为进行中，记录实际开始时间
+        if (MilestoneStatusEnum.IN_PROGRESS.getStatusCode().equals(status) && entity.getActualStartTime() == null) {
+            entity.setActualStartTime(java.time.LocalDateTime.now());
+        }
+        // 若转为已完成，记录实际结束时间
+        if (MilestoneStatusEnum.COMPLETED.getStatusCode().equals(status) && entity.getActualEndTime() == null) {
+            entity.setActualEndTime(java.time.LocalDateTime.now());
+        }
+        milestoneRepository.updateMilestone(entity);
         log.info("更新里程碑状态成功 milestoneId={}, oldStatus={}, newStatus={}", milestoneId, entity.getStatus(), status);
         return true;
     }

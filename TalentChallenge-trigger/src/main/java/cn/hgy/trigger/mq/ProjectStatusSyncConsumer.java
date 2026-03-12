@@ -12,7 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import cn.hgy.domain.project.model.valobj.MilestoneStatusEnum;
+import cn.hgy.domain.project.model.entity.ProjectMilestoneEntity;
 
 @Slf4j
 @Component
