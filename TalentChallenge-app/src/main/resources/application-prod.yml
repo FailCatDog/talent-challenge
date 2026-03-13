@@ -78,5 +78,15 @@ app:
     worker-id: ${SNOWFLAKE_WORKER_ID:1}
   jwt:
     secret: uflDZHmxOfdP9h5bFcxP4Ls1192dBxNEKbKPstQeRSvwF73sdeLhgc7jCl4CATTh2zDoa9RVf0v3ioFH62TuwT2a2JYD1JXuKJ2t867RLtSQWbp6sVQuwq79tYuz28w6feEXKsApaJqgijiw2JVXsB6RwvtGDcHYLD2xC0O8ZVyYIddoxvG8KJKF8CMrl4UYRHcaPShTBjjHoLeQP9EHIV55KGrjvqKA1HiAkpI83pfb2mtulEvINNdDvs4E9YuVp8aTsw0aHhzVy7f0bbdp0UL5XcV0qL8AKInAg0iSvNgB
+
+# 文件上传配置
+file:
+  upload:
+    path:
+      milestones: /home/hgy/TalentChallenge/files/milestones
+      qualifications: /home/hgy/TalentChallenge/files/qualifications
+      bids: /home/hgy/TalentChallenge/files/bids
+    max-size: 10485760
+    allowed-types: pdf,doc,docx,jpg,jpeg,png,zip,rar
     expiration: 604800000     # 7天（毫秒）
     refresh-expiration: 604800000  # 7天（毫秒）
