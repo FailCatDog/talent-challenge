@@ -86,10 +86,12 @@ public interface IMilestoneService {
     /**
      * 提交里程碑成果
      * @param milestoneId 里程碑ID
+     * @param fileName 文件名
      * @param deliverableUrl 成果附件URL
+     * @param fileSize 文件大小
      * @return 是否成功
      */
-    boolean submitMilestoneDeliverable(String milestoneId, String deliverableUrl);
+    boolean submitMilestoneDeliverable(String milestoneId, String fileName, String deliverableUrl, Long fileSize);
     
     /**
      * 审批里程碑

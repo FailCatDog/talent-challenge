@@ -95,14 +95,20 @@ public class MilestoneHttpController implements IMilestoneHttpService {
     @Override
     public Response<Boolean> submitMilestoneDeliverable(@RequestBody MilestoneDeliverableRequestDTO dto, HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
-        log.info("提交里程碑成果 userId={}, milestoneId={}, deliverableUrl={}", userId, dto.getMilestoneId(), dto.getDeliverableUrl());
-        
+        log.info("提交里程碑成果 userId={}, milestoneId={}, fileName={}, deliverableUrl={}",
+                userId, dto.getMilestoneId(), dto.getFileName(), dto.getDeliverableUrl());
+
         if (dto == null || StrUtil.isBlank(dto.getMilestoneId()) || StrUtil.isBlank(dto.getDeliverableUrl())) {
             return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo(), false);
         }
-        
+
         try {
-            boolean result = milestoneService.submitMilestoneDeliverable(dto.getMilestoneId(), dto.getDeliverableUrl());
+            boolean result = milestoneService.submitMilestoneDeliverable(
+                    dto.getMilestoneId(),
+                    dto.getFileName(),
+                    dto.getDeliverableUrl(),
+                    dto.getFileSize()
+            );
             return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
         } catch (Exception e) {
             log.error("提交里程碑成果失败", e);

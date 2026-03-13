@@ -233,11 +233,11 @@ public class MilestoneService implements IMilestoneService {
     }
     
     @Override
-    public boolean submitMilestoneDeliverable(String milestoneId, String deliverableUrl) {
+    public boolean submitMilestoneDeliverable(String milestoneId, String fileName, String deliverableUrl, Long fileSize) {
         if (StrUtil.isBlank(milestoneId) || StrUtil.isBlank(deliverableUrl)) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
         }
-        
+
         ProjectMilestoneEntity entity = milestoneRepository.queryMilestoneById(milestoneId);
         if (entity == null) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑不存在");
@@ -261,10 +261,9 @@ public class MilestoneService implements IMilestoneService {
         }
 
         JSONObject fileInfo = new JSONObject();
-        String fileName = deliverableUrl.substring(deliverableUrl.lastIndexOf("/") + 1);
         fileInfo.put("fileName", fileName);
         fileInfo.put("fileUrl", deliverableUrl);
-        fileInfo.put("fileSize", null);
+        fileInfo.put("fileSize", fileSize);
         fileInfo.put("uploadTime", java.time.LocalDateTime.now().toString());
         fileList.add(fileInfo);
 
