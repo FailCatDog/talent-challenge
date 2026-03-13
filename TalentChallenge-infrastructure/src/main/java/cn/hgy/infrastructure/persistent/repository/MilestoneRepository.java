@@ -141,6 +141,8 @@ public class MilestoneRepository implements IMilestoneRepository {
                 .status(milestone.getStatus())
                 .progressPercent(milestone.getProgressPercent())
                 .deliverableUrl(milestone.getDeliverableUrl())
+                .deliverableFiles(milestone.getDeliverableFiles())
+                .referenceFiles(milestone.getReferenceFiles())
                 .approvalRule(milestone.getApprovalRule())
                 .approvalStatus(milestone.getApprovalStatus())
                 .currentOwnerId(milestone.getCurrentOwnerId())
