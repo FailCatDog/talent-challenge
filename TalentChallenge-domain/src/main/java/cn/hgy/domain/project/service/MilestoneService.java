@@ -251,7 +251,7 @@ public class MilestoneService implements IMilestoneService {
                     String.format("当前状态 %s 不允许提交成果", currentStatus));
         }
 
-        // 将新的交付物URL追加到deliverableFiles数组
+        // 将新的交付物URL追加到deliverableFiles数组（去重）
         JSONArray fileList;
         String existingFiles = entity.getDeliverableFiles();
         if (StrUtil.isBlank(existingFiles)) {
@@ -260,14 +260,26 @@ public class MilestoneService implements IMilestoneService {
             fileList = JSON.parseArray(existingFiles);
         }
 
-        JSONObject fileInfo = new JSONObject();
-        fileInfo.put("fileName", fileName);
-        fileInfo.put("fileUrl", deliverableUrl);
-        fileInfo.put("fileSize", fileSize);
-        fileInfo.put("uploadTime", java.time.LocalDateTime.now().toString());
-        fileList.add(fileInfo);
+        // 检查是否已存在相同的fileUrl，避免重复追加
+        boolean fileExists = false;
+        for (int i = 0; i < fileList.size(); i++) {
+            JSONObject existingFile = fileList.getJSONObject(i);
+            if (deliverableUrl.equals(existingFile.getString("fileUrl"))) {
+                fileExists = true;
+                break;
+            }
+        }
 
-        entity.setDeliverableFiles(fileList.toJSONString());
+        // 只有文件不存在时才追加
+        if (!fileExists) {
+            JSONObject fileInfo = new JSONObject();
+            fileInfo.put("fileName", fileName);
+            fileInfo.put("fileUrl", deliverableUrl);
+            fileInfo.put("fileSize", fileSize);
+            fileInfo.put("uploadTime", java.time.LocalDateTime.now().toString());
+            fileList.add(fileInfo);
+            entity.setDeliverableFiles(fileList.toJSONString());
+        }
 
         // 更新里程碑：设置交付物URL、状态转为delivered、审批状态为pending、进度30%
         entity.setDeliverableUrl(deliverableUrl);
