@@ -261,7 +261,10 @@ public class MilestoneService implements IMilestoneService {
         }
 
         JSONObject fileInfo = new JSONObject();
+        String fileName = deliverableUrl.substring(deliverableUrl.lastIndexOf("/") + 1);
+        fileInfo.put("fileName", fileName);
         fileInfo.put("fileUrl", deliverableUrl);
+        fileInfo.put("fileSize", null);
         fileInfo.put("uploadTime", java.time.LocalDateTime.now().toString());
         fileList.add(fileInfo);
 
