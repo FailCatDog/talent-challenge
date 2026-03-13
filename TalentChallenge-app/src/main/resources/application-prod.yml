@@ -1,5 +1,6 @@
 server:
   port: 8091
+  base-url: http://43.142.157.145:8091
 
 # 线程池配置
 thread:

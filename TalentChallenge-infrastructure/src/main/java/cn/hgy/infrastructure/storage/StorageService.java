@@ -39,6 +39,9 @@ public class StorageService {
     @Value("${file.upload.allowed-types}")
     private String allowedTypesConfig;
 
+    @Value("${server.base-url}")
+    private String serverBaseUrl;
+
     private static final String STATIC_PREFIX = "/static/milestones";
 
     /**
@@ -65,7 +68,7 @@ public class StorageService {
         Path targetFile = targetDir.resolve(sanitizedName);
         Files.copy(file.getInputStream(), targetFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 
-        String url = String.format("%s/%s/%s/%s", STATIC_PREFIX, projectId, milestoneId, sanitizedName);
+        String url = String.format("%s%s/%s/%s/%s", serverBaseUrl, STATIC_PREFIX, projectId, milestoneId, sanitizedName);
         log.info("文件已保存 path={}, url={}", targetFile, url);
         return url;
     }
@@ -94,7 +97,7 @@ public class StorageService {
         Path targetFile = targetDir.resolve(sanitizedName);
         Files.copy(file.getInputStream(), targetFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 
-        String url = String.format("/static/qualifications/%s/%s", userId, sanitizedName);
+        String url = String.format("%s/static/qualifications/%s/%s", serverBaseUrl, userId, sanitizedName);
         log.info("资质文件已保存 path={}, url={}", targetFile, url);
         return url;
     }
@@ -123,7 +126,7 @@ public class StorageService {
         Path targetFile = targetDir.resolve(sanitizedName);
         Files.copy(file.getInputStream(), targetFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 
-        String url = String.format("/static/bids/%s/%s", bidId, sanitizedName);
+        String url = String.format("%s/static/bids/%s/%s", serverBaseUrl, bidId, sanitizedName);
         log.info("揭榜附件已保存 path={}, url={}", targetFile, url);
         return url;
     }
@@ -150,7 +153,7 @@ public class StorageService {
         Path targetFile = targetDir.resolve(sanitizedName);
         Files.copy(file.getInputStream(), targetFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 
-        String url = String.format("/static/milestones/references/%s/%s/%s", projectId, milestoneId, sanitizedName);
+        String url = String.format("%s/static/milestones/references/%s/%s/%s", serverBaseUrl, projectId, milestoneId, sanitizedName);
         log.info("里程碑参考文件已保存 path={}, url={}", targetFile, url);
         return url;
     }
