@@ -78,6 +78,8 @@ app:
     worker-id: ${SNOWFLAKE_WORKER_ID:1}
   jwt:
     secret: uflDZHmxOfdP9h5bFcxP4Ls1192dBxNEKbKPstQeRSvwF73sdeLhgc7jCl4CATTh2zDoa9RVf0v3ioFH62TuwT2a2JYD1JXuKJ2t867RLtSQWbp6sVQuwq79tYuz28w6feEXKsApaJqgijiw2JVXsB6RwvtGDcHYLD2xC0O8ZVyYIddoxvG8KJKF8CMrl4UYRHcaPShTBjjHoLeQP9EHIV55KGrjvqKA1HiAkpI83pfb2mtulEvINNdDvs4E9YuVp8aTsw0aHhzVy7f0bbdp0UL5XcV0qL8AKInAg0iSvNgB
+    expiration: 7200000
+    refresh-expiration: 604800000
 
 # 文件上传配置
 file:
