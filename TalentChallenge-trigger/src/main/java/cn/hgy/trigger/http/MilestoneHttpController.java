@@ -142,7 +142,12 @@ public class MilestoneHttpController implements IMilestoneHttpService {
             String url = storageService.storeProposalFile(projectId, milestoneId, file);
 
             // 走原有业务逻辑：提交成果 + 状态流转
-            boolean result = milestoneService.submitMilestoneDeliverable(milestoneId, url);
+            boolean result = milestoneService.submitMilestoneDeliverable(
+                    milestoneId,
+                    file.getOriginalFilename(),
+                    url,
+                    file.getSize()
+            );
             return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
         } catch (Exception e) {
             log.error("上传里程碑成果文件失败", e);
