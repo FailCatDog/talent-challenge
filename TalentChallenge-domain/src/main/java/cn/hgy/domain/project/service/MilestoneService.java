@@ -8,6 +8,9 @@ import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.exception.AppException;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -240,13 +243,30 @@ public class MilestoneService implements IMilestoneService {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑不存在");
         }
 
-        // 状态校验：只允许进行中的里程碑提交
+        // 状态校验：允许进行中和已交付状态提交
         String currentStatus = entity.getStatus();
-        if (!MilestoneStatusEnum.IN_PROGRESS.getStatusCode().equals(currentStatus)) {
+        if (!MilestoneStatusEnum.IN_PROGRESS.getStatusCode().equals(currentStatus)
+                && !MilestoneStatusEnum.DELIVERED.getStatusCode().equals(currentStatus)) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(),
-                    String.format("当前状态 %s 不允许提交成果，只有进行中的里程碑才能提交", currentStatus));
+                    String.format("当前状态 %s 不允许提交成果", currentStatus));
         }
-        
+
+        // 将新的交付物URL追加到deliverableFiles数组
+        JSONArray fileList;
+        String existingFiles = entity.getDeliverableFiles();
+        if (StrUtil.isBlank(existingFiles)) {
+            fileList = new JSONArray();
+        } else {
+            fileList = JSON.parseArray(existingFiles);
+        }
+
+        JSONObject fileInfo = new JSONObject();
+        fileInfo.put("fileUrl", deliverableUrl);
+        fileInfo.put("uploadTime", java.time.LocalDateTime.now().toString());
+        fileList.add(fileInfo);
+
+        entity.setDeliverableFiles(fileList.toJSONString());
+
         // 更新里程碑：设置交付物URL、状态转为delivered、审批状态为pending、进度30%
         entity.setDeliverableUrl(deliverableUrl);
         entity.setStatus(MilestoneStatusEnum.DELIVERED.getStatusCode());
