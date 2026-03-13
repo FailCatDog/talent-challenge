@@ -56,8 +56,8 @@ public class CompanyQualificationDetailDTO {
     /** 联系邮箱 */
     private String contactEmail;
 
-    /** 资质文件URL列表 */
-    private List<String> qualificationFiles;
+    /** 资质文件URL列表（JSON格式） */
+    private String qualificationFiles;
 
     /** 认证状态 */
     private String certificationStatus;

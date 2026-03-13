@@ -95,6 +95,11 @@ public interface IUserManagementRepository {
     void updateCompanyQualificationFiles(String userId, List<String> fileUrls);
 
     /**
+     * 更新企业资质文件列表（JSON格式）
+     */
+    void updateCompanyQualificationFilesJson(String userId, String qualificationFilesJson);
+
+    /**
      * 更新企业认证核心字段
      */
     void updateCompanyCoreFields(String userId, String creditCode, String companyIndustry,

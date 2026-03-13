@@ -51,7 +51,7 @@ public class UserProfileResponseDTO {
     private String contactPosition;
     private String contactPhone;
     private String contactEmail;
-    private List<String> qualificationFiles;
+    private String qualificationFiles;
 
     // 企业认证信息
     private String certificationStatus;

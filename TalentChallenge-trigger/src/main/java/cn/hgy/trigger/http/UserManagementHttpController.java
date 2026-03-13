@@ -168,7 +168,7 @@ public class UserManagementHttpController implements IUserManagementHttpService 
 
             String fileUrl = storageService.storeQualificationFile(userId, file);
 
-            CompanyProfileEntity companyProfile = userManagementRepository.queryCompanyProfile(userId);
+            CompanyProfileEntity companyProfile = userManagementRepository.queryCompanyProfileByUserId(userId);
             if (companyProfile == null) {
                 return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), "企业资料不存在", null);
             }
@@ -189,7 +189,8 @@ public class UserManagementHttpController implements IUserManagementHttpService 
             fileList.add(fileInfo);
 
             companyProfile.setQualificationFiles(fileList.toJSONString());
-            userManagementRepository.updateCompanyProfile(companyProfile);
+            // 更新资质文件字段（JSON字符串）
+            userManagementRepository.updateCompanyQualificationFilesJson(userId, fileList.toJSONString());
 
             log.info("企业上传资质文件成功 userId=, fileUrl={}, 当前文件数={}", userId, fileUrl, fileList.size());
             return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), fileUrl);

@@ -12,9 +12,13 @@ spring:
 # 文件上传配置
 file:
   upload:
+    # 本地磁盘根目录（绝对路径），默认使用项目根目录下的 files
+    base-dir: /home/hgy/TalentChallenge/files
+    # 对外访问的 URL 前缀（相对路径或 CDN 完整前缀）
+    url-prefix: /static
     path:
-      milestones: ./files/milestones
-      qualifications: ./files/qualifications
-      bids: ./files/bids
+      milestones: milestones
+      qualifications: qualifications
+      bids: bids
     max-size: 10485760  # 10MB（字节）
     allowed-types: pdf,doc,docx,jpg,jpeg,png,zip,rar

@@ -2,6 +2,7 @@ package cn.hgy.infrastructure.storage;
 
 import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.exception.AppException;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -170,11 +171,16 @@ public class StorageService {
      */
     private void validateFileType(String fileName) {
         String extension = getFileExtension(fileName);
+
+        if (StrUtil.isBlank(allowedTypesConfig)) {
+            throw new AppException(ResponseCode.UN_ERROR.getCode(), "文件类型配置错误");
+        }
+
         List<String> allowedTypes = Arrays.asList(allowedTypesConfig.split(","));
 
         if (!allowedTypes.contains(extension.toLowerCase())) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(),
-                "不支持的文件类型，仅支持：" + allowedTypesConfig);
+                String.format("不支持的文件类型 .%s，仅支持：%s", extension, allowedTypesConfig));
         }
     }
 

@@ -195,8 +195,7 @@ public class UserManagementRepository implements IUserManagementRepository {
                 .contactPosition(companyProfile.getContactPosition())
                 .contactPhone(companyProfile.getContactPhone())
                 .contactEmail(companyProfile.getContactEmail())
-                .qualificationFiles(StrUtil.isNotBlank(companyProfile.getQualificationFiles()) ?
-                    JSON.parseArray(companyProfile.getQualificationFiles(), String.class) : null)
+                .qualificationFiles(companyProfile.getQualificationFiles())
                 .certificationStatus(companyProfile.getCertificationStatus())
                 .rejectReason(companyProfile.getRejectReason())
                 .certifiedAt(companyProfile.getCertifiedAt())
@@ -214,6 +213,13 @@ public class UserManagementRepository implements IUserManagementRepository {
         }
     }
 
+    @Override
+    public void updateCompanyQualificationFilesJson(String userId, String qualificationFilesJson) {
+        // 直接保存 JSON 字符串到数据库字段 qualification_files
+        companyProfileDao.updateQualificationFiles(userId, qualificationFilesJson);
+    }
+
+    // 兼容原有的 List<String> 接口，仍然将列表转换为 JSON 字符串后保存
     @Override
     public void updateCompanyQualificationFiles(String userId, List<String> fileUrls) {
         String json = JSON.toJSONString(fileUrls);
@@ -249,8 +255,7 @@ public class UserManagementRepository implements IUserManagementRepository {
         return list.stream().map(cp -> CompanyProfileEntity.builder()
                 .userId(cp.getUserId())
                 .creditCode(cp.getCreditCode())
-                .qualificationFiles(StrUtil.isNotBlank(cp.getQualificationFiles()) ?
-                    JSON.parseArray(cp.getQualificationFiles(), String.class) : null)
+                .qualificationFiles(cp.getQualificationFiles())
                 .certificationStatus(cp.getCertificationStatus())
                 .rejectReason(cp.getRejectReason())
                 .certifiedAt(cp.getCertifiedAt())
