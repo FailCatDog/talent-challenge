@@ -323,16 +323,54 @@ public class MilestoneService implements IMilestoneService {
             entity.setStatus(MilestoneStatusEnum.REJECTED.getStatusCode());
             entity.setApprovalStatus(MilestoneApprovalStatusEnum.REJECTED.getStatusCode());
         }
-        
+
         if (StrUtil.isNotBlank(remark)) {
             entity.setRemark(remark);
         }
-        
+
         milestoneRepository.updateMilestone(entity);
         log.info("审批里程碑成功 milestoneId={}, operatorId={}, approved={}", milestoneId, operatorId, approved);
+
+        // 审批通过后，自动启动下一个里程碑
+        if (approved) {
+            startNextMilestone(entity.getProjectId(), entity.getSequenceOrder());
+        }
+
         return true;
     }
-    
+
+    /**
+     * 自动启动下一个里程碑
+     * @param projectId 项目ID
+     * @param currentSequenceOrder 当前里程碑的顺序号
+     */
+    private void startNextMilestone(String projectId, Integer currentSequenceOrder) {
+        if (StrUtil.isBlank(projectId) || currentSequenceOrder == null) {
+            return;
+        }
+
+        List<ProjectMilestoneEntity> allMilestones = milestoneRepository.queryMilestonesByProjectId(projectId);
+        if (allMilestones == null || allMilestones.isEmpty()) {
+            return;
+        }
+
+        ProjectMilestoneEntity nextMilestone = null;
+        for (ProjectMilestoneEntity milestone : allMilestones) {
+            if (milestone.getSequenceOrder() != null && milestone.getSequenceOrder().equals(currentSequenceOrder + 1)) {
+                nextMilestone = milestone;
+                break;
+            }
+        }
+
+        if (nextMilestone != null && MilestoneStatusEnum.PLANNED.getStatusCode().equals(nextMilestone.getStatus())) {
+            nextMilestone.setStatus(MilestoneStatusEnum.IN_PROGRESS.getStatusCode());
+            nextMilestone.setActualStartTime(java.time.LocalDateTime.now());
+            milestoneRepository.updateMilestone(nextMilestone);
+            log.info("自动启动下一个里程碑 milestoneId={}, projectId={}, sequenceOrder={}",
+                    nextMilestone.getMilestoneId(), projectId, nextMilestone.getSequenceOrder());
+        }
+    }
+
     /**
      * 校验状态流转是否合法
      * 规则：planned → in_progress → delivered → under_review → completed/rejected
