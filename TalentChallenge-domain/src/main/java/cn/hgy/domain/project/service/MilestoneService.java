@@ -239,19 +239,12 @@ public class MilestoneService implements IMilestoneService {
         if (entity == null) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑不存在");
         }
-        
-        // 方案提交里程碑业务：仅允许 proposal_submission 编码的里程碑提交
-        if (!"proposal_submission".equals(entity.getMilestoneCode())) {
-            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "仅方案提交里程碑支持此操作");
-        }
-        
-        // 状态校验：必须是 planned 或 in_progress 状态才能提交
+
+        // 状态校验：只允许进行中的里程碑提交
         String currentStatus = entity.getStatus();
-        if (!MilestoneStatusEnum.PLANNED.getStatusCode().equals(currentStatus) 
-                && !MilestoneStatusEnum.IN_PROGRESS.getStatusCode().equals(currentStatus)
-                && !MilestoneStatusEnum.REJECTED.getStatusCode().equals(currentStatus)) {
-            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), 
-                    String.format("当前状态 %s 不允许提交成果", currentStatus));
+        if (!MilestoneStatusEnum.IN_PROGRESS.getStatusCode().equals(currentStatus)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    String.format("当前状态 %s 不允许提交成果，只有进行中的里程碑才能提交", currentStatus));
         }
         
         // 更新里程碑：设置交付物URL、状态转为delivered、审批状态为pending、进度30%
