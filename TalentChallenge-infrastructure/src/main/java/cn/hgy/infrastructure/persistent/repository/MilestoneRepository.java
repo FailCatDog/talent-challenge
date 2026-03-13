@@ -109,6 +109,8 @@ public class MilestoneRepository implements IMilestoneRepository {
         milestone.setStatus(entity.getStatus());
         milestone.setProgressPercent(entity.getProgressPercent());
         milestone.setDeliverableUrl(entity.getDeliverableUrl());
+        milestone.setDeliverableFiles(entity.getDeliverableFiles());
+        milestone.setReferenceFiles(entity.getReferenceFiles());
         milestone.setApprovalRule(entity.getApprovalRule());
         milestone.setApprovalStatus(entity.getApprovalStatus());
         milestone.setCurrentOwnerId(entity.getCurrentOwnerId());
