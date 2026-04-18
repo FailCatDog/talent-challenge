@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -169,6 +170,34 @@ public class MilestoneService implements IMilestoneService {
         List<ProjectMilestoneEntity> milestones = milestoneRepository.queryMilestonesByProjectId(projectId);
         return milestones != null ? milestones : new ArrayList<>();
     }
+
+    @Override
+    public boolean startInitialMilestone(String projectId) {
+        if (StrUtil.isBlank(projectId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+
+        List<ProjectMilestoneEntity> allMilestones = milestoneRepository.queryMilestonesByProjectId(projectId);
+        if (allMilestones == null || allMilestones.isEmpty()) {
+            return false;
+        }
+
+        for (ProjectMilestoneEntity milestone : allMilestones) {
+            if (milestone.getSequenceOrder() == null) {
+                continue;
+            }
+            if (!MilestoneStatusEnum.PLANNED.getStatusCode().equals(milestone.getStatus())) {
+                continue;
+            }
+
+            activateMilestone(milestone, LocalDateTime.now());
+            log.info("自动启动首个里程碑 milestoneId={}, projectId={}, sequenceOrder={}",
+                    milestone.getMilestoneId(), projectId, milestone.getSequenceOrder());
+            return true;
+        }
+
+        return false;
+    }
     
     @Override
     public ProjectMilestoneEntity getMilestoneByProjectIdAndCode(String projectId, String milestoneCode) {
@@ -317,7 +346,7 @@ public class MilestoneService implements IMilestoneService {
             entity.setStatus(MilestoneStatusEnum.COMPLETED.getStatusCode());
             entity.setApprovalStatus(MilestoneApprovalStatusEnum.APPROVED.getStatusCode());
             entity.setProgressPercent(100);
-            entity.setActualEndTime(java.time.LocalDateTime.now());
+            entity.setActualEndTime(LocalDateTime.now());
         } else {
             // 审批拒绝：状态转为rejected，审批状态为rejected
             entity.setStatus(MilestoneStatusEnum.REJECTED.getStatusCode());
@@ -363,12 +392,30 @@ public class MilestoneService implements IMilestoneService {
         }
 
         if (nextMilestone != null && MilestoneStatusEnum.PLANNED.getStatusCode().equals(nextMilestone.getStatus())) {
-            nextMilestone.setStatus(MilestoneStatusEnum.IN_PROGRESS.getStatusCode());
-            nextMilestone.setActualStartTime(java.time.LocalDateTime.now());
-            milestoneRepository.updateMilestone(nextMilestone);
+            activateMilestone(nextMilestone, LocalDateTime.now());
             log.info("自动启动下一个里程碑 milestoneId={}, projectId={}, sequenceOrder={}",
                     nextMilestone.getMilestoneId(), projectId, nextMilestone.getSequenceOrder());
         }
+    }
+
+    private void activateMilestone(ProjectMilestoneEntity milestone, LocalDateTime startTime) {
+        milestone.setStatus(MilestoneStatusEnum.IN_PROGRESS.getStatusCode());
+
+        if (milestone.getProgressPercent() == null) {
+            milestone.setProgressPercent(0);
+        }
+        if (StrUtil.isBlank(milestone.getApprovalStatus())) {
+            milestone.setApprovalStatus(MilestoneApprovalStatusEnum.PENDING.getStatusCode());
+        }
+        if (milestone.getPlannedStartTime() == null) {
+            milestone.setPlannedStartTime(startTime);
+        }
+        if (milestone.getActualStartTime() == null) {
+            milestone.setActualStartTime(startTime);
+        }
+        milestone.setActualEndTime(null);
+
+        milestoneRepository.updateMilestone(milestone);
     }
 
     /**
