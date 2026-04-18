@@ -4,6 +4,7 @@ import cn.hgy.infrastructure.persistent.po.Project;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -142,6 +143,12 @@ public interface ProjectDao {
      */
     int updateStatus(@Param("projectId") String projectId,
                     @Param("status") String status);
+
+    /**
+     * 查询指定状态且更新时间早于给定时间的项目
+     */
+    List<Project> selectByStatusAndUpdateTimeBefore(@Param("status") String status,
+                                                    @Param("updateTimeBefore") LocalDateTime updateTimeBefore);
 
     /**
      * 更新项目状态和提交时间

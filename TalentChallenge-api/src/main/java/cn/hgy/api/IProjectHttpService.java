@@ -192,4 +192,11 @@ public interface IProjectHttpService {
      * @return 项目列表
      */
     Response<ProjectListResponseDTO> getMyAcceptedProjects(String status, Integer pageNum, Integer pageSize, HttpServletRequest request);
+    /**
+     * 企业手动完结项目
+     * @param projectId 项目ID
+     * @param request HTTP请求
+     * @return 完结结果
+     */
+    Response<Boolean> closeProject(String projectId, HttpServletRequest request);
 }

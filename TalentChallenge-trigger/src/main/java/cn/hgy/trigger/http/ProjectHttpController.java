@@ -517,6 +517,18 @@ public class ProjectHttpController implements IProjectHttpService {
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
     }
 
+    @PostMapping("close/{projectId}")
+    @Override
+    public Response<Boolean> closeProject(@PathVariable("projectId") String projectId, HttpServletRequest request) {
+        String userId = UserContextDynamic.getUserContextDynamic();
+        logRequest("企业手动完结项目", userId, request);
+
+        checkCompanyCertified(userId);
+
+        boolean result = projectService.closeProject(projectId, userId);
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
+    }
+
     @GetMapping("my_accepted_projects")
     @Override
     public Response<ProjectListResponseDTO> getMyAcceptedProjects(@RequestParam(value = "status", required = false) String status,

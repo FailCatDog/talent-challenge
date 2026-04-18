@@ -94,6 +94,16 @@ public class ProjectRepository implements IProjectRepository {
     }
 
     @Override
+    public List<ProjectEntity> queryProjectsByStatusUpdatedBefore(String status, LocalDateTime updateTimeBefore) {
+        List<Project> projects = projectDao.selectByStatusAndUpdateTimeBefore(status, updateTimeBefore);
+        List<ProjectEntity> entities = new ArrayList<>();
+        for (Project project : projects) {
+            entities.add(convertToEntity(project));
+        }
+        return entities;
+    }
+
+    @Override
     public void updateProjectStatusAndSubmittedAt(String projectId, String status, java.time.LocalDateTime submittedAt) {
         projectDao.updateStatusAndSubmittedAt(projectId, status, submittedAt);
     }

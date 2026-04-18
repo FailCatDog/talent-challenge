@@ -4,6 +4,7 @@ import cn.hgy.domain.project.model.entity.ProjectEntity;
 import cn.hgy.domain.project.model.valobj.CategoryDistributionVO;
 import cn.hgy.domain.project.model.valobj.ProjectStatisticsVO;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -64,12 +65,20 @@ public interface IProjectRepository {
     void updateProjectStatus(String projectId, String status);
 
     /**
+     * 查询在指定更新时间之前的某状态项目
+     * @param status 项目状态
+     * @param updateTimeBefore 更新时间上限
+     * @return 项目列表
+     */
+    List<ProjectEntity> queryProjectsByStatusUpdatedBefore(String status, LocalDateTime updateTimeBefore);
+
+    /**
      * 更新项目状态和提交时间
      * @param projectId 项目ID
      * @param status 项目状态
      * @param submittedAt 提交时间
      */
-    void updateProjectStatusAndSubmittedAt(String projectId, String status, java.time.LocalDateTime submittedAt);
+    void updateProjectStatusAndSubmittedAt(String projectId, String status, LocalDateTime submittedAt);
 
     /**
      * 查询已发布项目列表

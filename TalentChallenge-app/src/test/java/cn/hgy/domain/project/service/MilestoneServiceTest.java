@@ -4,6 +4,8 @@ import cn.hgy.domain.project.model.entity.ProjectMilestoneEntity;
 import cn.hgy.domain.project.model.valobj.MilestoneApprovalStatusEnum;
 import cn.hgy.domain.project.model.valobj.MilestoneStatusEnum;
 import cn.hgy.domain.project.repository.IMilestoneRepository;
+import cn.hgy.domain.project.repository.IProjectRepository;
+import cn.hgy.domain.project.model.valobj.ProjectStatusEnum;
 import cn.hutool.core.lang.Snowflake;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +26,9 @@ class MilestoneServiceTest {
 
     @Mock
     private IMilestoneRepository milestoneRepository;
+
+    @Mock
+    private IProjectRepository projectRepository;
 
     @Mock
     private Snowflake snowflake;
@@ -110,5 +115,31 @@ class MilestoneServiceTest {
         assertThat(updatedNext.getPlannedStartTime()).isNotNull();
         assertThat(updatedNext.getActualStartTime()).isNotNull();
         assertThat(updatedNext.getActualEndTime()).isNull();
+    }
+
+    @Test
+    void shouldCompleteProjectWhenLastMilestoneApprovalPasses() {
+        ProjectMilestoneEntity lastMilestone = ProjectMilestoneEntity.builder()
+                .milestoneId("m2")
+                .projectId("p1")
+                .sequenceOrder(2)
+                .status(MilestoneStatusEnum.DELIVERED.getStatusCode())
+                .approvalStatus(MilestoneApprovalStatusEnum.PENDING.getStatusCode())
+                .build();
+        ProjectMilestoneEntity completedMilestone = ProjectMilestoneEntity.builder()
+                .milestoneId("m1")
+                .projectId("p1")
+                .sequenceOrder(1)
+                .status(MilestoneStatusEnum.COMPLETED.getStatusCode())
+                .build();
+
+        when(milestoneRepository.queryMilestoneById("m2")).thenReturn(lastMilestone);
+        when(milestoneRepository.queryMilestonesByProjectId("p1"))
+                .thenReturn(List.of(completedMilestone, lastMilestone), List.of(completedMilestone, lastMilestone));
+
+        boolean result = milestoneService.approveMilestone("m2", "enterprise-1", true, "done");
+
+        assertThat(result).isTrue();
+        verify(projectRepository).updateProjectStatus("p1", ProjectStatusEnum.COMPLETED.getStatusCode());
     }
 }

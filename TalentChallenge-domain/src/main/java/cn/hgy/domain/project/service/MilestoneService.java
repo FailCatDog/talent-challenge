@@ -3,7 +3,9 @@ package cn.hgy.domain.project.service;
 import cn.hgy.domain.project.model.entity.ProjectMilestoneEntity;
 import cn.hgy.domain.project.model.valobj.MilestoneApprovalStatusEnum;
 import cn.hgy.domain.project.model.valobj.MilestoneStatusEnum;
+import cn.hgy.domain.project.model.valobj.ProjectStatusEnum;
 import cn.hgy.domain.project.repository.IMilestoneRepository;
+import cn.hgy.domain.project.repository.IProjectRepository;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.exception.AppException;
 import cn.hutool.core.lang.Snowflake;
@@ -31,6 +33,7 @@ public class MilestoneService implements IMilestoneService {
     
 
     private final IMilestoneRepository milestoneRepository;
+    private final IProjectRepository projectRepository;
     private final Snowflake snowflake;
     
     @Override
@@ -362,7 +365,11 @@ public class MilestoneService implements IMilestoneService {
 
         // 审批通过后，自动启动下一个里程碑
         if (approved) {
-            startNextMilestone(entity.getProjectId(), entity.getSequenceOrder());
+            boolean nextStarted = startNextMilestone(entity.getProjectId(), entity.getSequenceOrder());
+            if (!nextStarted && isProjectReadyToComplete(entity.getProjectId())) {
+                projectRepository.updateProjectStatus(entity.getProjectId(), ProjectStatusEnum.COMPLETED.getStatusCode());
+                log.info("最后一个里程碑审批通过后自动完成项目 projectId={}", entity.getProjectId());
+            }
         }
 
         return true;
@@ -373,14 +380,14 @@ public class MilestoneService implements IMilestoneService {
      * @param projectId 项目ID
      * @param currentSequenceOrder 当前里程碑的顺序号
      */
-    private void startNextMilestone(String projectId, Integer currentSequenceOrder) {
+    private boolean startNextMilestone(String projectId, Integer currentSequenceOrder) {
         if (StrUtil.isBlank(projectId) || currentSequenceOrder == null) {
-            return;
+            return false;
         }
 
         List<ProjectMilestoneEntity> allMilestones = milestoneRepository.queryMilestonesByProjectId(projectId);
         if (allMilestones == null || allMilestones.isEmpty()) {
-            return;
+            return false;
         }
 
         ProjectMilestoneEntity nextMilestone = null;
@@ -395,7 +402,9 @@ public class MilestoneService implements IMilestoneService {
             activateMilestone(nextMilestone, LocalDateTime.now());
             log.info("自动启动下一个里程碑 milestoneId={}, projectId={}, sequenceOrder={}",
                     nextMilestone.getMilestoneId(), projectId, nextMilestone.getSequenceOrder());
+            return true;
         }
+        return false;
     }
 
     private void activateMilestone(ProjectMilestoneEntity milestone, LocalDateTime startTime) {
@@ -416,6 +425,23 @@ public class MilestoneService implements IMilestoneService {
         milestone.setActualEndTime(null);
 
         milestoneRepository.updateMilestone(milestone);
+    }
+
+    private boolean isProjectReadyToComplete(String projectId) {
+        List<ProjectMilestoneEntity> milestones = milestoneRepository.queryMilestonesByProjectId(projectId);
+        if (milestones == null || milestones.isEmpty()) {
+            return false;
+        }
+
+        for (ProjectMilestoneEntity milestone : milestones) {
+            String status = milestone.getStatus();
+            if (!MilestoneStatusEnum.COMPLETED.getStatusCode().equals(status)
+                    && !MilestoneStatusEnum.SKIPPED.getStatusCode().equals(status)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

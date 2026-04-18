@@ -255,6 +255,14 @@
         WHERE project_id = #{projectId}
     </update>
 
+    <select id="selectByStatusAndUpdateTimeBefore" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM project
+        WHERE status = #{status}
+          AND update_time &lt;= #{updateTimeBefore}
+        ORDER BY update_time ASC
+    </select>
+
     <update id="updateStatusAndSubmittedAt">
         UPDATE project SET
             status = #{status},
