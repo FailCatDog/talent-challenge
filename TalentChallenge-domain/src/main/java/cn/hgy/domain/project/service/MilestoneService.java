@@ -318,7 +318,6 @@ public class MilestoneService implements IMilestoneService {
         entity.setStatus(MilestoneStatusEnum.DELIVERED.getStatusCode());
         entity.setApprovalStatus(MilestoneApprovalStatusEnum.PENDING.getStatusCode());
         entity.setProgressPercent(30);
-        entity.setActualStartTime(java.time.LocalDateTime.now());
         
         milestoneRepository.updateMilestone(entity);
         log.info("提交里程碑成果成功 milestoneId={}, deliverableUrl={}", milestoneId, deliverableUrl);
@@ -392,13 +391,21 @@ public class MilestoneService implements IMilestoneService {
 
         ProjectMilestoneEntity nextMilestone = null;
         for (ProjectMilestoneEntity milestone : allMilestones) {
-            if (milestone.getSequenceOrder() != null && milestone.getSequenceOrder().equals(currentSequenceOrder + 1)) {
-                nextMilestone = milestone;
-                break;
+            if (milestone.getSequenceOrder() == null) {
+                continue;
             }
+            if (milestone.getSequenceOrder() <= currentSequenceOrder) {
+                continue;
+            }
+            if (!MilestoneStatusEnum.PLANNED.getStatusCode().equals(milestone.getStatus())) {
+                continue;
+            }
+
+            nextMilestone = milestone;
+            break;
         }
 
-        if (nextMilestone != null && MilestoneStatusEnum.PLANNED.getStatusCode().equals(nextMilestone.getStatus())) {
+        if (nextMilestone != null) {
             activateMilestone(nextMilestone, LocalDateTime.now());
             log.info("自动启动下一个里程碑 milestoneId={}, projectId={}, sequenceOrder={}",
                     nextMilestone.getMilestoneId(), projectId, nextMilestone.getSequenceOrder());
