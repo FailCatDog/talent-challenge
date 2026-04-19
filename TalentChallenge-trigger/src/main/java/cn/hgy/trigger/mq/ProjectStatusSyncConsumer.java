@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,7 +27,8 @@ public class ProjectStatusSyncConsumer {
     private final IMilestoneService milestoneService;
     private final IMilestoneTemplateService templateService;
 
-    @RabbitListener(queues = PROJECT_SYNC_QUEUE)
+    @Transactional
+    @RabbitListener(queues = PROJECT_SYNC_QUEUE, ackMode = "AUTO")
     public void handleBidConfirmed(BidConfirmedEvent event) {
         try {
             log.info("同步中标项目状态 bidId={}, projectId={}, teamId={}",
@@ -40,7 +42,10 @@ public class ProjectStatusSyncConsumer {
 
             // 项目进入进行中后先初始化必选里程碑，再自动启动首个可执行节点。
             templateService.initializeRequiredMilestones(event.getProjectId());
-            milestoneService.startInitialMilestone(event.getProjectId());
+            boolean started = milestoneService.startInitialMilestone(event.getProjectId());
+            if (!started) {
+                log.info("initial milestone activation skipped projectId={}", event.getProjectId());
+            }
 
             List<String> otherBidIds = bidRepository.findOtherActiveBidIds(
                     event.getProjectId(), event.getBidId());

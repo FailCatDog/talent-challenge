@@ -7,6 +7,7 @@ import cn.hgy.domain.project.repository.IProjectRepository;
 import cn.hgy.domain.project.service.IMilestoneService;
 import cn.hgy.domain.project.service.IMilestoneTemplateService;
 import cn.hgy.types.event.BidConfirmedEvent;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -49,6 +51,7 @@ class ProjectStatusSyncConsumerTest {
 
         when(bidRepository.findOtherActiveBidIds("project-1", "bid-1"))
                 .thenReturn(List.of("bid-2", "bid-3"));
+        when(milestoneService.startInitialMilestone("project-1")).thenReturn(true);
 
         consumer.handleBidConfirmed(event);
 
@@ -57,5 +60,15 @@ class ProjectStatusSyncConsumerTest {
         verify(templateService).initializeRequiredMilestones("project-1");
         verify(milestoneService).startInitialMilestone("project-1");
         verify(bidRepository).batchUpdateStatus(List.of("bid-2", "bid-3"), BidStatusEnum.REJECTED);
+    }
+
+    @Test
+    void shouldUseAutoAckForProjectSyncListener() throws NoSuchMethodException {
+        RabbitListener listener = ProjectStatusSyncConsumer.class
+                .getMethod("handleBidConfirmed", BidConfirmedEvent.class)
+                .getAnnotation(RabbitListener.class);
+
+        assertThat(listener).isNotNull();
+        assertThat(listener.ackMode()).isEqualTo("AUTO");
     }
 }

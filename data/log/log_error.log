@@ -1,8 +1,6 @@
-26-03-13.00:05:57.490 [HikariPool-1 housekeeper] WARN  HikariPool             - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=41m11s773ms904µs500ns).
-26-03-13.00:06:00.701 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
-26-03-13.00:24:08.218 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
-26-03-13.00:24:08.647 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-16] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-org.springframework.amqp.AmqpIOException: java.net.SocketException: Network is unreachable: no further information
+26-04-19.10:49:25.866 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
+26-04-19.10:49:26.068 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+org.springframework.amqp.AmqpIOException: java.net.NoRouteToHostException: No route to host: no further information
 	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:70)
 	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:632)
 	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:726)
@@ -20,7 +18,7 @@ org.springframework.amqp.AmqpIOException: java.net.SocketException: Network is u
 	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1483)
 	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1324)
 	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: java.net.SocketException: Network is unreachable: no further information
+Caused by: java.net.NoRouteToHostException: No route to host: no further information
 	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
 	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672)
 	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:547)
@@ -34,94 +32,479 @@ Caused by: java.net.SocketException: Network is unreachable: no further informat
 	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:647)
 	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:593)
 	... 15 common frames omitted
-26-03-13.00:24:08.729 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-17] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.00:24:09.393 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-18] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.00:49:01.983 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
-26-03-13.00:49:02.069 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-22] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-org.springframework.amqp.AmqpIOException: java.net.SocketException: Network is unreachable: no further information
-	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:70)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:632)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:726)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createBareChannel(CachingConnectionFactory.java:671)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getCachedChannelProxy(CachingConnectionFactory.java:644)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getChannel(CachingConnectionFactory.java:533)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory$ChannelCachingConnectionProxy.createChannel(CachingConnectionFactory.java:1484)
-	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2268)
-	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2235)
-	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2215)
-	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:467)
-	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:451)
-	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1972)
-	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1936)
-	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1483)
-	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1324)
+26-04-19.10:49:26.233 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:26.594 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:31.267 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:31.425 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:31.626 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:36.370 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-10] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:36.558 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-11] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:36.789 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-12] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:41.501 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:41.676 [HikariPool-1 housekeeper] WARN  HikariPool             - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=11h17m52s431ms495µs999ns).
+26-04-19.10:49:42.095 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-14] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:42.099 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-15] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:46.515 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-16] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:47.186 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-17] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:47.202 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-18] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:51.647 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-19] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:52.318 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-20] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:52.320 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-21] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:56.736 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-22] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:57.405 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-23] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:49:57.420 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-24] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:01.826 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-25] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:02.508 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-26] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:02.539 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-27] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:06.958 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-28] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:07.641 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-29] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:07.673 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-30] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:12.095 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-31] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:12.769 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-32] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:12.785 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-33] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:17.256 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-34] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:17.938 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-35] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:17.966 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-36] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:22.331 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-37] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:23.002 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-38] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:23.032 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-39] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:27.463 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-40] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:28.106 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-41] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:28.123 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-42] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:32.553 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-43] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:33.215 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-44] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:33.245 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-45] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:37.690 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-46] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:38.370 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-47] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:38.400 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-48] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:42.860 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-49] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:43.538 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-50] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:43.554 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-51] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:48.025 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-52] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:48.691 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-53] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:48.723 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-54] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:53.183 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-55] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:53.851 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-56] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:53.882 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-57] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:58.330 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-58] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:58.986 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-59] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:50:59.021 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-60] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:03.453 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-61] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:04.093 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-62] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:04.140 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-63] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:08.566 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-64] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:09.199 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-65] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:09.230 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-66] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:13.698 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-67] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:14.319 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-68] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:14.382 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-69] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:18.808 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-70] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:19.439 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-71] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:19.488 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-72] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:23.920 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-73] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:24.576 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-74] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:24.594 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-75] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:29.113 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-76] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:29.665 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-77] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:29.728 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-78] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:34.191 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-79] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:34.751 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-80] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:34.830 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-81] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:39.294 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-82] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:39.843 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-83] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:39.923 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-84] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:44.458 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-85] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:44.963 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-86] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:45.120 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-87] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:49.570 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-88] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:50.073 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-89] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:50.245 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-90] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:54.701 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-91] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:55.187 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-92] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:55.344 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-93] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:51:59.801 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-94] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:00.344 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-95] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:00.474 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-96] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:04.931 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-97] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:05.432 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-98] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:05.584 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-99] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:10.036 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-100] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:10.552 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-101] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:10.708 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-102] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:15.069 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-103] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:15.649 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-104] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:15.834 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-105] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:20.149 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-106] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:20.758 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-107] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:20.946 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-108] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:25.259 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-109] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:25.874 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-110] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:26.062 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-111] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:30.392 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-112] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:31.032 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-113] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:31.236 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-114] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:35.535 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-115] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:36.150 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-116] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:36.352 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-117] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:40.692 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-118] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:41.311 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-119] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:41.504 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-120] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:45.795 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-121] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:46.425 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-122] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:46.597 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-123] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:50.928 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-124] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:51.524 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-125] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:51.709 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-126] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:56.004 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-127] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:56.614 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-128] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:52:56.816 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-129] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:01.073 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-130] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:01.723 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-131] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:01.925 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-132] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:06.164 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-133] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:06.802 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-134] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:06.992 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-135] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:11.260 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-136] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:11.920 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-137] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:12.108 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-138] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:16.334 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-139] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:17.006 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-140] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:17.213 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-141] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:21.431 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-142] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:22.113 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-143] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:22.316 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-144] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:26.525 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-145] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:27.197 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-146] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:27.490 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-147] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:31.644 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-148] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:32.299 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-149] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:32.609 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-150] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:36.750 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-151] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:37.375 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-152] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:37.685 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-153] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:41.851 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-154] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.10:53:42.525 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-155] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
+26-04-19.11:23:12.097 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-156] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@7af0c918 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.11:23:12.097 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-157] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@79bfda72 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.11:23:22.115 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-156] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@23f492c7 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.11:23:22.115 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-157] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@3cbd4b21 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.11:23:32.137 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-156] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@2c246cc (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.11:23:32.137 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-157] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@723c3215 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.11:23:32.147 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-157] ERROR ProjectStatusSyncConsumer - 项目同步失败 bidId=2032102779329318912, projectId=2032096897971392512
+org.mybatis.spring.MyBatisSystemException: 
+### Error updating database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\project_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.ProjectDao.updateAcceptedTeam
+### The error occurred while executing an update
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:99)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347)
+	at jdk.proxy2/jdk.proxy2.$Proxy78.update(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.update(SqlSessionTemplate.java:234)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:67)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at jdk.proxy2/jdk.proxy2.$Proxy81.updateAcceptedTeam(Unknown Source)
+	at cn.hgy.infrastructure.persistent.repository.ProjectRepository.updateAcceptedTeam(ProjectRepository.java:215)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:138)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:727)
+	at cn.hgy.infrastructure.persistent.repository.ProjectRepository$$SpringCGLIB$$0.updateAcceptedTeam(<generated>)
+	at cn.hgy.trigger.mq.ProjectStatusSyncConsumer.handleBidConfirmed(ProjectStatusSyncConsumer.java:35)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.messaging.handler.invocation.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:169)
+	at org.springframework.amqp.rabbit.listener.adapter.KotlinAwareInvocableHandlerMethod.doInvoke(KotlinAwareInvocableHandlerMethod.java:45)
+	at org.springframework.messaging.handler.invocation.InvocableHandlerMethod.invoke(InvocableHandlerMethod.java:119)
+	at org.springframework.amqp.rabbit.listener.adapter.HandlerAdapter.invoke(HandlerAdapter.java:75)
+	at org.springframework.amqp.rabbit.listener.adapter.MessagingMessageListenerAdapter.invokeHandler(MessagingMessageListenerAdapter.java:270)
+	at org.springframework.amqp.rabbit.listener.adapter.MessagingMessageListenerAdapter.invokeHandlerAndProcessResult(MessagingMessageListenerAdapter.java:217)
+	at org.springframework.amqp.rabbit.listener.adapter.MessagingMessageListenerAdapter.onMessage(MessagingMessageListenerAdapter.java:148)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.doInvokeListener(AbstractMessageListenerContainer.java:1694)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.actualInvokeListener(AbstractMessageListenerContainer.java:1616)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.retry.interceptor.RetryOperationsInterceptor$1.doWithRetry(RetryOperationsInterceptor.java:114)
+	at org.springframework.retry.support.RetryTemplate.doExecute(RetryTemplate.java:357)
+	at org.springframework.retry.support.RetryTemplate.execute(RetryTemplate.java:246)
+	at org.springframework.retry.interceptor.RetryOperationsInterceptor.invoke(RetryOperationsInterceptor.java:135)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:223)
+	at org.springframework.amqp.rabbit.listener.$Proxy112.invokeListener(Unknown Source)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.invokeListener(AbstractMessageListenerContainer.java:1604)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.doExecuteListener(AbstractMessageListenerContainer.java:1595)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.executeListenerAndHandleException(AbstractMessageListenerContainer.java:1540)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.lambda$executeListener$8(AbstractMessageListenerContainer.java:1518)
+	at io.micrometer.observation.Observation.observe(Observation.java:498)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.executeListener(AbstractMessageListenerContainer.java:1518)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.doReceiveAndExecute(SimpleMessageListenerContainer.java:1086)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.receiveAndExecute(SimpleMessageListenerContainer.java:1022)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.mainLoop(SimpleMessageListenerContainer.java:1425)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1326)
 	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: java.net.SocketException: Network is unreachable: no further information
-	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
-	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672)
-	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:547)
-	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:602)
-	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
-	at java.base/java.net.Socket.connect(Socket.java:633)
-	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:61)
-	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1249)
-	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1198)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectAddresses(AbstractConnectionFactory.java:678)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:647)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:593)
-	... 15 common frames omitted
-26-03-13.00:49:02.344 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-23] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.00:49:02.901 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-24] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.00:50:46.245 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
-26-03-13.00:50:46.576 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-28] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-org.springframework.amqp.AmqpIOException: java.net.SocketException: Network is unreachable: no further information
-	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:70)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:632)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:726)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createBareChannel(CachingConnectionFactory.java:671)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getCachedChannelProxy(CachingConnectionFactory.java:644)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getChannel(CachingConnectionFactory.java:533)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory$ChannelCachingConnectionProxy.createChannel(CachingConnectionFactory.java:1484)
-	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2268)
-	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2235)
-	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2215)
-	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:467)
-	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:451)
-	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1972)
-	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1936)
-	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1483)
-	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1324)
+Caused by: org.apache.ibatis.exceptions.PersistenceException: 
+### Error updating database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\project_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.ProjectDao.updateAcceptedTeam
+### The error occurred while executing an update
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:199)
+	at jdk.internal.reflect.GeneratedMethodAccessor43.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333)
+	... 57 common frames omitted
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84)
+	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:77)
+	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:64)
+	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:348)
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:89)
+	at org.apache.ibatis.executor.SimpleExecutor.doUpdate(SimpleExecutor.java:49)
+	at org.apache.ibatis.executor.BaseExecutor.update(BaseExecutor.java:117)
+	at org.apache.ibatis.executor.CachingExecutor.update(CachingExecutor.java:76)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:197)
+	... 61 common frames omitted
+Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30068ms (total=8, active=0, idle=8, waiting=0)
+	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:686)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:179)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:144)
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:127)
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160)
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118)
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81)
+	... 69 common frames omitted
+Caused by: java.sql.SQLNonTransientConnectionException: No operations allowed after connection closed.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:110)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:97)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:63)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:73)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:73)
+	at com.mysql.cj.jdbc.ConnectionImpl.setNetworkTimeout(ConnectionImpl.java:2488)
+	at com.zaxxer.hikari.pool.PoolBase.setNetworkTimeout(PoolBase.java:562)
+	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:169)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:168)
+	... 74 common frames omitted
+Caused by: com.mysql.cj.exceptions.ConnectionIsClosedException: No operations allowed after connection closed.
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:61)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:105)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:151)
+	at com.mysql.cj.NativeSession.checkClosed(NativeSession.java:762)
+	at com.mysql.cj.jdbc.ConnectionImpl.checkClosed(ConnectionImpl.java:569)
+	at com.mysql.cj.jdbc.ConnectionImpl.setNetworkTimeout(ConnectionImpl.java:2484)
+	... 77 common frames omitted
+26-04-19.11:23:32.147 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-156] ERROR ProjectStatusSyncConsumer - 项目同步失败 bidId=2023249295125385216, projectId=2023249119094640640
+org.mybatis.spring.MyBatisSystemException: 
+### Error updating database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\project_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.ProjectDao.updateAcceptedTeam
+### The error occurred while executing an update
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:99)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347)
+	at jdk.proxy2/jdk.proxy2.$Proxy78.update(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.update(SqlSessionTemplate.java:234)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:67)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at jdk.proxy2/jdk.proxy2.$Proxy81.updateAcceptedTeam(Unknown Source)
+	at cn.hgy.infrastructure.persistent.repository.ProjectRepository.updateAcceptedTeam(ProjectRepository.java:215)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:138)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:727)
+	at cn.hgy.infrastructure.persistent.repository.ProjectRepository$$SpringCGLIB$$0.updateAcceptedTeam(<generated>)
+	at cn.hgy.trigger.mq.ProjectStatusSyncConsumer.handleBidConfirmed(ProjectStatusSyncConsumer.java:35)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.messaging.handler.invocation.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:169)
+	at org.springframework.amqp.rabbit.listener.adapter.KotlinAwareInvocableHandlerMethod.doInvoke(KotlinAwareInvocableHandlerMethod.java:45)
+	at org.springframework.messaging.handler.invocation.InvocableHandlerMethod.invoke(InvocableHandlerMethod.java:119)
+	at org.springframework.amqp.rabbit.listener.adapter.HandlerAdapter.invoke(HandlerAdapter.java:75)
+	at org.springframework.amqp.rabbit.listener.adapter.MessagingMessageListenerAdapter.invokeHandler(MessagingMessageListenerAdapter.java:270)
+	at org.springframework.amqp.rabbit.listener.adapter.MessagingMessageListenerAdapter.invokeHandlerAndProcessResult(MessagingMessageListenerAdapter.java:217)
+	at org.springframework.amqp.rabbit.listener.adapter.MessagingMessageListenerAdapter.onMessage(MessagingMessageListenerAdapter.java:148)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.doInvokeListener(AbstractMessageListenerContainer.java:1694)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.actualInvokeListener(AbstractMessageListenerContainer.java:1616)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.retry.interceptor.RetryOperationsInterceptor$1.doWithRetry(RetryOperationsInterceptor.java:114)
+	at org.springframework.retry.support.RetryTemplate.doExecute(RetryTemplate.java:357)
+	at org.springframework.retry.support.RetryTemplate.execute(RetryTemplate.java:246)
+	at org.springframework.retry.interceptor.RetryOperationsInterceptor.invoke(RetryOperationsInterceptor.java:135)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:223)
+	at org.springframework.amqp.rabbit.listener.$Proxy112.invokeListener(Unknown Source)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.invokeListener(AbstractMessageListenerContainer.java:1604)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.doExecuteListener(AbstractMessageListenerContainer.java:1595)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.executeListenerAndHandleException(AbstractMessageListenerContainer.java:1540)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.lambda$executeListener$8(AbstractMessageListenerContainer.java:1518)
+	at io.micrometer.observation.Observation.observe(Observation.java:498)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.executeListener(AbstractMessageListenerContainer.java:1518)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.doReceiveAndExecute(SimpleMessageListenerContainer.java:1086)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.receiveAndExecute(SimpleMessageListenerContainer.java:1022)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.mainLoop(SimpleMessageListenerContainer.java:1425)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1326)
 	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: java.net.SocketException: Network is unreachable: no further information
-	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
-	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672)
-	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:547)
-	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:602)
-	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
-	at java.base/java.net.Socket.connect(Socket.java:633)
-	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:61)
-	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1249)
-	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1198)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectAddresses(AbstractConnectionFactory.java:678)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:647)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:593)
-	... 15 common frames omitted
-26-03-13.00:50:46.841 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-29] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.00:50:46.901 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-30] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.00:56:47.441 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-31] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@3947467b (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-26-03-13.00:56:47.445 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-31] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@8b4df6c (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-26-03-13.00:56:47.447 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-31] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@5a9f4882 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-26-03-13.00:56:47.448 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-31] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@5968b934 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-26-03-13.00:56:47.450 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-31] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@4f814226 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-26-03-13.00:56:47.451 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-31] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@6160bb05 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-26-03-13.00:56:47.453 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-31] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@419b24f3 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-26-03-13.00:56:47.456 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-31] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@5d2684ed (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-26-03-13.00:56:47.457 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-31] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@18f37d1d (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-26-03-13.00:56:47.461 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-31] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@7caf4595 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
-26-03-13.00:57:37.052 [http-nio-8091-exec-9] ERROR GlobalExceptionHandler - 系统异常: No static resource api/v1/bid/attachment/upload.
-org.springframework.web.servlet.resource.NoResourceFoundException: No static resource api/v1/bid/attachment/upload.
-	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
-	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
+Caused by: org.apache.ibatis.exceptions.PersistenceException: 
+### Error updating database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\project_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.ProjectDao.updateAcceptedTeam
+### The error occurred while executing an update
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:199)
+	at jdk.internal.reflect.GeneratedMethodAccessor43.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333)
+	... 57 common frames omitted
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84)
+	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:77)
+	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:64)
+	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:348)
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:89)
+	at org.apache.ibatis.executor.SimpleExecutor.doUpdate(SimpleExecutor.java:49)
+	at org.apache.ibatis.executor.BaseExecutor.update(BaseExecutor.java:117)
+	at org.apache.ibatis.executor.CachingExecutor.update(CachingExecutor.java:76)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:197)
+	... 61 common frames omitted
+Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30068ms (total=8, active=0, idle=8, waiting=0)
+	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:686)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:179)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:144)
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:127)
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160)
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118)
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81)
+	... 69 common frames omitted
+Caused by: java.sql.SQLNonTransientConnectionException: No operations allowed after connection closed.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:110)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:97)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:63)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:73)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:73)
+	at com.mysql.cj.jdbc.ConnectionImpl.setNetworkTimeout(ConnectionImpl.java:2488)
+	at com.zaxxer.hikari.pool.PoolBase.setNetworkTimeout(PoolBase.java:562)
+	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:169)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:168)
+	... 74 common frames omitted
+Caused by: com.mysql.cj.exceptions.ConnectionIsClosedException: No operations allowed after connection closed.
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:61)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:105)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:151)
+	at com.mysql.cj.NativeSession.checkClosed(NativeSession.java:762)
+	at com.mysql.cj.jdbc.ConnectionImpl.checkClosed(ConnectionImpl.java:569)
+	at com.mysql.cj.jdbc.ConnectionImpl.setNetworkTimeout(ConnectionImpl.java:2484)
+	... 77 common frames omitted
+26-04-19.11:30:16.073 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
+26-04-19.11:30:16.073 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
+26-04-19.11:47:42.376 [http-nio-8091-exec-2] WARN  UserContextDynamicInterceptor - JWT令牌已过期，请求URI: /api/v1/milestone/deliverable
+26-04-19.11:47:42.384 [http-nio-8091-exec-2] WARN  GlobalExceptionHandler - JWT令牌已过期: JWT expired at 2026-04-18T17:12:34Z. Current time: 2026-04-19T03:47:42Z, a difference of 38108374 milliseconds.  Allowed clock skew: 0 milliseconds.
+26-04-19.11:47:53.086 [http-nio-8091-exec-4] ERROR UserManagementServiceImpl - 更新用户最后登录时间失败：
+### Error updating database.  Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\user_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: UPDATE user SET last_login_time = ?         WHERE user_id = ?
+### Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+26-04-19.11:48:11.140 [http-nio-8091-exec-3] ERROR UserManagementServiceImpl - 更新用户最后登录时间失败：
+### Error updating database.  Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\user_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: UPDATE user SET last_login_time = ?         WHERE user_id = ?
+### Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+26-04-19.12:00:15.059 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@c2683f7 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:00:15.059 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@2e48e863 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:00:25.081 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@6d9627ae (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:11:38.437 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
+26-04-19.12:11:38.437 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
+26-04-19.12:12:56.639 [http-nio-8091-exec-2] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@71687d8f (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:13:06.654 [http-nio-8091-exec-2] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@17030aa7 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:13:13.118 [http-nio-8091-exec-2] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@5bd5e136 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:13:18.393 [http-nio-8091-exec-2] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@3c994a2e (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:13:18.400 [http-nio-8091-exec-2] ERROR GlobalExceptionHandler - 系统异常: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\company_profile_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.CompanyProfileDao.queryByUserId
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+org.mybatis.spring.MyBatisSystemException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\company_profile_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.CompanyProfileDao.queryByUserId
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:99)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347)
+	at jdk.proxy2/jdk.proxy2.$Proxy78.selectOne(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:154)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:87)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at jdk.proxy2/jdk.proxy2.$Proxy98.queryByUserId(Unknown Source)
+	at cn.hgy.infrastructure.persistent.repository.UserManagementRepository.queryCompanyProfileByUserId(UserManagementRepository.java:179)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:723)
+	at cn.hgy.infrastructure.persistent.repository.UserManagementRepository$$SpringCGLIB$$0.queryCompanyProfileByUserId(<generated>)
+	at cn.hgy.trigger.http.ProjectHttpController.checkCompanyCertified(ProjectHttpController.java:597)
+	at cn.hgy.trigger.http.ProjectHttpController.saveDraft(ProjectHttpController.java:61)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
 	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
 	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
 	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
@@ -162,13 +545,381 @@ org.springframework.web.servlet.resource.NoResourceFoundException: No static res
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:842)
-26-03-13.01:00:51.823 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.01:00:51.828 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.01:01:03.645 [http-nio-8091-exec-2] ERROR BidHttpController      - 上传揭榜附件失败 bidId=
+Caused by: org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\company_profile_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.CompanyProfileDao.queryByUserId
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:156)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:75)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333)
+	... 66 common frames omitted
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84)
+	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:77)
+	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:64)
+	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:348)
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:89)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:64)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154)
+	... 74 common frames omitted
+Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 31784ms (total=6, active=0, idle=6, waiting=0)
+	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:686)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:179)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:144)
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:127)
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160)
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118)
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81)
+	... 84 common frames omitted
+Caused by: java.sql.SQLNonTransientConnectionException: No operations allowed after connection closed.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:110)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:97)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:63)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:73)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:73)
+	at com.mysql.cj.jdbc.ConnectionImpl.setNetworkTimeout(ConnectionImpl.java:2488)
+	at com.zaxxer.hikari.pool.PoolBase.setNetworkTimeout(PoolBase.java:562)
+	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:169)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:168)
+	... 89 common frames omitted
+Caused by: com.mysql.cj.exceptions.ConnectionIsClosedException: No operations allowed after connection closed.
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:61)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:105)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:151)
+	at com.mysql.cj.NativeSession.checkClosed(NativeSession.java:762)
+	at com.mysql.cj.jdbc.ConnectionImpl.checkClosed(ConnectionImpl.java:569)
+	at com.mysql.cj.jdbc.ConnectionImpl.setNetworkTimeout(ConnectionImpl.java:2484)
+	... 92 common frames omitted
+26-04-19.12:17:38.086 [http-nio-8091-exec-7] WARN  UserContextDynamicInterceptor - JWT令牌已过期，请求URI: /api/v1/project/admin/approve/2045717561668145152
+26-04-19.12:17:38.089 [http-nio-8091-exec-7] WARN  GlobalExceptionHandler - JWT令牌已过期: JWT expired at 2026-04-18T17:12:48Z. Current time: 2026-04-19T04:17:38Z, a difference of 39890083 milliseconds.  Allowed clock skew: 0 milliseconds.
+26-04-19.12:17:44.069 [http-nio-8091-exec-8] ERROR UserManagementServiceImpl - 更新用户最后登录时间失败：
+### Error updating database.  Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\user_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: UPDATE user SET last_login_time = ?         WHERE user_id = ?
+### Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+26-04-19.12:37:04.391 [http-nio-8091-exec-7] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@60f5996 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:37:14.403 [http-nio-8091-exec-7] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@1ef8b78e (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:37:24.420 [http-nio-8091-exec-7] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@4c1471d9 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:37:24.422 [http-nio-8091-exec-7] ERROR GlobalExceptionHandler - 系统异常: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\company_profile_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.CompanyProfileDao.queryByUserId
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+org.mybatis.spring.MyBatisSystemException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\company_profile_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.CompanyProfileDao.queryByUserId
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:99)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347)
+	at jdk.proxy2/jdk.proxy2.$Proxy78.selectOne(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:154)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:87)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at jdk.proxy2/jdk.proxy2.$Proxy98.queryByUserId(Unknown Source)
+	at cn.hgy.infrastructure.persistent.repository.UserManagementRepository.queryCompanyProfileByUserId(UserManagementRepository.java:179)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:723)
+	at cn.hgy.infrastructure.persistent.repository.UserManagementRepository$$SpringCGLIB$$0.queryCompanyProfileByUserId(<generated>)
+	at cn.hgy.trigger.http.ProjectHttpController.checkCompanyCertified(ProjectHttpController.java:597)
+	at cn.hgy.trigger.http.ProjectHttpController.saveDraft(ProjectHttpController.java:61)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\company_profile_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.CompanyProfileDao.queryByUserId
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:156)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:75)
+	at jdk.internal.reflect.GeneratedMethodAccessor12.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333)
+	... 66 common frames omitted
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84)
+	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:77)
+	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:64)
+	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:348)
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:89)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:64)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154)
+	... 73 common frames omitted
+Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30050ms (total=9, active=0, idle=9, waiting=0)
+	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:686)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:179)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:144)
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:127)
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160)
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118)
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81)
+	... 83 common frames omitted
+Caused by: java.sql.SQLNonTransientConnectionException: No operations allowed after connection closed.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:110)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:97)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:63)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:73)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:73)
+	at com.mysql.cj.jdbc.ConnectionImpl.setNetworkTimeout(ConnectionImpl.java:2488)
+	at com.zaxxer.hikari.pool.PoolBase.setNetworkTimeout(PoolBase.java:562)
+	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:169)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:168)
+	... 88 common frames omitted
+Caused by: com.mysql.cj.exceptions.ConnectionIsClosedException: No operations allowed after connection closed.
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:61)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:105)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:151)
+	at com.mysql.cj.NativeSession.checkClosed(NativeSession.java:762)
+	at com.mysql.cj.jdbc.ConnectionImpl.checkClosed(ConnectionImpl.java:569)
+	at com.mysql.cj.jdbc.ConnectionImpl.setNetworkTimeout(ConnectionImpl.java:2484)
+	... 91 common frames omitted
+26-04-19.12:38:49.974 [http-nio-8091-exec-10] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@1f7e1ebb (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:38:59.988 [http-nio-8091-exec-10] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@2a7607b6 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:39:09.993 [http-nio-8091-exec-10] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@2e56c797 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:39:09.995 [http-nio-8091-exec-10] ERROR GlobalExceptionHandler - 系统异常: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\company_profile_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.CompanyProfileDao.queryByUserId
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+org.mybatis.spring.MyBatisSystemException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\company_profile_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.CompanyProfileDao.queryByUserId
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:99)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:347)
+	at jdk.proxy2/jdk.proxy2.$Proxy78.selectOne(Unknown Source)
+	at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:154)
+	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:87)
+	at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:141)
+	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+	at jdk.proxy2/jdk.proxy2.$Proxy98.queryByUserId(Unknown Source)
+	at cn.hgy.infrastructure.persistent.repository.UserManagementRepository.queryCompanyProfileByUserId(UserManagementRepository.java:179)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:723)
+	at cn.hgy.infrastructure.persistent.repository.UserManagementRepository$$SpringCGLIB$$0.queryCompanyProfileByUserId(<generated>)
+	at cn.hgy.trigger.http.ProjectHttpController.checkCompanyCertified(ProjectHttpController.java:597)
+	at cn.hgy.trigger.http.ProjectHttpController.saveDraft(ProjectHttpController.java:61)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\company_profile_mapper.xml]
+### The error may involve cn.hgy.infrastructure.persistent.dao.CompanyProfileDao.queryByUserId
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.apache.ibatis.exceptions.ExceptionFactory.wrapException(ExceptionFactory.java:30)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:156)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:142)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:75)
+	at jdk.internal.reflect.GeneratedMethodAccessor12.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:333)
+	... 66 common frames omitted
+Caused by: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:84)
+	at org.mybatis.spring.transaction.SpringManagedTransaction.openConnection(SpringManagedTransaction.java:77)
+	at org.mybatis.spring.transaction.SpringManagedTransaction.getConnection(SpringManagedTransaction.java:64)
+	at org.apache.ibatis.executor.BaseExecutor.getConnection(BaseExecutor.java:348)
+	at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:89)
+	at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:64)
+	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:336)
+	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:158)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:110)
+	at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:90)
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:154)
+	... 73 common frames omitted
+Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30036ms (total=9, active=0, idle=9, waiting=0)
+	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:686)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:179)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:144)
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:127)
+	at org.springframework.jdbc.datasource.DataSourceUtils.fetchConnection(DataSourceUtils.java:160)
+	at org.springframework.jdbc.datasource.DataSourceUtils.doGetConnection(DataSourceUtils.java:118)
+	at org.springframework.jdbc.datasource.DataSourceUtils.getConnection(DataSourceUtils.java:81)
+	... 83 common frames omitted
+Caused by: java.sql.SQLNonTransientConnectionException: No operations allowed after connection closed.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:110)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:97)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:63)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:73)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:73)
+	at com.mysql.cj.jdbc.ConnectionImpl.setNetworkTimeout(ConnectionImpl.java:2488)
+	at com.zaxxer.hikari.pool.PoolBase.setNetworkTimeout(PoolBase.java:562)
+	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:169)
+	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:168)
+	... 88 common frames omitted
+Caused by: com.mysql.cj.exceptions.ConnectionIsClosedException: No operations allowed after connection closed.
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:61)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:105)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:151)
+	at com.mysql.cj.NativeSession.checkClosed(NativeSession.java:762)
+	at com.mysql.cj.jdbc.ConnectionImpl.checkClosed(ConnectionImpl.java:569)
+	at com.mysql.cj.jdbc.ConnectionImpl.setNetworkTimeout(ConnectionImpl.java:2484)
+	... 91 common frames omitted
+26-04-19.12:41:35.295 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@3473e240 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:41:35.295 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@29a80aa8 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:41:35.550 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@60a5be85 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:41:45.308 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@ff01be5 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-19.12:55:39.862 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
+26-04-19.12:55:39.863 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
+26-04-19.13:14:05.364 [http-nio-8091-exec-7] ERROR GlobalExceptionHandler - 业务异常: null
 cn.hgy.types.exception.AppException: null
-	at cn.hgy.domain.bid.service.BidService.loadBid(BidService.java:215)
-	at cn.hgy.domain.bid.service.BidService.queryBidById(BidService.java:245)
-	at cn.hgy.trigger.http.BidHttpController.uploadBidAttachment(BidHttpController.java:208)
+	at cn.hgy.domain.bid.service.BidService.confirm(BidService.java:102)
+	at cn.hgy.trigger.http.BidHttpController.confirm(BidHttpController.java:140)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -219,498 +970,30 @@ cn.hgy.types.exception.AppException: null
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:842)
-26-03-13.01:02:43.963 [http-nio-8091-exec-6] ERROR BidHttpController      - 上传揭榜附件失败 bidId=2032140113051521024
-java.io.IOException: 文件为空
-	at cn.hgy.infrastructure.storage.StorageService.storeBidAttachment(StorageService.java:106)
-	at cn.hgy.trigger.http.BidHttpController.uploadBidAttachment(BidHttpController.java:221)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-26-03-13.01:31:41.982 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.01:31:41.983 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.01:50:57.266 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.01:50:57.266 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.09:41:35.404 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.09:41:35.404 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.09:45:16.149 [http-nio-8091-exec-7] ERROR GlobalExceptionHandler - 系统异常: Current request is not a multipart request
-org.springframework.web.multipart.MultipartException: Current request is not a multipart request
-	at org.springframework.web.method.annotation.RequestParamMethodArgumentResolver.handleMissingValueInternal(RequestParamMethodArgumentResolver.java:213)
-	at org.springframework.web.method.annotation.RequestParamMethodArgumentResolver.handleMissingValue(RequestParamMethodArgumentResolver.java:196)
-	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:125)
-	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
-	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:226)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:180)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-26-03-13.09:49:36.176 [http-nio-8091-exec-9] ERROR GlobalExceptionHandler - 系统异常: No static resource api/v1/milestone/detail/2023249119220469760.
-org.springframework.web.servlet.resource.NoResourceFoundException: No static resource api/v1/milestone/detail/2023249119220469760.
-	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
-	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-26-03-13.09:50:04.828 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.09:50:04.828 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.09:52:31.383 [http-nio-8091-exec-2] ERROR GlobalExceptionHandler - 系统异常: No static resource api/v1/milestone/detail/2023249119220469760.
-org.springframework.web.servlet.resource.NoResourceFoundException: No static resource api/v1/milestone/detail/2023249119220469760.
-	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
-	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-26-03-13.09:53:08.367 [http-nio-8091-exec-3] ERROR GlobalExceptionHandler - 系统异常: No static resource api/v1/milestone/detail/2032096898172719104.
-org.springframework.web.servlet.resource.NoResourceFoundException: No static resource api/v1/milestone/detail/2032096898172719104.
-	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
-	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-26-03-13.10:24:45.153 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.10:24:45.153 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.11:14:23.465 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 1 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.11:14:23.466 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 2 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.11:38:58.222 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.11:38:58.223 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.12:15:44.966 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.12:15:44.966 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.12:27:13.348 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.12:27:13.348 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.12:27:56.093 [http-nio-8091-exec-2] ERROR MilestoneHttpController - 提交里程碑成果失败
-cn.hgy.types.exception.AppException: null
-	at cn.hgy.domain.project.service.MilestoneService.submitMilestoneDeliverable(MilestoneService.java:247)
-	at cn.hgy.trigger.http.MilestoneHttpController.submitMilestoneDeliverable(MilestoneHttpController.java:105)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-26-03-13.12:32:46.138 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.12:32:46.138 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.12:46:23.481 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.12:46:23.481 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.13:07:00.286 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.13:07:00.286 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.13:26:12.214 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.13:26:12.214 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.14:00:50.193 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 1 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.14:00:50.194 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 2 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.14:01:16.957 [main            ] WARN  AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'springMvcConfig' defined in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-trigger\target\classes\cn\hgy\trigger\config\SpringMvcConfig.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'UserContextDynamicInterceptor' defined in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-trigger\target\classes\cn\hgy\trigger\interceptor\UserContextDynamicInterceptor.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'JWTServiceImpl': Injection of autowired dependencies failed
-26-03-13.14:01:16.982 [main            ] ERROR SpringApplication      - Application run failed
-org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'springMvcConfig' defined in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-trigger\target\classes\cn\hgy\trigger\config\SpringMvcConfig.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'UserContextDynamicInterceptor' defined in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-trigger\target\classes\cn\hgy\trigger\interceptor\UserContextDynamicInterceptor.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'JWTServiceImpl': Injection of autowired dependencies failed
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804)
-	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1381)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1218)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1155)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1121)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1056)
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
-	at cn.hgy.Application.main(Application.java:16)
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'UserContextDynamicInterceptor' defined in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-trigger\target\classes\cn\hgy\trigger\interceptor\UserContextDynamicInterceptor.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'JWTServiceImpl': Injection of autowired dependencies failed
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804)
-	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1381)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1218)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1664)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1552)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
-	... 21 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'JWTServiceImpl': Injection of autowired dependencies failed
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:515)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1445)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1664)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1552)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
-	... 35 common frames omitted
-Caused by: org.springframework.util.PlaceholderResolutionException: Could not resolve placeholder 'app.jwt.expiration' in value "${app.jwt.expiration}"
-	at org.springframework.util.PlaceholderResolutionException.withValue(PlaceholderResolutionException.java:81)
-	at org.springframework.util.PlaceholderParser$ParsedValue.resolve(PlaceholderParser.java:423)
-	at org.springframework.util.PlaceholderParser.replacePlaceholders(PlaceholderParser.java:128)
-	at org.springframework.util.PropertyPlaceholderHelper.parseStringValue(PropertyPlaceholderHelper.java:118)
-	at org.springframework.util.PropertyPlaceholderHelper.replacePlaceholders(PropertyPlaceholderHelper.java:114)
-	at org.springframework.core.env.AbstractPropertyResolver.doResolvePlaceholders(AbstractPropertyResolver.java:255)
-	at org.springframework.core.env.AbstractPropertyResolver.resolveRequiredPlaceholders(AbstractPropertyResolver.java:226)
-	at org.springframework.context.support.PropertySourcesPlaceholderConfigurer.lambda$processProperties$0(PropertySourcesPlaceholderConfigurer.java:201)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveEmbeddedValue(AbstractBeanFactory.java:971)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1574)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1552)
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
-	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
-	... 47 common frames omitted
-26-03-13.14:07:25.030 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
-26-03-13.14:07:25.030 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
-26-03-13.14:40:11.898 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 1 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.14:40:11.899 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 2 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.15:10:12.124 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 3 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.15:56:57.543 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
-26-03-13.15:57:01.036 [HikariPool-1 housekeeper] WARN  HikariPool             - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=12m38s84ms214µs600ns).
-26-03-13.16:46:24.719 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 1 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.17:16:24.963 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 3 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.17:16:24.963 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 2 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.18:16:25.450 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 4 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.18:46:25.693 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 5 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.18:46:25.693 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 6 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.19:46:26.182 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 7 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.20:16:26.426 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 8 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.20:16:26.426 [AMQP Connection 43.142.157.145:5672] ERROR CachingConnectionFactory - Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=406, reply-text=PRECONDITION_FAILED - delivery acknowledgement on channel 9 timed out. Timeout value used: 1800000 ms. This timeout value can be configured, see consumers doc guide to learn more, class-id=0, method-id=0)
-26-03-13.20:52:16.951 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
-26-03-13.20:52:23.948 [HikariPool-1 housekeeper] WARN  HikariPool             - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=13m23s968ms42µs300ns).
-26-03-13.21:03:55.228 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
-26-03-13.21:04:01.552 [HikariPool-1 housekeeper] WARN  HikariPool             - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m43s101ms11µs).
-26-03-13.21:56:57.851 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
-26-03-13.21:56:58.556 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-25] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-org.springframework.amqp.AmqpIOException: java.net.SocketException: Network is unreachable: no further information
-	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:70)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:632)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:726)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createBareChannel(CachingConnectionFactory.java:671)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getCachedChannelProxy(CachingConnectionFactory.java:644)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getChannel(CachingConnectionFactory.java:533)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory$ChannelCachingConnectionProxy.createChannel(CachingConnectionFactory.java:1484)
-	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2268)
-	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2235)
-	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2215)
-	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:467)
-	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:451)
-	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1972)
-	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1936)
-	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1483)
-	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1324)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: java.net.SocketException: Network is unreachable: no further information
-	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
-	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672)
-	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:547)
-	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:602)
-	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
-	at java.base/java.net.Socket.connect(Socket.java:633)
-	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:61)
-	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1249)
-	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1198)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectAddresses(AbstractConnectionFactory.java:678)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:647)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:593)
-	... 15 common frames omitted
-26-03-13.21:56:58.638 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-26] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.21:56:58.939 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-27] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.21:57:01.877 [HikariPool-1 housekeeper] WARN  HikariPool             - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m29s620ms202µs100ns).
-26-03-13.22:17:19.007 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-28] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.22:17:19.044 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-29] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.22:17:19.060 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-30] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.22:17:46.750 [HikariPool-1 housekeeper] WARN  HikariPool             - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=20m44s873ms234µs700ns).
-26-03-13.22:23:16.034 [AMQP Connection 43.142.157.145:5672] WARN  ForgivingExceptionHandler - An unexpected connection driver error occurred (Exception message: Connection reset)
-26-03-13.22:23:16.172 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-34] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-org.springframework.amqp.AmqpIOException: java.net.SocketException: Network is unreachable: no further information
-	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:70)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:632)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:726)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createBareChannel(CachingConnectionFactory.java:671)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getCachedChannelProxy(CachingConnectionFactory.java:644)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getChannel(CachingConnectionFactory.java:533)
-	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory$ChannelCachingConnectionProxy.createChannel(CachingConnectionFactory.java:1484)
-	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2268)
-	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2235)
-	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2215)
-	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:467)
-	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:451)
-	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1972)
-	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1936)
-	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1483)
-	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1324)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: java.net.SocketException: Network is unreachable: no further information
-	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
-	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672)
-	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:547)
-	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:602)
-	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
-	at java.base/java.net.Socket.connect(Socket.java:633)
-	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:61)
-	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1249)
-	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1198)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectAddresses(AbstractConnectionFactory.java:678)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:647)
-	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:593)
-	... 15 common frames omitted
-26-03-13.22:23:16.334 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-35] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.22:23:16.957 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-36] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.22:29:10.426 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-37] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.22:29:10.491 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-38] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.22:29:10.541 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-39] ERROR SimpleMessageListenerContainer - Failed to check/redeclare auto-delete queue(s).
-26-03-13.22:29:29.610 [HikariPool-1 housekeeper] WARN  HikariPool             - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=11m42s860ms469µs900ns).
+26-04-19.13:48:19.665 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
+26-04-19.13:48:19.665 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
+26-04-19.13:49:22.911 [http-nio-8091-exec-2] WARN  UserContextDynamicInterceptor - JWT令牌已过期，请求URI: /api/v1/project/save_draft
+26-04-19.13:49:22.920 [http-nio-8091-exec-2] WARN  GlobalExceptionHandler - JWT令牌已过期: JWT expired at 2026-04-19T05:48:11Z. Current time: 2026-04-19T05:49:22Z, a difference of 71909 milliseconds.  Allowed clock skew: 0 milliseconds.
+26-04-19.13:49:31.411 [http-nio-8091-exec-1] ERROR UserManagementServiceImpl - 更新用户最后登录时间失败：
+### Error updating database.  Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\user_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: UPDATE user SET last_login_time = ?         WHERE user_id = ?
+### Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+26-04-19.13:49:47.968 [http-nio-8091-exec-4] ERROR UserManagementServiceImpl - 更新用户最后登录时间失败：
+### Error updating database.  Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\user_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: UPDATE user SET last_login_time = ?         WHERE user_id = ?
+### Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+26-04-19.13:50:02.334 [http-nio-8091-exec-7] ERROR UserManagementServiceImpl - 更新用户最后登录时间失败：
+### Error updating database.  Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\user_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: UPDATE user SET last_login_time = ?         WHERE user_id = ?
+### Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+26-04-19.14:17:55.939 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
+26-04-19.14:17:55.939 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/

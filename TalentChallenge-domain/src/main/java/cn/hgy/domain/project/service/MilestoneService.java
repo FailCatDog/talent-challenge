@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -185,7 +186,25 @@ public class MilestoneService implements IMilestoneService {
             return false;
         }
 
-        for (ProjectMilestoneEntity milestone : allMilestones) {
+        boolean alreadyStarted = allMilestones.stream().anyMatch(this::hasStartedExecution);
+        if (alreadyStarted) {
+            log.info("project milestones already started, skip initial activation projectId={}", projectId);
+            return false;
+        }
+
+        ProjectMilestoneEntity initialMilestone = allMilestones.stream()
+                .filter(milestone -> milestone.getSequenceOrder() != null)
+                .filter(milestone -> MilestoneStatusEnum.PLANNED.getStatusCode().equals(milestone.getStatus()))
+                .min(Comparator.comparingInt(ProjectMilestoneEntity::getSequenceOrder))
+                .orElse(null);
+        if (initialMilestone != null) {
+            activateMilestone(initialMilestone, LocalDateTime.now());
+            log.info("auto activate initial milestone milestoneId={}, projectId={}, sequenceOrder={}",
+                    initialMilestone.getMilestoneId(), projectId, initialMilestone.getSequenceOrder());
+            return true;
+        }
+
+        for (ProjectMilestoneEntity milestone : java.util.Collections.<ProjectMilestoneEntity>emptyList()) {
             if (milestone.getSequenceOrder() == null) {
                 continue;
             }
@@ -432,6 +451,23 @@ public class MilestoneService implements IMilestoneService {
         milestone.setActualEndTime(null);
 
         milestoneRepository.updateMilestone(milestone);
+    }
+
+    private boolean hasStartedExecution(ProjectMilestoneEntity milestone) {
+        if (milestone == null) {
+            return false;
+        }
+        if (milestone.getActualStartTime() != null) {
+            return true;
+        }
+
+        String status = milestone.getStatus();
+        if (StrUtil.isBlank(status)) {
+            return false;
+        }
+
+        return !MilestoneStatusEnum.PLANNED.getStatusCode().equals(status)
+                && !MilestoneStatusEnum.SKIPPED.getStatusCode().equals(status);
     }
 
     private boolean isProjectReadyToComplete(String projectId) {

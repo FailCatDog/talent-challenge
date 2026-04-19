@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -157,6 +159,32 @@ class MilestoneServiceTest {
         assertThat(updatedNext.getMilestoneId()).isEqualTo("m2");
         assertThat(updatedNext.getStatus()).isEqualTo(MilestoneStatusEnum.IN_PROGRESS.getStatusCode());
         assertThat(updatedNext.getActualStartTime()).isNotNull();
+    }
+
+    @Test
+    void shouldSkipInitialActivationWhenProjectAlreadyStarted() {
+        LocalDateTime startedAt = LocalDateTime.of(2026, 4, 19, 9, 0, 0);
+        ProjectMilestoneEntity firstMilestone = ProjectMilestoneEntity.builder()
+                .milestoneId("m1")
+                .projectId("p1")
+                .sequenceOrder(1)
+                .status(MilestoneStatusEnum.DELIVERED.getStatusCode())
+                .actualStartTime(startedAt)
+                .build();
+        ProjectMilestoneEntity secondMilestone = ProjectMilestoneEntity.builder()
+                .milestoneId("m2")
+                .projectId("p1")
+                .sequenceOrder(3)
+                .status(MilestoneStatusEnum.PLANNED.getStatusCode())
+                .build();
+
+        when(milestoneRepository.queryMilestonesByProjectId("p1"))
+                .thenReturn(List.of(firstMilestone, secondMilestone));
+
+        boolean result = milestoneService.startInitialMilestone("p1");
+
+        assertThat(result).isFalse();
+        verify(milestoneRepository, never()).updateMilestone(any(ProjectMilestoneEntity.class));
     }
 
     @Test

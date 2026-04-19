@@ -50,7 +50,7 @@ spring:
         max-interval: 10000ms
     listener:
       simple:
-        acknowledge-mode: manual
+        acknowledge-mode: auto
         concurrency: 3
         max-concurrency: 10
         prefetch: 10

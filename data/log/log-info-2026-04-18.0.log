@@ -1,0 +1,256 @@
+26-04-18.23:02:48.471 [main            ] INFO  Application            - Starting Application using Java 17.0.16 with PID 45448 (E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes started by 32934 in E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge)
+26-04-18.23:02:48.473 [main            ] INFO  Application            - The following 1 profile is active: "prod"
+26-04-18.23:02:50.468 [main            ] INFO  TomcatWebServer        - Tomcat initialized with port 8091 (http)
+26-04-18.23:02:50.490 [main            ] INFO  Http11NioProtocol      - Initializing ProtocolHandler ["http-nio-8091"]
+26-04-18.23:02:50.492 [main            ] INFO  StandardService        - Starting service [Tomcat]
+26-04-18.23:02:50.493 [main            ] INFO  StandardEngine         - Starting Servlet engine: [Apache Tomcat/10.1.36]
+26-04-18.23:02:50.608 [main            ] INFO  [/]                    - Initializing Spring embedded WebApplicationContext
+26-04-18.23:02:50.609 [main            ] INFO  ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2068 ms
+26-04-18.23:02:52.209 [main            ] INFO  OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+26-04-18.23:02:52.448 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/milestones/
+26-04-18.23:02:52.448 [main            ] WARN  ResourceHandlerUtils   - Appended trailing slash to static resource location: file:///E:/Code/产教融合项目/揭榜挂帅后端/talent-challenge/data/qualifications/
+26-04-18.23:02:52.936 [main            ] INFO  Http11NioProtocol      - Starting ProtocolHandler ["http-nio-8091"]
+26-04-18.23:02:52.965 [main            ] INFO  TomcatWebServer        - Tomcat started on port 8091 (http) with context path '/'
+26-04-18.23:02:52.967 [main            ] INFO  CachingConnectionFactory - Attempting to connect to: [43.142.157.145:5672]
+26-04-18.23:02:53.376 [main            ] INFO  CachingConnectionFactory - Created new connection: rabbitConnectionFactory#4052913c:0/SimpleConnection@3df04fa1 [delegate=amqp://admin@43.142.157.145:5672/, localPort=56639]
+26-04-18.23:02:54.668 [main            ] INFO  Application            - Started Application in 7.211 seconds (process running for 8.054)
+26-04-18.23:02:54.672 [main            ] INFO  MilestoneTemplateInitializer - 开始初始化默认里程碑模板...
+26-04-18.23:02:54.672 [main            ] INFO  MilestoneTemplateService - 开始初始化默认里程碑模板
+26-04-18.23:02:54.693 [main            ] INFO  HikariDataSource       - HikariPool-1 - Starting...
+26-04-18.23:02:55.933 [main            ] INFO  HikariPool             - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@18ff1520
+26-04-18.23:02:55.935 [main            ] INFO  HikariDataSource       - HikariPool-1 - Start completed.
+26-04-18.23:02:56.076 [main            ] INFO  MilestoneTemplateService - 里程碑模板已存在，跳过初始化
+26-04-18.23:02:56.076 [main            ] INFO  MilestoneTemplateInitializer - 默认里程碑模板初始化成功
+26-04-18.23:10:43.428 [http-nio-8091-exec-3] INFO  [/]                    - Initializing Spring DispatcherServlet 'dispatcherServlet'
+26-04-18.23:10:43.428 [http-nio-8091-exec-3] INFO  DispatcherServlet      - Initializing Servlet 'dispatcherServlet'
+26-04-18.23:10:43.429 [http-nio-8091-exec-3] INFO  DispatcherServlet      - Completed initialization in 1 ms
+26-04-18.23:10:43.561 [http-nio-8091-exec-3] INFO  UserManagementHttpController - 用户登录
+26-04-18.23:10:44.004 [http-nio-8091-exec-3] ERROR UserManagementServiceImpl - 更新用户最后登录时间失败：
+### Error updating database.  Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\user_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: UPDATE user SET last_login_time = ?         WHERE user_id = ?
+### Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+26-04-18.23:10:44.007 [http-nio-8091-exec-3] INFO  UserManagementHttpController - 用户登录完成 userId=2018608172406804480 userType=企业
+26-04-18.23:12:34.021 [http-nio-8091-exec-6] INFO  UserManagementHttpController - 用户登录
+26-04-18.23:12:34.370 [http-nio-8091-exec-6] ERROR UserManagementServiceImpl - 更新用户最后登录时间失败：
+### Error updating database.  Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\user_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: UPDATE user SET last_login_time = ?         WHERE user_id = ?
+### Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+26-04-18.23:12:34.371 [http-nio-8091-exec-6] INFO  UserManagementHttpController - 用户登录完成 userId=2018608120762339328 userType=学生
+26-04-18.23:12:48.222 [http-nio-8091-exec-5] INFO  UserManagementHttpController - 用户登录
+26-04-18.23:12:48.585 [http-nio-8091-exec-5] ERROR UserManagementServiceImpl - 更新用户最后登录时间失败：
+### Error updating database.  Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+### The error may exist in file [E:\Code\产教融合项目\揭榜挂帅后端\talent-challenge\TalentChallenge-app\target\classes\mybatis\mapper\user_mapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: UPDATE user SET last_login_time = ?         WHERE user_id = ?
+### Cause: org.apache.ibatis.binding.BindingException: Parameter 'lastLoginTime' not found. Available parameters are [arg1, arg0, param1, param2]
+26-04-18.23:12:48.585 [http-nio-8091-exec-5] INFO  UserManagementHttpController - 用户登录完成 userId=2031391299944452096 userType=管理员
+26-04-18.23:14:49.776 [http-nio-8091-exec-9] INFO  ProjectHttpController  - 企业保存项目草稿 userId=2018608172406804480 userType=2
+26-04-18.23:14:50.410 [http-nio-8091-exec-9] INFO  ProjectService         - 项目草稿保存成功 projectId=2045521441323094016
+26-04-18.23:14:50.412 [http-nio-8091-exec-9] INFO  MilestoneTemplateService - 为项目初始化必须里程碑 projectId=2045521441323094016
+26-04-18.23:14:50.804 [http-nio-8091-exec-9] INFO  MilestoneService       - 创建里程碑 milestoneId=2045521443441217536, projectId=2045521441323094016, milestoneCode=proposal_submission
+26-04-18.23:14:50.958 [http-nio-8091-exec-9] INFO  MilestoneTemplateService - 创建必须里程碑成功 projectId=2045521441323094016, milestoneCode=proposal_submission, name=方案提交
+26-04-18.23:14:51.198 [http-nio-8091-exec-9] INFO  MilestoneService       - 创建里程碑 milestoneId=2045521445068607488, projectId=2045521441323094016, milestoneCode=deliverable_submission
+26-04-18.23:14:51.355 [http-nio-8091-exec-9] INFO  MilestoneTemplateService - 创建必须里程碑成功 projectId=2045521441323094016, milestoneCode=deliverable_submission, name=成果提交
+26-04-18.23:14:51.594 [http-nio-8091-exec-9] INFO  MilestoneService       - 创建里程碑 milestoneId=2045521446771494912, projectId=2045521441323094016, milestoneCode=project_settlement
+26-04-18.23:14:51.768 [http-nio-8091-exec-9] INFO  MilestoneTemplateService - 创建必须里程碑成功 projectId=2045521441323094016, milestoneCode=project_settlement, name=项目结算
+26-04-18.23:14:51.768 [http-nio-8091-exec-9] INFO  MilestoneTemplateService - 项目必须里程碑初始化完成 projectId=2045521441323094016, 成功创建3个里程碑
+26-04-18.23:14:51.768 [http-nio-8091-exec-9] INFO  ProjectService         - 项目必须里程碑初始化成功 projectId=2045521441323094016
+26-04-18.23:19:29.488 [http-nio-8091-exec-3] INFO  ProjectHttpController  - 管理员获取项目列表 status=pending_review userId=2031391299944452096 userType=3
+26-04-18.23:19:52.760 [http-nio-8091-exec-2] WARN  UserContextDynamicInterceptor - JWT令牌无效，请求URI: /api/v1/project/submit_review/2045521441323094016
+26-04-18.23:19:52.764 [http-nio-8091-exec-2] WARN  GlobalExceptionHandler - JWT令牌无效: JWT strings must contain exactly 2 period characters. Found: 0
+26-04-18.23:20:13.119 [http-nio-8091-exec-4] INFO  ProjectHttpController  - 企业提交项目审核 userId=2018608172406804480 userType=2
+26-04-18.23:20:13.359 [http-nio-8091-exec-4] ERROR GlobalExceptionHandler - 业务异常: null
+cn.hgy.types.exception.AppException: null
+	at cn.hgy.domain.project.service.ProjectService.submitForReview(ProjectService.java:237)
+	at cn.hgy.trigger.http.ProjectHttpController.submitForReview(ProjectHttpController.java:146)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+26-04-18.23:20:31.818 [http-nio-8091-exec-6] WARN  UserContextDynamicInterceptor - JWT令牌无效，请求URI: /api/v1/project/update_project
+26-04-18.23:20:31.819 [http-nio-8091-exec-6] WARN  GlobalExceptionHandler - JWT令牌无效: JWT strings must contain exactly 2 period characters. Found: 0
+26-04-18.23:20:49.128 [http-nio-8091-exec-5] INFO  ProjectHttpController  - 企业更新项目 userId=2018608172406804480 userType=2
+26-04-18.23:20:54.814 [http-nio-8091-exec-7] INFO  ProjectHttpController  - 企业提交项目审核 userId=2018608172406804480 userType=2
+26-04-18.23:20:55.069 [http-nio-8091-exec-7] ERROR GlobalExceptionHandler - 业务异常: null
+cn.hgy.types.exception.AppException: null
+	at cn.hgy.domain.project.service.ProjectService.submitForReview(ProjectService.java:237)
+	at cn.hgy.trigger.http.ProjectHttpController.submitForReview(ProjectHttpController.java:146)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:257)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:190)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+26-04-18.23:23:02.338 [http-nio-8091-exec-10] INFO  ProjectHttpController  - 企业提交项目审核 userId=2018608172406804480 userType=2
+26-04-18.23:23:02.514 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  ProjectStatusSyncConsumer - 同步中标项目状态 bidId=2032102779329318912, projectId=2032096897971392512, teamId=2020476698205753344
+26-04-18.23:23:07.485 [http-nio-8091-exec-1] INFO  ProjectHttpController  - 管理员获取项目列表 status=pending_review userId=2031391299944452096 userType=3
+26-04-18.23:23:12.547 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] WARN  PoolBase               - HikariPool-1 - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@3ce72fec (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+26-04-18.23:23:12.937 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  MilestoneTemplateService - 为项目初始化必须里程碑 projectId=2032096897971392512
+26-04-18.23:23:13.015 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  MilestoneTemplateService - 项目里程碑已存在，跳过初始化 projectId=2032096897971392512
+26-04-18.23:23:13.273 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  MilestoneService       - 自动启动首个里程碑 milestoneId=2032096898369851392, projectId=2032096897971392512, sequenceOrder=6
+26-04-18.23:23:13.384 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] INFO  ProjectStatusSyncConsumer - 项目同步完成 projectId=2032096897971392512, acceptedTeamId=2020476698205753344
+26-04-18.23:23:14.486 [http-nio-8091-exec-3] INFO  ProjectHttpController  - 管理员审核通过项目 userId=2031391299944452096 userType=3
+26-04-18.23:26:46.577 [http-nio-8091-exec-6] INFO  BidHttpController      - team 2020476698205753344 apply bid, project 2045521441323094016
+26-04-18.23:26:54.012 [http-nio-8091-exec-5] INFO  BidHttpController      - operator 2018608172406804480 query bids, project 2022959380340805632
+26-04-18.23:27:13.912 [http-nio-8091-exec-7] INFO  BidHttpController      - operator 2018608172406804480 query bids, project 2045521441323094016
+26-04-18.23:27:30.115 [http-nio-8091-exec-8] INFO  BidHttpController      - operator 2018608172406804480 shortlist bid 2045524447028449280
+26-04-18.23:27:35.925 [http-nio-8091-exec-9] INFO  BidHttpController      - operator 2018608172406804480 confirm bid 2045524447028449280
+26-04-18.23:27:36.505 [http-nio-8091-exec-9] INFO  EventPublisher         - 发布竞榜确认事件成功 bidId=2045524447028449280, projectId=2045521441323094016, teamId=2020476698205753344
+26-04-18.23:27:36.593 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] INFO  ProjectStatusSyncConsumer - 同步中标项目状态 bidId=2045524447028449280, projectId=2045521441323094016, teamId=2020476698205753344
+26-04-18.23:27:36.908 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] INFO  MilestoneTemplateService - 为项目初始化必须里程碑 projectId=2045521441323094016
+26-04-18.23:27:36.978 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] INFO  MilestoneTemplateService - 项目里程碑已存在，跳过初始化 projectId=2045521441323094016
+26-04-18.23:27:37.235 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] INFO  MilestoneService       - 自动启动首个里程碑 milestoneId=2045521443441217536, projectId=2045521441323094016, sequenceOrder=1
+26-04-18.23:27:37.341 [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] INFO  ProjectStatusSyncConsumer - 项目同步完成 projectId=2045521441323094016, acceptedTeamId=2020476698205753344
+26-04-18.23:29:29.496 [http-nio-8091-exec-3] ERROR GlobalExceptionHandler - 系统异常: Required part 'file' is not present.
+org.springframework.web.multipart.support.MissingServletRequestPartException: Required part 'file' is not present.
+	at org.springframework.web.method.annotation.RequestParamMethodArgumentResolver.handleMissingValueInternal(RequestParamMethodArgumentResolver.java:216)
+	at org.springframework.web.method.annotation.RequestParamMethodArgumentResolver.handleMissingValue(RequestParamMethodArgumentResolver.java:196)
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:125)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:226)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:180)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1088)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:978)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+26-04-18.23:30:08.264 [http-nio-8091-exec-2] INFO  MilestoneHttpController - 提交里程碑成果 userId=2018608120762339328, milestoneId=2045521443441217536, fileName=null, deliverableUrl=/static/milestones/2032096897971392512/2032097070445367296/电子成绩单.pdf
+26-04-18.23:30:08.740 [http-nio-8091-exec-2] INFO  MilestoneService       - 提交里程碑成果成功 milestoneId=2045521443441217536, deliverableUrl=/static/milestones/2032096897971392512/2032097070445367296/电子成绩单.pdf
+26-04-18.23:31:14.655 [http-nio-8091-exec-5] INFO  MilestoneHttpController - 审批里程碑 userId=2018608172406804480, milestoneId=2045521443441217536, approved=true
+26-04-18.23:31:14.981 [http-nio-8091-exec-5] INFO  MilestoneService       - 审批里程碑成功 milestoneId=2045521443441217536, operatorId=2018608172406804480, approved=true
