@@ -382,6 +382,26 @@ CREATE TABLE `team_member`  (
 INSERT INTO `team_member` VALUES (1, '2020476698205753344', '2018608120762339328', 'leader', '2026-03-09 23:04:01');
 
 -- ----------------------------
+-- Table structure for team_invite
+-- ----------------------------
+DROP TABLE IF EXISTS `team_invite`;
+CREATE TABLE `team_invite`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `invite_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邀请ID',
+  `team_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '团队ID',
+  `inviter_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '邀请人ID（队长）',
+  `invited_user_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '被邀请用户ID',
+  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending' COMMENT '邀请状态：pending/accepted/rejected/cancelled',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `handle_time` datetime NULL DEFAULT NULL COMMENT '处理时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_invite_id`(`invite_id` ASC) USING BTREE,
+  INDEX `idx_team_invited_user`(`invited_user_id` ASC) USING BTREE,
+  INDEX `idx_team_invite_team`(`team_id` ASC) USING BTREE,
+  INDEX `idx_team_invite_status`(`status` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '团队邀请表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;

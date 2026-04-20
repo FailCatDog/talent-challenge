@@ -1,7 +1,9 @@
 package cn.hgy.domain.team.repository;
 
+import cn.hgy.api.dto.TeamInviteItemDTO;
 import cn.hgy.api.dto.TeamMemberItemDTO;
 import cn.hgy.domain.team.model.entity.TeamEntity;
+import cn.hgy.domain.team.model.entity.TeamInviteEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,8 @@ public interface ITeamRepository {
 
     Optional<TeamEntity> queryByTeamId(String teamId);
 
+    Optional<TeamEntity> queryActiveTeamByUserId(String userId);
+
     List<TeamEntity> queryByLeaderIdList(String leaderId, Integer offset, Integer limit);
 
     Long countByLeaderId(String leaderId);
@@ -27,5 +31,17 @@ public interface ITeamRepository {
 
     /** 判断用户是否为团队成员（不含队长） */
     boolean existsMember(String teamId, String userId);
+
+    boolean saveInvite(TeamInviteEntity inviteEntity);
+
+    boolean updateInvite(TeamInviteEntity inviteEntity);
+
+    Optional<TeamInviteEntity> queryInviteById(String inviteId);
+
+    boolean existsPendingInvite(String teamId, String invitedUserId);
+
+    List<TeamInviteItemDTO> queryInvitesByInvitedUserId(String invitedUserId, String status);
+
+    boolean addMember(String teamId, String userId, String role);
 }
 

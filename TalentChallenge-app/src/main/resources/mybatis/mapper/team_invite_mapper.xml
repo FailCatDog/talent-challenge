@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hgy.infrastructure.persistent.dao.TeamInviteDao">
+
+    <resultMap id="TeamInviteResultMap" type="cn.hgy.infrastructure.persistent.po.TeamInvite">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="invite_id" property="inviteId" jdbcType="VARCHAR"/>
+        <result column="team_id" property="teamId" jdbcType="VARCHAR"/>
+        <result column="inviter_id" property="inviterId" jdbcType="VARCHAR"/>
+        <result column="invited_user_id" property="invitedUserId" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="handle_time" property="handleTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.TeamInvite" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO team_invite (
+            invite_id, team_id, inviter_id, invited_user_id, status, create_time, handle_time
+        ) VALUES (
+            #{inviteId}, #{teamId}, #{inviterId}, #{invitedUserId}, #{status}, #{createTime}, #{handleTime}
+        )
+    </insert>
+
+    <update id="update" parameterType="cn.hgy.infrastructure.persistent.po.TeamInvite">
+        UPDATE team_invite
+        SET status = #{status},
+            handle_time = #{handleTime}
+        WHERE invite_id = #{inviteId}
+    </update>
+
+    <select id="selectByInviteId" parameterType="java.lang.String" resultMap="TeamInviteResultMap">
+        SELECT id, invite_id, team_id, inviter_id, invited_user_id, status, create_time, handle_time
+        FROM team_invite
+        WHERE invite_id = #{inviteId}
+    </select>
+
+    <select id="existsPendingInvite" resultType="int">
+        SELECT COUNT(1)
+        FROM team_invite
+        WHERE team_id = #{teamId}
+          AND invited_user_id = #{invitedUserId}
+          AND status = 'pending'
+    </select>
+
+    <resultMap id="TeamInviteItemResultMap" type="cn.hgy.api.dto.TeamInviteItemDTO">
+        <result column="invite_id" property="inviteId" jdbcType="VARCHAR"/>
+        <result column="team_id" property="teamId" jdbcType="VARCHAR"/>
+        <result column="team_name" property="teamName" jdbcType="VARCHAR"/>
+        <result column="inviter_id" property="inviterId" jdbcType="VARCHAR"/>
+        <result column="inviter_name" property="inviterName" jdbcType="VARCHAR"/>
+        <result column="invited_user_id" property="invitedUserId" jdbcType="VARCHAR"/>
+        <result column="invited_user_name" property="invitedUserName" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="handle_time" property="handleTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectByInvitedUserId" resultMap="TeamInviteItemResultMap">
+        SELECT
+            ti.invite_id,
+            ti.team_id,
+            t.team_name,
+            ti.inviter_id,
+            inviter.nickname AS inviter_name,
+            ti.invited_user_id,
+            invited.nickname AS invited_user_name,
+            ti.status,
+            ti.create_time,
+            ti.handle_time
+        FROM team_invite ti
+        LEFT JOIN team t ON ti.team_id = t.team_id
+        LEFT JOIN user inviter ON ti.inviter_id = inviter.user_id
+        LEFT JOIN user invited ON ti.invited_user_id = invited.user_id
+        WHERE ti.invited_user_id = #{invitedUserId}
+        <if test="status != null and status != ''">
+            AND ti.status = #{status}
+        </if>
+        ORDER BY ti.create_time DESC
+    </select>
+
+</mapper>

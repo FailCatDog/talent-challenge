@@ -118,6 +118,9 @@ public class UserManagementRepository implements IUserManagementRepository {
     @Override
     public UserEntity queryUserBaseByUserId(String userId) {
         User user = userDao.queryByUserId(userId);
+        if (user == null) {
+            return null;
+        }
 
         // 转换对象
         return UserEntity.builder()

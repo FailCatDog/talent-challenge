@@ -596,7 +596,7 @@ public class ProjectHttpController implements IProjectHttpService {
 
     private String getTeamIdByUserId(String userId) {
         try {
-            java.util.Optional<cn.hgy.domain.team.model.entity.TeamEntity> teamOpt = teamRepository.queryByLeaderId(userId);
+            java.util.Optional<cn.hgy.domain.team.model.entity.TeamEntity> teamOpt = teamRepository.queryActiveTeamByUserId(userId);
             if (teamOpt.isPresent()) {
                 return teamOpt.get().getTeamId();
             }

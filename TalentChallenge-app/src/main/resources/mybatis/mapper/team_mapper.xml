@@ -37,6 +37,18 @@
         where team_id = #{teamId}
     </select>
 
+    <select id="selectActiveTeamByUserId" parameterType="java.lang.String" resultMap="TeamResultMap">
+        select distinct
+        t.id, t.team_id, t.team_name, t.leader_id, t.description, t.avatar_url, t.status,
+        t.member_count, t.max_member_count, t.create_time, t.update_time
+        from team t
+        inner join team_member tm on t.team_id = tm.team_id
+        where tm.user_id = #{userId}
+          and t.status = 'active'
+        order by t.create_time desc
+        limit 1
+    </select>
+
     <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.Team" useGeneratedKeys="true" keyProperty="id">
         insert into team (
             team_id, team_name, leader_id, description, avatar_url, status, member_count, max_member_count, create_time, update_time

@@ -2,6 +2,9 @@ package cn.hgy.trigger.http;
 
 import cn.hgy.api.ITeamHttpService;
 import cn.hgy.api.dto.TeamCreateRequestDTO;
+import cn.hgy.api.dto.TeamInviteHandleRequestDTO;
+import cn.hgy.api.dto.TeamInviteItemDTO;
+import cn.hgy.api.dto.TeamInviteRequestDTO;
 import cn.hgy.api.dto.TeamListResponseDTO;
 import cn.hgy.api.dto.TeamMemberItemDTO;
 import cn.hgy.api.dto.TeamResponseDTO;
@@ -17,6 +20,7 @@ import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -33,6 +37,7 @@ public class TeamHttpController implements ITeamHttpService {
     private final ITeamService teamService;
 
     @PostMapping("create")
+    @Transactional
     @Override
     public Response<String> createTeam(@RequestBody TeamCreateRequestDTO dto, HttpServletRequest request) {
         ensureStudent(UserContextDynamic.getUserType());
@@ -99,7 +104,7 @@ public class TeamHttpController implements ITeamHttpService {
         String userId = requireUserId();
         log.info("student {} query my team", userId);
 
-        TeamEntity teamEntity = teamService.getTeamByLeaderId(userId);
+        TeamEntity teamEntity = teamService.getActiveTeamByUserId(userId);
         if (teamEntity == null) {
             return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), null);
         }
@@ -134,6 +139,42 @@ public class TeamHttpController implements ITeamHttpService {
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), responseDTO);
     }
 
+    @PostMapping("invite")
+    @Transactional
+    @Override
+    public Response<Boolean> inviteMember(@RequestBody TeamInviteRequestDTO dto, HttpServletRequest request) {
+        ensureStudent(UserContextDynamic.getUserType());
+        String userId = requireUserId();
+        log.info("student {} invite member {} to team {}", userId, dto.getInvitedUserId(), dto.getTeamId());
+
+        boolean result = teamService.inviteMember(dto.getTeamId(), userId, dto.getInvitedUserId());
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
+    }
+
+    @GetMapping("invite/my")
+    @Override
+    public Response<List<TeamInviteItemDTO>> getMyInvites(@RequestParam(value = "status", required = false) String status,
+                                                          HttpServletRequest request) {
+        ensureStudent(UserContextDynamic.getUserType());
+        String userId = requireUserId();
+        log.info("student {} query my team invites, status {}", userId, status);
+
+        List<TeamInviteItemDTO> invites = teamService.getMyInvites(userId, status);
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), invites);
+    }
+
+    @PostMapping("invite/handle")
+    @Transactional
+    @Override
+    public Response<Boolean> handleInvite(@RequestBody TeamInviteHandleRequestDTO dto, HttpServletRequest request) {
+        ensureStudent(UserContextDynamic.getUserType());
+        String userId = requireUserId();
+        log.info("student {} handle invite {}, accept {}", userId, dto.getInviteId(), dto.getAccept());
+
+        boolean result = teamService.handleInvite(dto.getInviteId(), userId, dto.getAccept());
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
+    }
+
     private void ensureStudent(Integer userType) {
         if (!Integer.valueOf(STUDENT_TYPE).equals(userType)) {
             throw new AppException(ResponseCode.TEAM_PERMISSION_DENIED.getCode(), ResponseCode.TEAM_PERMISSION_DENIED.getInfo());
@@ -165,4 +206,3 @@ public class TeamHttpController implements ITeamHttpService {
                 .build();
     }
 }
-

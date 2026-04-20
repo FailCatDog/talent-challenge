@@ -59,6 +59,9 @@ public enum ResponseCode {
     TEAM_ALREADY_EXISTS("ERR_BIZ_044", "您已拥有活跃的团队"),
     TEAM_PERMISSION_DENIED("ERR_BIZ_045", "无权限操作该团队"),
     TEAM_STATUS_INVALID("ERR_BIZ_046", "团队状态不允许此操作"),
+    TEAM_LEADER_LIMIT("ERR_BIZ_047", "一个学生仅能作为队长创建一个队伍"),
+    TEAM_MEMBER_CONFLICT("ERR_BIZ_048", "您已加入其他活跃队伍"),
+    TEAM_INVITE_NOT_FOUND("ERR_BIZ_049", "团队邀请不存在"),
 
     ADMIN_PERMISSION_DENIED("ERR_AUTH_001", "需要管理员权限"),
     TOKEN_EXPIRED("ERR_AUTH_002", "登录已过期，请重新登录"),
