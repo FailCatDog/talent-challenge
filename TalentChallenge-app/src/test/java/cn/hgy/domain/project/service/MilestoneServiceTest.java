@@ -188,6 +188,58 @@ class MilestoneServiceTest {
     }
 
     @Test
+    void shouldReturnActiveMilestoneAsCurrentMilestone() {
+        ProjectMilestoneEntity plannedMilestone = ProjectMilestoneEntity.builder()
+                .milestoneId("m1")
+                .projectId("p1")
+                .sequenceOrder(1)
+                .status(MilestoneStatusEnum.PLANNED.getStatusCode())
+                .name("方案提交")
+                .build();
+        ProjectMilestoneEntity activeMilestone = ProjectMilestoneEntity.builder()
+                .milestoneId("m2")
+                .projectId("p1")
+                .sequenceOrder(2)
+                .status(MilestoneStatusEnum.IN_PROGRESS.getStatusCode())
+                .name("中期答辩")
+                .build();
+
+        when(milestoneRepository.queryMilestonesByProjectId("p1"))
+                .thenReturn(List.of(plannedMilestone, activeMilestone));
+
+        ProjectMilestoneEntity currentMilestone = milestoneService.getCurrentMilestoneByProjectId("p1");
+
+        assertThat(currentMilestone).isNotNull();
+        assertThat(currentMilestone.getMilestoneId()).isEqualTo("m2");
+    }
+
+    @Test
+    void shouldReturnFirstPlannedMilestoneWhenProjectNotStarted() {
+        ProjectMilestoneEntity secondMilestone = ProjectMilestoneEntity.builder()
+                .milestoneId("m2")
+                .projectId("p1")
+                .sequenceOrder(2)
+                .status(MilestoneStatusEnum.PLANNED.getStatusCode())
+                .name("成果提交")
+                .build();
+        ProjectMilestoneEntity firstMilestone = ProjectMilestoneEntity.builder()
+                .milestoneId("m1")
+                .projectId("p1")
+                .sequenceOrder(1)
+                .status(MilestoneStatusEnum.PLANNED.getStatusCode())
+                .name("方案提交")
+                .build();
+
+        when(milestoneRepository.queryMilestonesByProjectId("p1"))
+                .thenReturn(List.of(secondMilestone, firstMilestone));
+
+        ProjectMilestoneEntity currentMilestone = milestoneService.getCurrentMilestoneByProjectId("p1");
+
+        assertThat(currentMilestone).isNotNull();
+        assertThat(currentMilestone.getMilestoneId()).isEqualTo("m1");
+    }
+
+    @Test
     void shouldKeepActualStartTimeWhenSubmittingDeliverable() {
         LocalDateTime startedAt = LocalDateTime.of(2026, 4, 19, 10, 0, 0);
         ProjectMilestoneEntity milestone = ProjectMilestoneEntity.builder()

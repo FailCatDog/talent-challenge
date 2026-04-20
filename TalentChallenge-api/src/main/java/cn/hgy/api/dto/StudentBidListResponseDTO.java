@@ -20,5 +20,6 @@ public class StudentBidListResponseDTO {
     private String teamId;
     private String teamName;
     private String status;
+    private String currentMilestone;
     private LocalDateTime createdAt;
 }

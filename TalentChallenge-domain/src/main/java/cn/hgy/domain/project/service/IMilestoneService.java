@@ -47,6 +47,14 @@ public interface IMilestoneService {
     List<ProjectMilestoneEntity> getMilestonesByProjectId(String projectId);
 
     /**
+     * 获取项目当前里程碑。
+     *
+     * @param projectId 项目ID
+     * @return 当前里程碑，不存在则返回 null
+     */
+    ProjectMilestoneEntity getCurrentMilestoneByProjectId(String projectId);
+
+    /**
      * 启动项目的首个可执行里程碑
      * @param projectId 项目ID
      * @return 是否成功触发

@@ -5,7 +5,9 @@ import cn.hgy.api.dto.*;
 import cn.hgy.api.response.Response;
 import cn.hgy.domain.project.model.entity.ProjectCategoryEntity;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
+import cn.hgy.domain.project.model.entity.ProjectMilestoneEntity;
 import cn.hgy.domain.project.service.IProjectService;
+import cn.hgy.domain.project.service.IMilestoneService;
 import cn.hgy.infrastructure.persistent.jwt.JWTServiceImpl;
 import cn.hgy.trigger.interceptor.UserContextDynamic;
 import cn.hgy.types.common.ProjectComment;
@@ -35,6 +37,7 @@ import java.util.List;
 public class ProjectHttpController implements IProjectHttpService {
 
     private final IProjectService projectService;
+    private final IMilestoneService milestoneService;
     private final JWTServiceImpl jwtService;
     private final cn.hgy.domain.team.repository.ITeamRepository teamRepository;
     private final IUserManagementRepository userManagementRepository;
@@ -124,7 +127,7 @@ public class ProjectHttpController implements IProjectHttpService {
 
         List<ProjectListItemResponseDTO> projectDTOs = new ArrayList<>();
         for (ProjectEntity project : projects) {
-            projectDTOs.add(convertToListItemDTO(project));
+            projectDTOs.add(convertToListItemDTO(project, true));
         }
 
         ProjectListResponseDTO listDTO = ProjectListResponseDTO.builder()
@@ -384,20 +387,43 @@ public class ProjectHttpController implements IProjectHttpService {
     }
 
     private ProjectListItemResponseDTO convertToListItemDTO(ProjectEntity entity) {
-        return ProjectListItemResponseDTO.builder()
+        return convertToListItemDTO(entity, false);
+    }
+
+    private ProjectListItemResponseDTO convertToListItemDTO(ProjectEntity entity, boolean includeCurrentMilestone) {
+        ProjectListItemResponseDTO.ProjectListItemResponseDTOBuilder builder = ProjectListItemResponseDTO.builder()
                 .projectId(entity.getProjectId())
                 .serialNumber(entity.getSerialNumber())
                 .title(entity.getTitle())
                 .applicationCount(entity.getApplicationCount())
                 .acceptedTeamId(entity.getAcceptedTeamId())
+                .acceptedTeamName(resolveAcceptedTeamName(entity))
                 .status(entity.getStatus())
                 .budgetAmount(entity.getBudgetAmount())
                 .currency(entity.getCurrency())
                 .publisherName(entity.getPublisherName())
                 .viewCount(entity.getViewCount())
                 .expectedEndDate(entity.getExpectedEndDate())
-                .submittedAt(entity.getSubmittedAt())
-                .build();
+                .submittedAt(entity.getSubmittedAt());
+
+        if (includeCurrentMilestone && StrUtil.isNotBlank(entity.getProjectId())) {
+            ProjectMilestoneEntity currentMilestone = milestoneService.getCurrentMilestoneByProjectId(entity.getProjectId());
+            builder.currentMilestone(currentMilestone != null ? currentMilestone.getName() : null);
+        }
+
+        return builder.build();
+    }
+
+    private String resolveAcceptedTeamName(ProjectEntity entity) {
+        if (entity == null || StrUtil.isBlank(entity.getAcceptedTeamId())) {
+            return null;
+        }
+        if (StrUtil.isNotBlank(entity.getAcceptedTeamName())) {
+            return entity.getAcceptedTeamName();
+        }
+        return teamRepository.queryByTeamId(entity.getAcceptedTeamId())
+                .map(cn.hgy.domain.team.model.entity.TeamEntity::getTeamName)
+                .orElse(null);
     }
 
     @PostMapping("admin/category/create")
@@ -555,7 +581,7 @@ public class ProjectHttpController implements IProjectHttpService {
 
         List<ProjectListItemResponseDTO> projectDTOs = new ArrayList<>();
         for (ProjectEntity project : projects) {
-            projectDTOs.add(convertToListItemDTO(project));
+            projectDTOs.add(convertToListItemDTO(project, true));
         }
 
         ProjectListResponseDTO listDTO = ProjectListResponseDTO.builder()

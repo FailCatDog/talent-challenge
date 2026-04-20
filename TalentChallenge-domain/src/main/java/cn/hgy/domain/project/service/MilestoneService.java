@@ -176,6 +176,20 @@ public class MilestoneService implements IMilestoneService {
     }
 
     @Override
+    public ProjectMilestoneEntity getCurrentMilestoneByProjectId(String projectId) {
+        List<ProjectMilestoneEntity> milestones = getMilestonesByProjectId(projectId);
+        if (milestones.isEmpty()) {
+            return null;
+        }
+
+        return milestones.stream()
+                .filter(milestone -> milestone.getSequenceOrder() != null)
+                .min(Comparator.comparingInt(this::resolveMilestonePriority)
+                        .thenComparingInt(ProjectMilestoneEntity::getSequenceOrder))
+                .orElse(null);
+    }
+
+    @Override
     public boolean startInitialMilestone(String projectId) {
         if (StrUtil.isBlank(projectId)) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
@@ -468,6 +482,31 @@ public class MilestoneService implements IMilestoneService {
 
         return !MilestoneStatusEnum.PLANNED.getStatusCode().equals(status)
                 && !MilestoneStatusEnum.SKIPPED.getStatusCode().equals(status);
+    }
+
+    private int resolveMilestonePriority(ProjectMilestoneEntity milestone) {
+        if (milestone == null || StrUtil.isBlank(milestone.getStatus())) {
+            return Integer.MAX_VALUE;
+        }
+
+        String status = milestone.getStatus();
+        if (MilestoneStatusEnum.IN_PROGRESS.getStatusCode().equals(status)
+                || MilestoneStatusEnum.DELIVERED.getStatusCode().equals(status)
+                || MilestoneStatusEnum.UNDER_REVIEW.getStatusCode().equals(status)
+                || MilestoneStatusEnum.REJECTED.getStatusCode().equals(status)) {
+            return 0;
+        }
+        if (MilestoneStatusEnum.PLANNED.getStatusCode().equals(status)) {
+            return 1;
+        }
+        if (MilestoneStatusEnum.COMPLETED.getStatusCode().equals(status)) {
+            return 2;
+        }
+        if (MilestoneStatusEnum.EXPIRED.getStatusCode().equals(status)
+                || MilestoneStatusEnum.SKIPPED.getStatusCode().equals(status)) {
+            return 3;
+        }
+        return Integer.MAX_VALUE;
     }
 
     private boolean isProjectReadyToComplete(String projectId) {

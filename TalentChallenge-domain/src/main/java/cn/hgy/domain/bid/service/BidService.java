@@ -9,8 +9,10 @@ import cn.hgy.domain.bid.model.valobj.BidStatusEnum;
 import cn.hgy.domain.bid.repository.IBidRepository;
 import cn.hgy.domain.bid.service.IBidEventPublisher;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
+import cn.hgy.domain.project.model.entity.ProjectMilestoneEntity;
 import cn.hgy.domain.project.model.valobj.ProjectStatusEnum;
 import cn.hgy.domain.project.repository.IProjectRepository;
+import cn.hgy.domain.project.service.IMilestoneService;
 import cn.hgy.domain.team.model.entity.TeamEntity;
 import cn.hgy.domain.team.repository.ITeamRepository;
 import cn.hgy.domain.team.service.ITeamService;
@@ -37,6 +39,7 @@ public class BidService implements IBidService {
     private final IBidEventPublisher bidEventPublisher;
     private final ITeamRepository teamRepository;
     private final ITeamService teamService;
+    private final IMilestoneService milestoneService;
 
     @Override
     public boolean apply(BidCommand command) {
@@ -174,7 +177,15 @@ public class BidService implements IBidService {
         if (StrUtil.isBlank(userId)) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
         }
-        return bidRepository.queryStudentBids(userId);
+        List<StudentBidListResponseDTO> bids = bidRepository.queryStudentBids(userId);
+        for (StudentBidListResponseDTO bid : bids) {
+            if (StrUtil.isBlank(bid.getProjectId())) {
+                continue;
+            }
+            ProjectMilestoneEntity currentMilestone = milestoneService.getCurrentMilestoneByProjectId(bid.getProjectId());
+            bid.setCurrentMilestone(currentMilestone != null ? currentMilestone.getName() : null);
+        }
+        return bids;
     }
 
     @Override
