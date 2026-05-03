@@ -43,9 +43,6 @@ public class TeamService implements ITeamService {
         if (teamRepository.countByLeaderId(command.getLeaderId()) > 0) {
             throw new AppException(ResponseCode.TEAM_LEADER_LIMIT.getCode(), ResponseCode.TEAM_LEADER_LIMIT.getInfo());
         }
-        if (teamRepository.queryActiveTeamByUserId(command.getLeaderId()).isPresent()) {
-            throw new AppException(ResponseCode.TEAM_MEMBER_CONFLICT.getCode(), ResponseCode.TEAM_MEMBER_CONFLICT.getInfo());
-        }
 
         LocalDateTime now = LocalDateTime.now();
         TeamEntity teamEntity = TeamEntity.builder()
@@ -162,6 +159,24 @@ public class TeamService implements ITeamService {
     }
 
     @Override
+    public List<TeamEntity> getJoinedTeams(String userId) {
+        if (StrUtil.isBlank(userId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        return teamRepository.queryJoinedTeamsByUserId(userId);
+    }
+
+    @Override
+    public TeamEntity getJoinedTeamDetail(String userId, String teamId) {
+        if (StrUtil.isBlank(userId) || StrUtil.isBlank(teamId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        return teamRepository.queryJoinedTeamByUserIdAndTeamId(userId, teamId)
+                .orElseThrow(() -> new AppException(ResponseCode.TEAM_PERMISSION_DENIED.getCode(),
+                        ResponseCode.TEAM_PERMISSION_DENIED.getInfo()));
+    }
+
+    @Override
     public Long countTeamsByLeaderId(String leaderId) {
         if (StrUtil.isBlank(leaderId)) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
@@ -183,6 +198,36 @@ public class TeamService implements ITeamService {
             return false;
         }
         return teamRepository.existsMember(teamId, userId);
+    }
+
+    @Override
+    public boolean removeMember(String teamId, String leaderId, String memberUserId) {
+        if (StrUtil.isBlank(teamId) || StrUtil.isBlank(leaderId) || StrUtil.isBlank(memberUserId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        if (StrUtil.equals(leaderId, memberUserId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "不能移除队长");
+        }
+
+        TeamEntity teamEntity = loadTeam(teamId);
+        if (!StrUtil.equals(teamEntity.getLeaderId(), leaderId)) {
+            throw new AppException(ResponseCode.TEAM_PERMISSION_DENIED.getCode(), ResponseCode.TEAM_PERMISSION_DENIED.getInfo());
+        }
+        ensureTeamActive(teamEntity);
+
+        boolean removed = teamRepository.removeMember(teamId, memberUserId);
+        if (!removed) {
+            throw new AppException(ResponseCode.TEAM_NOT_FOUND.getCode(), "团队成员不存在");
+        }
+
+        int currentCount = teamEntity.getMemberCount() == null ? 1 : teamEntity.getMemberCount();
+        teamEntity.setMemberCount(Math.max(1, currentCount - 1));
+        teamEntity.setUpdateTime(LocalDateTime.now());
+        boolean teamUpdated = teamRepository.update(teamEntity);
+        if (!teamUpdated) {
+            throw new AppException(ResponseCode.TEAM_UPDATE_FAIL.getCode(), ResponseCode.TEAM_UPDATE_FAIL.getInfo());
+        }
+        return true;
     }
 
     @Override
@@ -208,8 +253,8 @@ public class TeamService implements ITeamService {
         if (!Integer.valueOf(UserTypeEnum.STUDENT.getCode()).equals(invitedUser.getType())) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "只能邀请学生用户加入队伍");
         }
-        if (teamRepository.queryActiveTeamByUserId(invitedUserId).isPresent()) {
-            throw new AppException(ResponseCode.TEAM_MEMBER_CONFLICT.getCode(), ResponseCode.TEAM_MEMBER_CONFLICT.getInfo());
+        if (teamRepository.existsMember(teamId, invitedUserId)) {
+            throw new AppException(ResponseCode.TEAM_MEMBER_CONFLICT.getCode(), "该用户已在当前团队中");
         }
         if (teamRepository.existsPendingInvite(teamId, invitedUserId)) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "该用户已有待处理的邀请");
@@ -227,18 +272,24 @@ public class TeamService implements ITeamService {
     }
 
     @Override
-    public List<TeamInviteItemDTO> getMyInvites(String userId, String status) {
+    public List<TeamInviteItemDTO> getMyPendingInvites(String userId) {
         if (StrUtil.isBlank(userId)) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
         }
-        if (StrUtil.isNotBlank(status) && TeamInviteStatusEnum.getByCode(status) == null) {
-            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "无效的邀请状态");
-        }
-        return teamRepository.queryInvitesByInvitedUserId(userId, status);
+        return teamRepository.queryInvitesByInvitedUserId(userId, TeamInviteStatusEnum.PENDING.getCode());
     }
 
     @Override
-    public boolean handleInvite(String inviteId, String userId, Boolean accept) {
+    public boolean agreeInvite(String inviteId, String userId) {
+        return handleInvite(inviteId, userId, true);
+    }
+
+    @Override
+    public boolean rejectInvite(String inviteId, String userId) {
+        return handleInvite(inviteId, userId, false);
+    }
+
+    private boolean handleInvite(String inviteId, String userId, Boolean accept) {
         if (StrUtil.isBlank(inviteId) || StrUtil.isBlank(userId) || accept == null) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
         }
@@ -256,8 +307,8 @@ public class TeamService implements ITeamService {
         ensureTeamActive(teamEntity);
 
         if (accept) {
-            if (teamRepository.queryActiveTeamByUserId(userId).isPresent()) {
-                throw new AppException(ResponseCode.TEAM_MEMBER_CONFLICT.getCode(), ResponseCode.TEAM_MEMBER_CONFLICT.getInfo());
+            if (teamRepository.existsMember(teamEntity.getTeamId(), userId)) {
+                throw new AppException(ResponseCode.TEAM_MEMBER_CONFLICT.getCode(), "该用户已在当前团队中");
             }
             ensureNotFull(teamEntity);
             boolean added = teamRepository.addMember(teamEntity.getTeamId(), userId, "member");

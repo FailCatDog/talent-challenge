@@ -22,6 +22,10 @@ public interface ITeamRepository {
 
     List<TeamEntity> queryByLeaderIdList(String leaderId, Integer offset, Integer limit);
 
+    List<TeamEntity> queryJoinedTeamsByUserId(String userId);
+
+    Optional<TeamEntity> queryJoinedTeamByUserIdAndTeamId(String userId, String teamId);
+
     Long countByLeaderId(String leaderId);
 
     boolean existsByLeaderIdAndStatus(String leaderId, String status);
@@ -43,5 +47,7 @@ public interface ITeamRepository {
     List<TeamInviteItemDTO> queryInvitesByInvitedUserId(String invitedUserId, String status);
 
     boolean addMember(String teamId, String userId, String role);
+
+    boolean removeMember(String teamId, String userId);
 }
 

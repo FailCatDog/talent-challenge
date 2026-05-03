@@ -25,7 +25,6 @@
         <include refid="Base_Column_List"/>
         from team
         where leader_id = #{leaderId}
-        and status = 'active'
         order by create_time desc
         limit 1
     </select>
@@ -46,6 +45,29 @@
         where tm.user_id = #{userId}
           and t.status = 'active'
         order by t.create_time desc
+        limit 1
+    </select>
+
+    <select id="selectJoinedTeamsByUserId" parameterType="java.lang.String" resultMap="TeamResultMap">
+        select distinct
+        t.id, t.team_id, t.team_name, t.leader_id, t.description, t.avatar_url, t.status,
+        t.member_count, t.max_member_count, t.create_time, t.update_time
+        from team t
+        inner join team_member tm on t.team_id = tm.team_id
+        where tm.user_id = #{userId}
+          and tm.role = 'member'
+        order by t.create_time desc
+    </select>
+
+    <select id="selectJoinedTeamByUserIdAndTeamId" resultMap="TeamResultMap">
+        select distinct
+        t.id, t.team_id, t.team_name, t.leader_id, t.description, t.avatar_url, t.status,
+        t.member_count, t.max_member_count, t.create_time, t.update_time
+        from team t
+        inner join team_member tm on t.team_id = tm.team_id
+        where tm.user_id = #{userId}
+          and tm.team_id = #{teamId}
+          and tm.role = 'member'
         limit 1
     </select>
 

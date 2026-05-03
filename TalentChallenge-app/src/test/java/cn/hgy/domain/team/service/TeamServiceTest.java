@@ -60,20 +60,19 @@ class TeamServiceTest {
     }
 
     @Test
-    void shouldRejectCreateWhenStudentAlreadyInActiveTeam() {
+    void shouldCreateTeamWhenStudentOnlyJoinedOtherTeams() {
         TeamCommand command = TeamCommand.builder()
                 .teamName("A")
                 .leaderId("u1")
                 .build();
 
         when(teamRepository.countByLeaderId("u1")).thenReturn(0L);
-        when(teamRepository.queryActiveTeamByUserId("u1"))
-                .thenReturn(Optional.of(TeamEntity.builder().teamId("t1").status(TeamStatusEnum.ACTIVE.getCode()).build()));
+        when(snowflake.nextIdStr()).thenReturn("team-1");
+        when(teamRepository.save(any(TeamEntity.class))).thenReturn(true);
 
-        assertThatThrownBy(() -> teamService.createTeam(command))
-                .isInstanceOf(AppException.class);
+        String teamId = teamService.createTeam(command);
 
-        verify(teamRepository, never()).save(any());
+        assertThat(teamId).isEqualTo("team-1");
     }
 
     @Test
@@ -92,7 +91,7 @@ class TeamServiceTest {
 
         when(teamRepository.queryByTeamId("t1")).thenReturn(Optional.of(teamEntity));
         when(userManagementRepository.queryUserBaseByUserId("user2")).thenReturn(invitedUser);
-        when(teamRepository.queryActiveTeamByUserId("user2")).thenReturn(Optional.empty());
+        when(teamRepository.existsMember("t1", "user2")).thenReturn(false);
         when(teamRepository.existsPendingInvite("t1", "user2")).thenReturn(false);
         when(snowflake.nextIdStr()).thenReturn("invite-1");
         when(teamRepository.saveInvite(any(TeamInviteEntity.class))).thenReturn(true);
@@ -129,12 +128,12 @@ class TeamServiceTest {
 
         when(teamRepository.queryInviteById("invite-1")).thenReturn(Optional.of(inviteEntity));
         when(teamRepository.queryByTeamId("t1")).thenReturn(Optional.of(teamEntity));
-        when(teamRepository.queryActiveTeamByUserId("user2")).thenReturn(Optional.empty());
+        when(teamRepository.existsMember("t1", "user2")).thenReturn(false);
         when(teamRepository.addMember("t1", "user2", "member")).thenReturn(true);
         when(teamRepository.update(teamEntity)).thenReturn(true);
         when(teamRepository.updateInvite(any(TeamInviteEntity.class))).thenReturn(true);
 
-        boolean result = teamService.handleInvite("invite-1", "user2", true);
+        boolean result = teamService.agreeInvite("invite-1", "user2");
 
         assertThat(result).isTrue();
         assertThat(teamEntity.getMemberCount()).isEqualTo(2);
@@ -147,11 +146,62 @@ class TeamServiceTest {
     }
 
     @Test
-    void shouldReturnMyInvites() {
+    void shouldRejectInvite() {
+        TeamInviteEntity inviteEntity = TeamInviteEntity.builder()
+                .inviteId("invite-1")
+                .teamId("t1")
+                .invitedUserId("user2")
+                .status(TeamInviteStatusEnum.PENDING.getCode())
+                .build();
+        TeamEntity teamEntity = TeamEntity.builder()
+                .teamId("t1")
+                .leaderId("leader1")
+                .status(TeamStatusEnum.ACTIVE.getCode())
+                .memberCount(1)
+                .maxMemberCount(5)
+                .build();
+
+        when(teamRepository.queryInviteById("invite-1")).thenReturn(Optional.of(inviteEntity));
+        when(teamRepository.queryByTeamId("t1")).thenReturn(Optional.of(teamEntity));
+        when(teamRepository.updateInvite(any(TeamInviteEntity.class))).thenReturn(true);
+
+        boolean result = teamService.rejectInvite("invite-1", "user2");
+
+        assertThat(result).isTrue();
+
+        ArgumentCaptor<TeamInviteEntity> captor = ArgumentCaptor.forClass(TeamInviteEntity.class);
+        verify(teamRepository).updateInvite(captor.capture());
+        assertThat(captor.getValue().getStatus()).isEqualTo(TeamInviteStatusEnum.REJECTED.getCode());
+        assertThat(captor.getValue().getHandleTime()).isNotNull();
+    }
+
+    @Test
+    void shouldRemoveMemberFromTeam() {
+        TeamEntity teamEntity = TeamEntity.builder()
+                .teamId("t1")
+                .leaderId("leader1")
+                .status(TeamStatusEnum.ACTIVE.getCode())
+                .memberCount(3)
+                .maxMemberCount(5)
+                .build();
+
+        when(teamRepository.queryByTeamId("t1")).thenReturn(Optional.of(teamEntity));
+        when(teamRepository.removeMember("t1", "user2")).thenReturn(true);
+        when(teamRepository.update(teamEntity)).thenReturn(true);
+
+        boolean result = teamService.removeMember("t1", "leader1", "user2");
+
+        assertThat(result).isTrue();
+        assertThat(teamEntity.getMemberCount()).isEqualTo(2);
+        verify(teamRepository).removeMember("t1", "user2");
+    }
+
+    @Test
+    void shouldReturnMyPendingInvites() {
         when(teamRepository.queryInvitesByInvitedUserId("user2", "pending"))
                 .thenReturn(List.of(TeamInviteItemDTO.builder().inviteId("i1").status("pending").build()));
 
-        List<TeamInviteItemDTO> invites = teamService.getMyInvites("user2", "pending");
+        List<TeamInviteItemDTO> invites = teamService.getMyPendingInvites("user2");
 
         assertThat(invites).hasSize(1);
         assertThat(invites.get(0).getInviteId()).isEqualTo("i1");

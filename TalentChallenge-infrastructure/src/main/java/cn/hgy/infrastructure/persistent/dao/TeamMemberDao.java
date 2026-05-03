@@ -21,4 +21,7 @@ public interface TeamMemberDao {
 
     /** 查询团队所有成员（含用户昵称、头像） */
     List<TeamMemberItemDTO> selectMembersByTeamId(@Param("teamId") String teamId);
+
+    /** 删除普通成员记录 */
+    int deleteMember(@Param("teamId") String teamId, @Param("userId") String userId);
 }

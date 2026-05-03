@@ -81,6 +81,28 @@ public class TeamRepository implements ITeamRepository {
     }
 
     @Override
+    public List<TeamEntity> queryJoinedTeamsByUserId(String userId) {
+        List<Team> teams = teamDao.selectJoinedTeamsByUserId(userId);
+        if (teams == null || teams.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<TeamEntity> entities = new ArrayList<>();
+        for (Team team : teams) {
+            entities.add(convertToEntity(team));
+        }
+        return entities;
+    }
+
+    @Override
+    public Optional<TeamEntity> queryJoinedTeamByUserIdAndTeamId(String userId, String teamId) {
+        Team team = teamDao.selectJoinedTeamByUserIdAndTeamId(userId, teamId);
+        if (team == null) {
+            return Optional.empty();
+        }
+        return Optional.of(convertToEntity(team));
+    }
+
+    @Override
     public List<TeamEntity> queryByLeaderIdList(String leaderId, Integer offset, Integer limit) {
         List<Team> teams = teamDao.selectByLeaderIdList(leaderId, offset, limit);
         if (teams == null || teams.isEmpty()) {
@@ -150,6 +172,11 @@ public class TeamRepository implements ITeamRepository {
         member.setRole(role);
         member.setJoinTime(LocalDateTime.now());
         return teamMemberDao.insert(member) > 0;
+    }
+
+    @Override
+    public boolean removeMember(String teamId, String userId) {
+        return teamMemberDao.deleteMember(teamId, userId) > 0;
     }
 
     private Team convertToPo(TeamEntity entity) {

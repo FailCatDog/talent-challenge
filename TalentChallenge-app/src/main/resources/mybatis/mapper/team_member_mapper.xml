@@ -31,4 +31,11 @@
         ORDER BY FIELD(tm.role, 'leader', 'member'), tm.join_time ASC
     </select>
 
+    <delete id="deleteMember">
+        DELETE FROM team_member
+        WHERE team_id = #{teamId}
+          AND user_id = #{userId}
+          AND role = 'member'
+    </delete>
+
 </mapper>

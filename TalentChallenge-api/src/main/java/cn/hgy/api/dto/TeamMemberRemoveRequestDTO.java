@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TeamInviteHandleRequestDTO {
+public class TeamMemberRemoveRequestDTO {
 
-    private String inviteId;
-    private Boolean accept;
+    private String teamId;
+    private String userId;
 }

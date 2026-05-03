@@ -19,6 +19,10 @@ public interface TeamDao {
 
     Team selectActiveTeamByUserId(@Param("userId") String userId);
 
+    Team selectJoinedTeamByUserIdAndTeamId(@Param("userId") String userId, @Param("teamId") String teamId);
+
+    List<Team> selectJoinedTeamsByUserId(@Param("userId") String userId);
+
     List<Team> selectByLeaderIdList(@Param("leaderId") String leaderId,
                                     @Param("offset") Integer offset,
                                     @Param("limit") Integer limit);
