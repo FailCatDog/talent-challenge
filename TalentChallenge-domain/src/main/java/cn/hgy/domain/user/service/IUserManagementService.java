@@ -83,14 +83,14 @@ public interface IUserManagementService {
      * 管理员通过企业认证
      * @param targetUserId 目标企业用户ID
      */
-    void approveCompanyCertification(String targetUserId);
+    void approveCompanyCertification(String targetUserId, String reviewerId);
 
     /**
      * 管理员拒绝企业认证
      * @param targetUserId 目标企业用户ID
      * @param reason 拒绝原因
      */
-    void rejectCompanyCertification(String targetUserId, String reason);
+    void rejectCompanyCertification(String targetUserId, String reason, String reviewerId);
 
     /**
      * 管理员分页查询待审核企业列表

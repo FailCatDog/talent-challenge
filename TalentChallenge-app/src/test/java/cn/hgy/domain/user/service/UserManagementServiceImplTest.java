@@ -1,5 +1,7 @@
 package cn.hgy.domain.user.service;
 
+import cn.hgy.domain.audit.repository.IAuditReviewRepository;
+import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
 import cn.hgy.domain.user.model.entity.UserAuthCredentialEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
@@ -37,6 +39,9 @@ class UserManagementServiceImplTest {
 
     @Mock
     private IJWTService jwtService; // 模拟JWT服务
+
+    @Mock
+    private IAuditReviewRepository auditReviewRepository;
 
     @InjectMocks
     private UserManagementServiceImpl userManagementService; // 注入被测试的服务实现
@@ -472,6 +477,29 @@ class UserManagementServiceImplTest {
         test_LoginWithIdentityType("phone", "13900139000", "phonePassword", "phoneUser123");
 
         log.info("测试完成：不同身份类型登录测试通过");
+    }
+
+    @Test
+    void shouldRecordAuditHistoryWhenAdminRejectsCompanyCertification() {
+        CompanyProfileEntity profile = CompanyProfileEntity.builder()
+                .userId("company-1")
+                .certificationStatus("pending_review")
+                .build();
+        when(repository.queryCompanyProfileByUserId("company-1")).thenReturn(profile);
+
+        userManagementService.rejectCompanyCertification("company-1", "资料不完整", "admin-1");
+
+        verify(repository).updateCompanyCertificationStatus("company-1", "rejected", "资料不完整");
+        verify(auditReviewRepository).save(argThat(record -> {
+            assertThat(record.getAuditType()).isEqualTo("company");
+            assertThat(record.getTargetId()).isEqualTo("company-1");
+            assertThat(record.getAction()).isEqualTo("reject");
+            assertThat(record.getFromStatus()).isEqualTo("pending_review");
+            assertThat(record.getToStatus()).isEqualTo("rejected");
+            assertThat(record.getReason()).isEqualTo("资料不完整");
+            assertThat(record.getReviewerId()).isEqualTo("admin-1");
+            return true;
+        }));
     }
 
     private void test_LoginWithIdentityType(String identityType, String identifier, String credential, String userId) {

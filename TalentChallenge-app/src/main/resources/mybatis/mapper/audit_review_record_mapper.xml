@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hgy.infrastructure.persistent.dao.AuditReviewRecordDao">
+
+    <resultMap id="BaseResultMap" type="cn.hgy.infrastructure.persistent.po.AuditReviewRecord">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="record_id" property="recordId" jdbcType="VARCHAR"/>
+        <result column="audit_type" property="auditType" jdbcType="VARCHAR"/>
+        <result column="target_id" property="targetId" jdbcType="VARCHAR"/>
+        <result column="action" property="action" jdbcType="VARCHAR"/>
+        <result column="from_status" property="fromStatus" jdbcType="VARCHAR"/>
+        <result column="to_status" property="toStatus" jdbcType="VARCHAR"/>
+        <result column="reason" property="reason" jdbcType="LONGVARCHAR"/>
+        <result column="reviewer_id" property="reviewerId" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="target_name" property="targetName" jdbcType="VARCHAR"/>
+        <result column="reviewer_name" property="reviewerName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="cn.hgy.infrastructure.persistent.po.AuditReviewRecord">
+        INSERT INTO audit_review_record (
+            record_id, audit_type, target_id, action, from_status,
+            to_status, reason, reviewer_id, create_time
+        ) VALUES (
+            #{recordId}, #{auditType}, #{targetId}, #{action}, #{fromStatus},
+            #{toStatus}, #{reason}, #{reviewerId}, #{createTime}
+        )
+    </insert>
+
+    <select id="selectHistory" resultMap="BaseResultMap">
+        SELECT
+            r.id, r.record_id, r.audit_type, r.target_id, r.action, r.from_status,
+            r.to_status, r.reason, r.reviewer_id, r.create_time,
+            CASE
+                WHEN r.audit_type = 'project' THEN p.title
+                WHEN r.audit_type = 'company' THEN cu.nickname
+                ELSE NULL
+            END AS target_name,
+            ru.nickname AS reviewer_name
+        FROM audit_review_record r
+        LEFT JOIN project p ON r.audit_type = 'project' AND r.target_id = p.project_id
+        LEFT JOIN user cu ON r.audit_type = 'company' AND r.target_id = cu.user_id
+        LEFT JOIN user ru ON r.reviewer_id = ru.user_id
+        <where>
+            <if test="auditType != null and auditType != ''">
+                r.audit_type = #{auditType}
+            </if>
+            <if test="targetId != null and targetId != ''">
+                AND r.target_id = #{targetId}
+            </if>
+            <if test="action != null and action != ''">
+                AND r.action = #{action}
+            </if>
+        </where>
+        ORDER BY r.create_time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countHistory" resultType="long">
+        SELECT COUNT(1)
+        FROM audit_review_record r
+        <where>
+            <if test="auditType != null and auditType != ''">
+                r.audit_type = #{auditType}
+            </if>
+            <if test="targetId != null and targetId != ''">
+                AND r.target_id = #{targetId}
+            </if>
+            <if test="action != null and action != ''">
+                AND r.action = #{action}
+            </if>
+        </where>
+    </select>
+</mapper>

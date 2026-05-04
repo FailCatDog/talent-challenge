@@ -317,7 +317,7 @@ public class ProjectHttpController implements IProjectHttpService {
         String userId = UserContextDynamic.getUserContextDynamic();
         logRequest("管理员审核通过项目", userId, request);
 
-        boolean result = projectService.approveProject(projectId);
+        boolean result = projectService.approveProject(projectId, userId);
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
     }
 
@@ -327,7 +327,7 @@ public class ProjectHttpController implements IProjectHttpService {
         String userId = UserContextDynamic.getUserContextDynamic();
         logRequest("管理员拒绝项目", userId, request);
 
-        boolean result = projectService.rejectProject(dto.getProjectId(), dto.getRejectReason());
+        boolean result = projectService.rejectProject(dto.getProjectId(), dto.getRejectReason(), userId);
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
     }
 

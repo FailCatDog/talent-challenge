@@ -135,7 +135,7 @@ public interface IProjectService {
      * @param projectId 项目ID
      * @return 审核是否成功
      */
-    boolean approveProject(String projectId);
+    boolean approveProject(String projectId, String reviewerId);
 
     /**
      * 管理员拒绝项目
@@ -143,7 +143,7 @@ public interface IProjectService {
      * @param rejectReason 拒绝原因
      * @return 拒绝是否成功
      */
-    boolean rejectProject(String projectId, String rejectReason);
+    boolean rejectProject(String projectId, String rejectReason, String reviewerId);
 
     /**
      * 根据状态查询项目列表

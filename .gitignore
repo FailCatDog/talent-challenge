@@ -37,3 +37,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# 忽略日志目录
+data/log/
+
+# 忽略所有日志文件
+*.log

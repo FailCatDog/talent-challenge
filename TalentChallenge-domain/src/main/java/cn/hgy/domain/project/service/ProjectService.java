@@ -1,5 +1,7 @@
 package cn.hgy.domain.project.service;
 
+import cn.hgy.domain.audit.model.entity.AuditReviewRecordEntity;
+import cn.hgy.domain.audit.repository.IAuditReviewRepository;
 import cn.hgy.domain.project.model.entity.ProjectCategoryEntity;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
 import cn.hgy.domain.project.model.entity.ProjectMilestoneEntity;
@@ -31,6 +33,7 @@ public class ProjectService implements IProjectService{
     private final IProjectRepository repository;
     private final IMilestoneTemplateService milestoneTemplateService;
     private final IMilestoneService milestoneService;
+    private final IAuditReviewRepository auditReviewRepository;
 
     @Override
     public boolean createProject(ProjectComment projectComment) {
@@ -289,7 +292,7 @@ public class ProjectService implements IProjectService{
     }
 
     @Override
-    public boolean approveProject(String projectId) {
+    public boolean approveProject(String projectId, String reviewerId) {
         ProjectEntity projectEntity = repository.queryProjectById(projectId);
         if (projectEntity == null) {
             throw new AppException(ResponseCode.PROJECT_NOT_FOUND.getCode(), ResponseCode.PROJECT_NOT_FOUND.getInfo());
@@ -300,11 +303,12 @@ public class ProjectService implements IProjectService{
         }
 
         repository.updateProjectStatusAndReason(projectId, "published", null);
+        saveAuditRecord("project", projectId, "approve", projectEntity.getStatus(), "published", null, reviewerId);
         return true;
     }
 
     @Override
-    public boolean rejectProject(String projectId, String rejectReason) {
+    public boolean rejectProject(String projectId, String rejectReason, String reviewerId) {
         ProjectEntity projectEntity = repository.queryProjectById(projectId);
         if (projectEntity == null) {
             throw new AppException(ResponseCode.PROJECT_NOT_FOUND.getCode(), ResponseCode.PROJECT_NOT_FOUND.getInfo());
@@ -315,6 +319,7 @@ public class ProjectService implements IProjectService{
         }
 
         repository.updateProjectStatusAndReason(projectId, "rejected", rejectReason);
+        saveAuditRecord("project", projectId, "reject", projectEntity.getStatus(), "rejected", rejectReason, reviewerId);
         return true;
     }
 
@@ -528,5 +533,18 @@ public class ProjectService implements IProjectService{
         String datePart = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
         String randomPart = String.format("%06d", new java.util.Random().nextInt(1000000));
         return "PRJ" + datePart + randomPart;
+    }
+
+    private void saveAuditRecord(String auditType, String targetId, String action,
+                                 String fromStatus, String toStatus, String reason, String reviewerId) {
+        auditReviewRepository.save(AuditReviewRecordEntity.builder()
+                .auditType(auditType)
+                .targetId(targetId)
+                .action(action)
+                .fromStatus(fromStatus)
+                .toStatus(toStatus)
+                .reason(reason)
+                .reviewerId(reviewerId)
+                .build());
     }
 }

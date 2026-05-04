@@ -1,6 +1,8 @@
 package cn.hgy.domain.user.service;
 
 import cn.hgy.api.dto.UserProfileResponseDTO;
+import cn.hgy.domain.audit.model.entity.AuditReviewRecordEntity;
+import cn.hgy.domain.audit.repository.IAuditReviewRepository;
 import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
 import cn.hgy.domain.user.model.entity.StudentProfileEntity;
 import cn.hgy.domain.user.model.entity.UserAuthCredentialEntity;
@@ -32,6 +34,7 @@ public class UserManagementServiceImpl implements IUserManagementService{
 
     private final IUserManagementRepository repository;
     private final IJWTService jwtService;
+    private final IAuditReviewRepository auditReviewRepository;
 
     @Override
     public Boolean userRegister(String nickname, String type, String identityType, String identifier, String credential) {
@@ -294,14 +297,20 @@ public class UserManagementServiceImpl implements IUserManagementService{
     }
 
     @Override
-    public void approveCompanyCertification(String targetUserId) {
+    public void approveCompanyCertification(String targetUserId, String reviewerId) {
+        CompanyProfileEntity profile = repository.queryCompanyProfileByUserId(targetUserId);
+        String fromStatus = profile != null ? profile.getCertificationStatus() : null;
         repository.updateCompanyCertificationStatus(targetUserId, CertificationStatusEnum.CERTIFIED.getCode(), null);
+        saveAuditRecord(targetUserId, "approve", fromStatus, CertificationStatusEnum.CERTIFIED.getCode(), null, reviewerId);
         log.info("管理员通过企业认证 targetUserId={}", targetUserId);
     }
 
     @Override
-    public void rejectCompanyCertification(String targetUserId, String reason) {
+    public void rejectCompanyCertification(String targetUserId, String reason, String reviewerId) {
+        CompanyProfileEntity profile = repository.queryCompanyProfileByUserId(targetUserId);
+        String fromStatus = profile != null ? profile.getCertificationStatus() : null;
         repository.updateCompanyCertificationStatus(targetUserId, CertificationStatusEnum.REJECTED.getCode(), reason);
+        saveAuditRecord(targetUserId, "reject", fromStatus, CertificationStatusEnum.REJECTED.getCode(), reason, reviewerId);
         log.info("管理员拒绝企业认证 targetUserId={}, reason={}", targetUserId, reason);
     }
 
@@ -313,5 +322,18 @@ public class UserManagementServiceImpl implements IUserManagementService{
     @Override
     public long countCompaniesByCertificationStatus(String status) {
         return repository.countCompaniesByCertificationStatus(status);
+    }
+
+    private void saveAuditRecord(String targetUserId, String action, String fromStatus,
+                                 String toStatus, String reason, String reviewerId) {
+        auditReviewRepository.save(AuditReviewRecordEntity.builder()
+                .auditType("company")
+                .targetId(targetUserId)
+                .action(action)
+                .fromStatus(fromStatus)
+                .toStatus(toStatus)
+                .reason(reason)
+                .reviewerId(reviewerId)
+                .build());
     }
 }

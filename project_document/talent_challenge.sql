@@ -430,6 +430,28 @@ CREATE TABLE `team_member`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '团队成员关联表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for audit_review_record
+-- ----------------------------
+DROP TABLE IF EXISTS `audit_review_record`;
+CREATE TABLE `audit_review_record`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `record_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '审核记录ID',
+  `audit_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '审核类型：project/company',
+  `target_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '被审核对象ID',
+  `action` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '审核动作：approve/reject',
+  `from_status` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '审核前状态',
+  `to_status` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '审核后状态',
+  `reason` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '审核意见或拒绝原因',
+  `reviewer_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '审核管理员用户ID',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审核时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_record_id`(`record_id` ASC) USING BTREE,
+  INDEX `idx_audit_type_target`(`audit_type` ASC, `target_id` ASC) USING BTREE,
+  INDEX `idx_action`(`action` ASC) USING BTREE,
+  INDEX `idx_create_time`(`create_time` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '管理员审核历史记录' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Records of team_member
 -- ----------------------------
 INSERT INTO `team_member` VALUES (1, '2020476698205753344', '2018608120762339328', 'leader', '2026-03-09 23:04:01');

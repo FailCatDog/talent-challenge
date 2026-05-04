@@ -238,13 +238,14 @@ public class UserManagementHttpController implements IUserManagementHttpService 
      */
     @GetMapping(value = "/admin/company/pending_review")
     public Response<Map<String, Object>> getPendingReviewCompanies(
-            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "status", defaultValue = "pending_review") String status,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
             HttpServletRequest request) {
         log.info("管理员查询企业列表 status={}, page={}, pageSize={}", status, page, pageSize);
-        List<Map<String, Object>> list = userManagementRepository.queryCompanyList(status, page, pageSize);
-        long total = userManagementRepository.countCompanyList(status);
+        String queryStatus = "all".equals(status) ? null : status;
+        List<Map<String, Object>> list = userManagementRepository.queryCompanyList(queryStatus, page, pageSize);
+        long total = userManagementRepository.countCompanyList(queryStatus);
         List<CompanyPendingReviewDTO> dtoList = list.stream().map(item -> CompanyPendingReviewDTO.builder()
                 .userId((String) item.get("userId"))
                 .companyName((String) item.get("companyName"))
@@ -303,7 +304,8 @@ public class UserManagementHttpController implements IUserManagementHttpService 
     @PostMapping(value = "/admin/company/approve/{userId}")
     public Response<Boolean> approveCompany(@PathVariable("userId") String targetUserId, HttpServletRequest request) {
         log.info("管理员通过企业认证 targetUserId={}", targetUserId);
-        userManagementService.approveCompanyCertification(targetUserId);
+        String reviewerId = UserContextDynamic.getUserContextDynamic();
+        userManagementService.approveCompanyCertification(targetUserId, reviewerId);
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), true);
     }
 
@@ -316,7 +318,8 @@ public class UserManagementHttpController implements IUserManagementHttpService 
                                             HttpServletRequest request) {
         String reason = body.getOrDefault("reason", "");
         log.info("管理员拒绝企业认证 targetUserId={}, reason=", targetUserId, reason);
-        userManagementService.rejectCompanyCertification(targetUserId, reason);
+        String reviewerId = UserContextDynamic.getUserContextDynamic();
+        userManagementService.rejectCompanyCertification(targetUserId, reason, reviewerId);
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), true);
     }
 }

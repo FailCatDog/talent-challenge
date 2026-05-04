@@ -1,5 +1,6 @@
 package cn.hgy.domain.project.service;
 
+import cn.hgy.domain.audit.repository.IAuditReviewRepository;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
 import cn.hgy.domain.project.repository.IProjectRepository;
 import cn.hgy.types.common.ProjectComment;
@@ -38,6 +39,9 @@ class ProjectServiceTest {
 
     @Mock
     private IMilestoneService milestoneService;
+
+    @Mock
+    private IAuditReviewRepository auditReviewRepository;
 
     @InjectMocks
     private ProjectService projectService;
@@ -386,6 +390,30 @@ class ProjectServiceTest {
 
         assertThat(result).isTrue();
         verify(repository).updateProjectStatus("p1", "completed");
+    }
+
+    @Test
+    void shouldRecordAuditHistoryWhenAdminApprovesProject() {
+        ProjectEntity projectEntity = ProjectEntity.builder()
+                .projectId("p1")
+                .status("pending_review")
+                .build();
+
+        when(repository.queryProjectById("p1")).thenReturn(projectEntity);
+
+        boolean result = projectService.approveProject("p1", "admin-1");
+
+        assertThat(result).isTrue();
+        verify(repository).updateProjectStatusAndReason("p1", "published", null);
+        verify(auditReviewRepository).save(argThat(record -> {
+            assertThat(record.getAuditType()).isEqualTo("project");
+            assertThat(record.getTargetId()).isEqualTo("p1");
+            assertThat(record.getAction()).isEqualTo("approve");
+            assertThat(record.getFromStatus()).isEqualTo("pending_review");
+            assertThat(record.getToStatus()).isEqualTo("published");
+            assertThat(record.getReviewerId()).isEqualTo("admin-1");
+            return true;
+        }));
     }
 
     private ProjectComment buildValidProjectComment() {
