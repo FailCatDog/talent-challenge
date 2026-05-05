@@ -405,7 +405,7 @@ public class MilestoneService implements IMilestoneService {
         milestoneRepository.updateMilestone(entity);
         log.info("审批里程碑成功 milestoneId={}, operatorId={}, approved={}", milestoneId, operatorId, approved);
 
-        // 审批通过后，自动启动下一个里程碑（逻辑与 updateMilestoneStatus→completed 共用）
+        // 审批通过后，自动启动下一个里程碑
         if (approved) {
             tryAdvanceWorkflowAfterMilestoneCompleted(entity);
         }
@@ -428,9 +428,9 @@ public class MilestoneService implements IMilestoneService {
     }
 
     /**
-     * 自动启动下一个里程碑（顺序大于当前且仍为 planned 的第一项；列表已按 sequence_order 排序）
+     * 自动启动下一个里程碑
      *
-     * @param completedMilestone 刚完成的里程碑（用于 projectId、sequenceOrder；sequenceOrder 为空时按列表位置推断下一项）
+     * @param completedMilestone 刚完成的里程碑
      */
     private boolean startNextMilestone(ProjectMilestoneEntity completedMilestone) {
         if (completedMilestone == null || StrUtil.isBlank(completedMilestone.getProjectId())) {
