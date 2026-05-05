@@ -95,6 +95,11 @@ public class ProjectEntity {
     private LocalDateTime publishedAt;
 
     /**
+     * 提交审核时间（状态变为pending_review的时间）
+     */
+    private LocalDateTime submittedAt;
+
+    /**
      * 申请截止时间
      */
     private LocalDateTime applicationDeadline;

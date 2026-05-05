@@ -19,4 +19,3 @@ public class MilestoneUpdateRequestDTO {
     private LocalDateTime plannedEndTime;
     private Integer remindBeforeHours;
 }
-

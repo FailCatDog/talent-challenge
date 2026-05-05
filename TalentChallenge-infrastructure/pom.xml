@@ -43,6 +43,10 @@
         <!-- 系统模块 -->
         <dependency>
             <groupId>cn.hgy</groupId>
+            <artifactId>TalentChallenge-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hgy</groupId>
             <artifactId>TalentChallenge-domain</artifactId>
         </dependency>
     </dependencies>

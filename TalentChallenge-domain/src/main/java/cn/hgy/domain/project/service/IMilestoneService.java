@@ -45,6 +45,21 @@ public interface IMilestoneService {
      * @return 里程碑列表
      */
     List<ProjectMilestoneEntity> getMilestonesByProjectId(String projectId);
+
+    /**
+     * 获取项目当前里程碑。
+     *
+     * @param projectId 项目ID
+     * @return 当前里程碑，不存在则返回 null
+     */
+    ProjectMilestoneEntity getCurrentMilestoneByProjectId(String projectId);
+
+    /**
+     * 启动项目的首个可执行里程碑
+     * @param projectId 项目ID
+     * @return 是否成功触发
+     */
+    boolean startInitialMilestone(String projectId);
     
     /**
      * 根据项目ID和里程碑编码查询里程碑
@@ -86,10 +101,12 @@ public interface IMilestoneService {
     /**
      * 提交里程碑成果
      * @param milestoneId 里程碑ID
+     * @param fileName 文件名
      * @param deliverableUrl 成果附件URL
+     * @param fileSize 文件大小
      * @return 是否成功
      */
-    boolean submitMilestoneDeliverable(String milestoneId, String deliverableUrl);
+    boolean submitMilestoneDeliverable(String milestoneId, String fileName, String deliverableUrl, Long fileSize);
     
     /**
      * 审批里程碑

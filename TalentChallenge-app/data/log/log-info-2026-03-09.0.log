@@ -1,0 +1,34 @@
+25-10-20.11:20:30.790 [main            ] INFO  InitSuperAdmin         - Starting InitSuperAdmin using Java 17.0.11 with PID 12528 (started by HGY in E:\Code-Project\Java-Project\TalentChallenge\TalentChallenge-app)
+25-10-20.11:20:30.792 [main            ] INFO  InitSuperAdmin         - The following 1 profile is active: "dev"
+25-10-20.11:20:33.209 [main            ] INFO  OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+25-10-20.11:20:34.020 [main            ] INFO  InitSuperAdmin         - Started InitSuperAdmin in 3.711 seconds (process running for 5.059)
+25-10-20.11:20:34.966 [main            ] INFO  InitSuperAdmin         - ==========================================
+25-10-20.11:20:34.966 [main            ] INFO  InitSuperAdmin         - 开始初始化超级管理员账号...
+25-10-20.11:20:34.966 [main            ] INFO  InitSuperAdmin         - ==========================================
+25-10-20.11:20:34.987 [main            ] INFO  HikariDataSource       - HikariPool-1 - Starting...
+25-10-20.11:20:35.321 [main            ] INFO  HikariPool             - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5617168c
+25-10-20.11:20:35.323 [main            ] INFO  HikariDataSource       - HikariPool-1 - Start completed.
+25-10-20.11:20:35.408 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown initiated...
+25-10-20.11:20:35.415 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown completed.
+25-10-20.11:22:21.696 [main            ] INFO  InitSuperAdmin         - Starting InitSuperAdmin using Java 17.0.11 with PID 29188 (started by HGY in E:\Code-Project\Java-Project\TalentChallenge\TalentChallenge-app)
+25-10-20.11:22:21.698 [main            ] INFO  InitSuperAdmin         - The following 1 profile is active: "dev"
+25-10-20.11:22:24.338 [main            ] INFO  OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+25-10-20.11:22:25.164 [main            ] INFO  InitSuperAdmin         - Started InitSuperAdmin in 3.919 seconds (process running for 4.916)
+25-10-20.11:22:25.998 [main            ] INFO  InitSuperAdmin         - ==========================================
+25-10-20.11:22:25.998 [main            ] INFO  InitSuperAdmin         - 开始初始化超级管理员账号...
+25-10-20.11:22:25.998 [main            ] INFO  InitSuperAdmin         - ==========================================
+25-10-20.11:22:26.011 [main            ] INFO  HikariDataSource       - HikariPool-1 - Starting...
+25-10-20.11:22:26.265 [main            ] INFO  HikariPool             - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4713b631
+25-10-20.11:22:26.266 [main            ] INFO  HikariDataSource       - HikariPool-1 - Start completed.
+25-10-20.11:22:26.425 [main            ] INFO  InitSuperAdmin         - ✅ 超级管理员创建成功！
+25-10-20.11:22:26.425 [main            ] INFO  InitSuperAdmin         - ------------------------------------------
+25-10-20.11:22:26.425 [main            ] INFO  InitSuperAdmin         - 登录信息：
+25-10-20.11:22:26.425 [main            ] INFO  InitSuperAdmin         -   用户名: admin
+25-10-20.11:22:26.425 [main            ] INFO  InitSuperAdmin         -   密码: Admin@123456
+25-10-20.11:22:26.425 [main            ] INFO  InitSuperAdmin         - ------------------------------------------
+25-10-20.11:22:26.425 [main            ] INFO  InitSuperAdmin         - ⚠️  请在首次登录后立即修改密码
+25-10-20.11:22:26.425 [main            ] INFO  InitSuperAdmin         - ==========================================
+25-10-20.11:22:26.441 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown initiated...
+25-10-20.11:22:26.503 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown completed.
+25-10-20.11:25:04.262 [main            ] INFO  InitSuperAdmin         - Starting InitSuperAdmin using Java 17.0.11 with PID 22964 (started by HGY in E:\Code-Project\Java-Project\TalentChallenge\TalentChallenge-app)
+25-10-20.11:25:04.272 [main            ] INFO  InitSuperAdmin         - The following 1 profile is active: "dev"

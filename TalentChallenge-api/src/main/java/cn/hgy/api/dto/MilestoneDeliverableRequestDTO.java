@@ -15,9 +15,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MilestoneDeliverableRequestDTO {
-    
+
     private String milestoneId;
+    private String fileName;
     private String deliverableUrl;
+    private Long fileSize;
     private String remark;
 }
 

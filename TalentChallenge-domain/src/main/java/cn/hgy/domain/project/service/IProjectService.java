@@ -135,7 +135,7 @@ public interface IProjectService {
      * @param projectId 项目ID
      * @return 审核是否成功
      */
-    boolean approveProject(String projectId);
+    boolean approveProject(String projectId, String reviewerId);
 
     /**
      * 管理员拒绝项目
@@ -143,7 +143,7 @@ public interface IProjectService {
      * @param rejectReason 拒绝原因
      * @return 拒绝是否成功
      */
-    boolean rejectProject(String projectId, String rejectReason);
+    boolean rejectProject(String projectId, String rejectReason, String reviewerId);
 
     /**
      * 根据状态查询项目列表
@@ -237,4 +237,25 @@ public interface IProjectService {
      * @return 项目数量
      */
     Long countProjectsByAcceptedTeam(String teamId, String status);
+
+    /**
+     * 企业手动完结项目
+     * @param projectId 项目ID
+     * @param publisherId 企业用户ID
+     * @return 是否成功
+     */
+    boolean closeProject(String projectId, String publisherId);
+
+    /**
+     * 自动关闭已完成超过两周的项目
+     * @return 实际关闭数量
+     */
+    int autoCloseCompletedProjects();
+
+    /**
+     * 将项目置为已完成
+     * @param projectId 项目ID
+     * @return 是否成功
+     */
+    boolean completeProject(String projectId);
 }

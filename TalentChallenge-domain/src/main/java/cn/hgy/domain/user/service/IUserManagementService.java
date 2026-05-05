@@ -1,7 +1,11 @@
 package cn.hgy.domain.user.service;
 
+import cn.hgy.api.dto.UserProfileResponseDTO;
+import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
+
+import java.util.List;
 
 /**
  * @Author: 黄光宇
@@ -52,5 +56,54 @@ public interface IUserManagementService {
     UserEntity updateUserProfile(String userId, String nickname, String avatarUrl, String bio,
                                   Integer gender, java.time.LocalDate birthday, String regionCode,
                                   String industry, String title);
+
+    /**
+     * 查询用户完整资料（包括扩展信息）
+     * @param userId 用户ID
+     * @return 用户完整资料DTO
+     */
+    UserProfileResponseDTO getUserProfile(String userId);
+
+    /**
+     * 企业提交资质文件及核心字段，状态变为 pending_review
+     * 若已认证（certified），拒绝修改核心字段
+     */
+    void submitCompanyQualification(String userId, List<String> fileUrls,
+                                     String creditCode, String companyIndustry, String companyScale,
+                                     String contactPerson, String contactPosition,
+                                     String contactPhone, String contactEmail);
+
+    /**
+     * 更新企业可自由修改字段（简介、标签、官网、地区）
+     */
+    void updateCompanyFreeFields(String userId, String companyIntro, List<String> companyTags,
+                                  String companyWebsite, String companyRegion);
+
+    /**
+     * 管理员通过企业认证
+     * @param targetUserId 目标企业用户ID
+     */
+    void approveCompanyCertification(String targetUserId, String reviewerId);
+
+    /**
+     * 管理员拒绝企业认证
+     * @param targetUserId 目标企业用户ID
+     * @param reason 拒绝原因
+     */
+    void rejectCompanyCertification(String targetUserId, String reason, String reviewerId);
+
+    /**
+     * 管理员分页查询待审核企业列表
+     * @param status 认证状态
+     * @param page 页码
+     * @param pageSize 每页数量
+     * @return 企业资料列表
+     */
+    List<CompanyProfileEntity> queryCompaniesByCertificationStatus(String status, int page, int pageSize);
+
+    /**
+     * 统计指定认证状态的企业数量
+     */
+    long countCompaniesByCertificationStatus(String status);
 
 }

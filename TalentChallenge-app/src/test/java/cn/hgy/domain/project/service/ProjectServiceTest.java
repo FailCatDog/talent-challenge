@@ -1,5 +1,6 @@
 package cn.hgy.domain.project.service;
 
+import cn.hgy.domain.audit.repository.IAuditReviewRepository;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
 import cn.hgy.domain.project.repository.IProjectRepository;
 import cn.hgy.types.common.ProjectComment;
@@ -36,6 +37,12 @@ class ProjectServiceTest {
     @Mock
     private IMilestoneTemplateService milestoneTemplateService;
 
+    @Mock
+    private IMilestoneService milestoneService;
+
+    @Mock
+    private IAuditReviewRepository auditReviewRepository;
+
     @InjectMocks
     private ProjectService projectService;
 
@@ -61,7 +68,7 @@ class ProjectServiceTest {
         verify(repository, times(1)).createProject(argThat(projectEntity -> {
             log.info("验证传递给repository的项目实体属性");
             assertThat(projectEntity.getProjectId()).isEqualTo(projectId);
-            assertThat(projectEntity.getSerialNumber()).isEqualTo(projectId);
+            assertThat(projectEntity.getSerialNumber()).startsWith("PRJ");
             assertThat(projectEntity.getTitle()).isEqualTo(projectComment.getTitle());
             assertThat(projectEntity.getDescription()).isEqualTo(projectComment.getDescription());
             assertThat(projectEntity.getCategoryId()).isEqualTo(projectComment.getCategoryId());
@@ -78,7 +85,7 @@ class ProjectServiceTest {
             assertThat(projectEntity.getApplicationDeadline()).isEqualTo(projectComment.getApplicationDeadline());
             assertThat(projectEntity.getExpectedStartDate()).isEqualTo(projectComment.getExpectedStartDate());
             assertThat(projectEntity.getExpectedEndDate()).isEqualTo(projectComment.getExpectedEndDate());
-            assertThat(projectEntity.getStatus()).isEqualTo("published");
+            assertThat(projectEntity.getStatus()).isEqualTo("draft");
             assertThat(projectEntity.getPublisherId()).isEqualTo(projectComment.getPublisherId());
             return true;
         }));
@@ -136,7 +143,7 @@ class ProjectServiceTest {
         verify(repository, times(1)).createProject(argThat(projectEntity -> {
             log.info("验证最少数据项目实体属性");
             assertThat(projectEntity.getProjectId()).isEqualTo(projectId);
-            assertThat(projectEntity.getSerialNumber()).isEqualTo(projectId);
+            assertThat(projectEntity.getSerialNumber()).startsWith("PRJ");
             assertThat(projectEntity.getTitle()).isEqualTo(projectComment.getTitle());
             assertThat(projectEntity.getPublisherId()).isEqualTo(projectComment.getPublisherId());
             return true;
@@ -243,7 +250,7 @@ class ProjectServiceTest {
         verify(repository).createProject(argThat(projectEntity -> {
             log.info("验证项目ID和序列号设置");
             assertThat(projectEntity.getProjectId()).isEqualTo(expectedProjectId);
-            assertThat(projectEntity.getSerialNumber()).isEqualTo(expectedProjectId);
+            assertThat(projectEntity.getSerialNumber()).startsWith("PRJ");
             log.info("项目ID和序列号均设置为：{}", expectedProjectId);
             return true;
         }));
@@ -266,7 +273,6 @@ class ProjectServiceTest {
         assertThat(exception.getCode()).isEqualTo(ResponseCode.PROJECT_TITLE_INVALID.getCode());
         assertThat(exception.getInfo()).isEqualTo(ResponseCode.PROJECT_TITLE_INVALID.getInfo());
 
-        verify(snowflake, never()).nextIdStr();
         verify(repository, never()).createProject(any());
 
         log.info("测试完成：标题过短异常测试通过");
@@ -286,7 +292,6 @@ class ProjectServiceTest {
         assertThat(exception.getCode()).isEqualTo(ResponseCode.PROJECT_BUDGET_INVALID.getCode());
         assertThat(exception.getInfo()).isEqualTo(ResponseCode.PROJECT_BUDGET_INVALID.getInfo());
 
-        verify(snowflake, never()).nextIdStr();
         verify(repository, never()).createProject(any());
 
         log.info("测试完成：预算为0异常测试通过");
@@ -307,7 +312,6 @@ class ProjectServiceTest {
         assertThat(exception.getCode()).isEqualTo(ResponseCode.PROJECT_TEAM_SIZE_INVALID.getCode());
         assertThat(exception.getInfo()).isEqualTo(ResponseCode.PROJECT_TEAM_SIZE_INVALID.getInfo());
 
-        verify(snowflake, never()).nextIdStr();
         verify(repository, never()).createProject(any());
 
         log.info("测试完成：团队规模无效异常测试通过");
@@ -340,6 +344,76 @@ class ProjectServiceTest {
         log.info("验证项目创建和里程碑初始化方法都被调用");
 
         log.info("测试完成：里程碑初始化失败异常测试通过");
+    }
+
+    @Test
+    void shouldCloseProjectWhenPublisherClosesCompletedProject() {
+        ProjectEntity projectEntity = ProjectEntity.builder()
+                .projectId("p1")
+                .publisherId("publisher-1")
+                .status("completed")
+                .build();
+
+        when(repository.queryProjectById("p1")).thenReturn(projectEntity);
+
+        boolean result = projectService.closeProject("p1", "publisher-1");
+
+        assertThat(result).isTrue();
+        verify(repository).updateProjectStatus("p1", "closed");
+    }
+
+    @Test
+    void shouldAutoCloseCompletedProjectsOlderThanTwoWeeks() {
+        ProjectEntity first = ProjectEntity.builder().projectId("p1").status("completed").build();
+        ProjectEntity second = ProjectEntity.builder().projectId("p2").status("completed").build();
+
+        when(repository.queryProjectsByStatusUpdatedBefore(eq("completed"), any(LocalDateTime.class)))
+                .thenReturn(java.util.List.of(first, second));
+
+        int closedCount = projectService.autoCloseCompletedProjects();
+
+        assertThat(closedCount).isEqualTo(2);
+        verify(repository).updateProjectStatus("p1", "closed");
+        verify(repository).updateProjectStatus("p2", "closed");
+    }
+
+    @Test
+    void shouldMarkProjectCompletedWhenProjectIsInProgress() {
+        ProjectEntity projectEntity = ProjectEntity.builder()
+                .projectId("p1")
+                .status("in_progress")
+                .build();
+
+        when(repository.queryProjectById("p1")).thenReturn(projectEntity);
+
+        boolean result = projectService.completeProject("p1");
+
+        assertThat(result).isTrue();
+        verify(repository).updateProjectStatus("p1", "completed");
+    }
+
+    @Test
+    void shouldRecordAuditHistoryWhenAdminApprovesProject() {
+        ProjectEntity projectEntity = ProjectEntity.builder()
+                .projectId("p1")
+                .status("pending_review")
+                .build();
+
+        when(repository.queryProjectById("p1")).thenReturn(projectEntity);
+
+        boolean result = projectService.approveProject("p1", "admin-1");
+
+        assertThat(result).isTrue();
+        verify(repository).updateProjectStatusAndReason("p1", "published", null);
+        verify(auditReviewRepository).save(argThat(record -> {
+            assertThat(record.getAuditType()).isEqualTo("project");
+            assertThat(record.getTargetId()).isEqualTo("p1");
+            assertThat(record.getAction()).isEqualTo("approve");
+            assertThat(record.getFromStatus()).isEqualTo("pending_review");
+            assertThat(record.getToStatus()).isEqualTo("published");
+            assertThat(record.getReviewerId()).isEqualTo("admin-1");
+            return true;
+        }));
     }
 
     private ProjectComment buildValidProjectComment() {

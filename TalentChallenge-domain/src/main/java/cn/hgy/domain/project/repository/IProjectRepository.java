@@ -1,7 +1,10 @@
 package cn.hgy.domain.project.repository;
 
 import cn.hgy.domain.project.model.entity.ProjectEntity;
+import cn.hgy.domain.project.model.valobj.CategoryDistributionVO;
+import cn.hgy.domain.project.model.valobj.ProjectStatisticsVO;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -60,6 +63,22 @@ public interface IProjectRepository {
      * @param status 项目状态
      */
     void updateProjectStatus(String projectId, String status);
+
+    /**
+     * 查询在指定更新时间之前的某状态项目
+     * @param status 项目状态
+     * @param updateTimeBefore 更新时间上限
+     * @return 项目列表
+     */
+    List<ProjectEntity> queryProjectsByStatusUpdatedBefore(String status, LocalDateTime updateTimeBefore);
+
+    /**
+     * 更新项目状态和提交时间
+     * @param projectId 项目ID
+     * @param status 项目状态
+     * @param submittedAt 提交时间
+     */
+    void updateProjectStatusAndSubmittedAt(String projectId, String status, LocalDateTime submittedAt);
 
     /**
      * 查询已发布项目列表
@@ -220,4 +239,16 @@ public interface IProjectRepository {
      * @return 项目数量
      */
     Long countProjectsByAcceptedTeamId(String teamId, String status);
+
+    /**
+     * 获取项目统计数据（各状态数量、时间维度统计）
+     * @return 项目统计VO
+     */
+    ProjectStatisticsVO getProjectStatistics();
+
+    /**
+     * 获取项目分类分布统计
+     * @return 分类分布列表
+     */
+    List<CategoryDistributionVO> getCategoryDistribution();
 }

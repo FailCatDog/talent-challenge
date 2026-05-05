@@ -109,5 +109,63 @@
         </if>
     </select>
 
+    <resultMap id="BidPublicResultMap" type="cn.hgy.api.dto.BidPublicListItemResponseDTO">
+        <result column="bid_id" property="bidId" jdbcType="VARCHAR"/>
+        <result column="team_id" property="teamId" jdbcType="VARCHAR"/>
+        <result column="team_name" property="teamName" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectPublicBidsByProject" resultMap="BidPublicResultMap">
+        SELECT
+            b.bid_id,
+            b.team_id,
+            t.team_name,
+            b.status,
+            b.create_time
+        FROM bid b
+        LEFT JOIN team t ON b.team_id = t.team_id
+        WHERE b.project_id = #{projectId}
+        ORDER BY b.create_time DESC
+    </select>
+
+    <resultMap id="StudentBidResultMap" type="cn.hgy.api.dto.StudentBidListResponseDTO">
+        <result column="bid_id" property="bidId" jdbcType="VARCHAR"/>
+        <result column="project_id" property="projectId" jdbcType="VARCHAR"/>
+        <result column="project_title" property="projectTitle" jdbcType="VARCHAR"/>
+        <result column="publisher_name" property="publisherName" jdbcType="VARCHAR"/>
+        <result column="team_id" property="teamId" jdbcType="VARCHAR"/>
+        <result column="team_name" property="teamName" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createdAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectStudentBids" resultMap="StudentBidResultMap">
+        SELECT
+            b.bid_id,
+            b.project_id,
+            p.title AS project_title,
+            u.nickname AS publisher_name,
+            b.team_id,
+            t.team_name,
+            b.status,
+            b.create_time
+        FROM bid b
+        INNER JOIN team_member tm ON b.team_id = tm.team_id
+        INNER JOIN team t ON b.team_id = t.team_id
+        LEFT JOIN project p ON b.project_id = p.project_id
+        LEFT JOIN user u ON p.publisher_id = u.user_id
+        WHERE tm.user_id = #{userId}
+        ORDER BY b.create_time DESC
+    </select>
+
+    <update id="updateBidAttachment">
+        UPDATE bid
+        SET attachment_url = #{attachmentUrl},
+            update_time = NOW()
+        WHERE bid_id = #{bidId}
+    </update>
+
 </mapper>
 

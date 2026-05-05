@@ -5,11 +5,17 @@ import cn.hgy.api.dto.*;
 import cn.hgy.api.response.Response;
 import cn.hgy.domain.project.model.entity.ProjectCategoryEntity;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
+import cn.hgy.domain.project.model.entity.ProjectMilestoneEntity;
 import cn.hgy.domain.project.service.IProjectService;
+import cn.hgy.domain.project.service.IMilestoneService;
 import cn.hgy.infrastructure.persistent.jwt.JWTServiceImpl;
 import cn.hgy.trigger.interceptor.UserContextDynamic;
 import cn.hgy.types.common.ProjectComment;
+import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
+import cn.hgy.domain.user.repository.IUserManagementRepository;
+import cn.hgy.types.enums.CertificationStatusEnum;
 import cn.hgy.types.enums.ResponseCode;
+import cn.hgy.types.exception.AppException;
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +33,14 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/project/")
+@RequestMapping("/api/v1/project")
 public class ProjectHttpController implements IProjectHttpService {
 
     private final IProjectService projectService;
+    private final IMilestoneService milestoneService;
     private final JWTServiceImpl jwtService;
     private final cn.hgy.domain.team.repository.ITeamRepository teamRepository;
+    private final IUserManagementRepository userManagementRepository;
 
     @PostMapping("create_project")
     @Override
@@ -51,6 +59,9 @@ public class ProjectHttpController implements IProjectHttpService {
     public Response<Boolean> saveDraft(@RequestBody ProjectCreateRequestDTO dto, HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
         logRequest("企业保存项目草稿", userId, request);
+
+        // 校验企业认证状态
+        checkCompanyCertified(userId);
 
         ProjectComment projectComment = buildProjectComment(dto, userId);
         boolean result = projectService.saveDraft(projectComment);
@@ -116,7 +127,7 @@ public class ProjectHttpController implements IProjectHttpService {
 
         List<ProjectListItemResponseDTO> projectDTOs = new ArrayList<>();
         for (ProjectEntity project : projects) {
-            projectDTOs.add(convertToListItemDTO(project));
+            projectDTOs.add(convertToListItemDTO(project, true));
         }
 
         ProjectListResponseDTO listDTO = ProjectListResponseDTO.builder()
@@ -257,14 +268,18 @@ public class ProjectHttpController implements IProjectHttpService {
 
     @GetMapping("admin/pending_review")
     @Override
-    public Response<ProjectListResponseDTO> getPendingReviewProjects(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                                                      @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
-                                                                      HttpServletRequest request) {
+    public Response<ProjectListResponseDTO> getPendingReviewProjects(
+            @RequestParam(value = "status", defaultValue = "pending_review") String status,
+            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+            HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
-        logRequest("管理员获取待审核项目列表", userId, request);
+        // status 传 "all" 时查全部
+        String queryStatus = "all".equals(status) ? null : status;
+        logRequest("管理员获取项目列表 status=" + status, userId, request);
 
-        List<ProjectEntity> projects = projectService.getProjectsByStatus("pending_review", pageNum, pageSize);
-        Long total = projectService.countProjectsByStatus("pending_review");
+        List<ProjectEntity> projects = projectService.getProjectsByStatus(queryStatus, pageNum, pageSize);
+        Long total = projectService.countProjectsByStatus(queryStatus);
 
         List<ProjectListItemResponseDTO> projectDTOs = new ArrayList<>();
         for (ProjectEntity project : projects) {
@@ -281,13 +296,28 @@ public class ProjectHttpController implements IProjectHttpService {
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), listDTO);
     }
 
+    @GetMapping("admin/detail/{projectId}")
+    @Override
+    public Response<ProjectDetailResponseDTO> getProjectReviewDetail(
+            @PathVariable("projectId") String projectId, HttpServletRequest request) {
+        String userId = UserContextDynamic.getUserContextDynamic();
+        logRequest("管理员查看项目审核详情", userId, request);
+
+        ProjectEntity projectEntity = projectService.getProjectDetail(projectId);
+        if (projectEntity == null) {
+            throw new AppException(ResponseCode.UN_ERROR.getCode(), "项目不存在");
+        }
+        ProjectDetailResponseDTO dto = convertToDetailDTO(projectEntity);
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), dto);
+    }
+
     @PostMapping("admin/approve/{projectId}")
     @Override
     public Response<Boolean> approveProject(@PathVariable("projectId") String projectId, HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
         logRequest("管理员审核通过项目", userId, request);
 
-        boolean result = projectService.approveProject(projectId);
+        boolean result = projectService.approveProject(projectId, userId);
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
     }
 
@@ -297,7 +327,7 @@ public class ProjectHttpController implements IProjectHttpService {
         String userId = UserContextDynamic.getUserContextDynamic();
         logRequest("管理员拒绝项目", userId, request);
 
-        boolean result = projectService.rejectProject(dto.getProjectId(), dto.getRejectReason());
+        boolean result = projectService.rejectProject(dto.getProjectId(), dto.getRejectReason(), userId);
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
     }
 
@@ -357,16 +387,43 @@ public class ProjectHttpController implements IProjectHttpService {
     }
 
     private ProjectListItemResponseDTO convertToListItemDTO(ProjectEntity entity) {
-        return ProjectListItemResponseDTO.builder()
+        return convertToListItemDTO(entity, false);
+    }
+
+    private ProjectListItemResponseDTO convertToListItemDTO(ProjectEntity entity, boolean includeCurrentMilestone) {
+        ProjectListItemResponseDTO.ProjectListItemResponseDTOBuilder builder = ProjectListItemResponseDTO.builder()
                 .projectId(entity.getProjectId())
                 .serialNumber(entity.getSerialNumber())
                 .title(entity.getTitle())
                 .applicationCount(entity.getApplicationCount())
                 .acceptedTeamId(entity.getAcceptedTeamId())
+                .acceptedTeamName(resolveAcceptedTeamName(entity))
                 .status(entity.getStatus())
                 .budgetAmount(entity.getBudgetAmount())
                 .currency(entity.getCurrency())
-                .build();
+                .publisherName(entity.getPublisherName())
+                .viewCount(entity.getViewCount())
+                .expectedEndDate(entity.getExpectedEndDate())
+                .submittedAt(entity.getSubmittedAt());
+
+        if (includeCurrentMilestone && StrUtil.isNotBlank(entity.getProjectId())) {
+            ProjectMilestoneEntity currentMilestone = milestoneService.getCurrentMilestoneByProjectId(entity.getProjectId());
+            builder.currentMilestone(currentMilestone != null ? currentMilestone.getName() : null);
+        }
+
+        return builder.build();
+    }
+
+    private String resolveAcceptedTeamName(ProjectEntity entity) {
+        if (entity == null || StrUtil.isBlank(entity.getAcceptedTeamId())) {
+            return null;
+        }
+        if (StrUtil.isNotBlank(entity.getAcceptedTeamName())) {
+            return entity.getAcceptedTeamName();
+        }
+        return teamRepository.queryByTeamId(entity.getAcceptedTeamId())
+                .map(cn.hgy.domain.team.model.entity.TeamEntity::getTeamName)
+                .orElse(null);
     }
 
     @PostMapping("admin/category/create")
@@ -478,8 +535,23 @@ public class ProjectHttpController implements IProjectHttpService {
         String userId = UserContextDynamic.getUserContextDynamic();
         logRequest("企业直接发布草稿项目", userId, request);
 
+        // 校验企业认证状态
+        checkCompanyCertified(userId);
+
         boolean result = projectService.publishDraftDirectly(projectId, userId);
 
+        return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
+    }
+
+    @PostMapping("close/{projectId}")
+    @Override
+    public Response<Boolean> closeProject(@PathVariable("projectId") String projectId, HttpServletRequest request) {
+        String userId = UserContextDynamic.getUserContextDynamic();
+        logRequest("企业手动完结项目", userId, request);
+
+        checkCompanyCertified(userId);
+
+        boolean result = projectService.closeProject(projectId, userId);
         return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
     }
 
@@ -509,7 +581,7 @@ public class ProjectHttpController implements IProjectHttpService {
 
         List<ProjectListItemResponseDTO> projectDTOs = new ArrayList<>();
         for (ProjectEntity project : projects) {
-            projectDTOs.add(convertToListItemDTO(project));
+            projectDTOs.add(convertToListItemDTO(project, true));
         }
 
         ProjectListResponseDTO listDTO = ProjectListResponseDTO.builder()
@@ -524,7 +596,7 @@ public class ProjectHttpController implements IProjectHttpService {
 
     private String getTeamIdByUserId(String userId) {
         try {
-            java.util.Optional<cn.hgy.domain.team.model.entity.TeamEntity> teamOpt = teamRepository.queryByLeaderId(userId);
+            java.util.Optional<cn.hgy.domain.team.model.entity.TeamEntity> teamOpt = teamRepository.queryActiveTeamByUserId(userId);
             if (teamOpt.isPresent()) {
                 return teamOpt.get().getTeamId();
             }
@@ -541,6 +613,16 @@ public class ProjectHttpController implements IProjectHttpService {
             log.info("{} userId={} userType={}", action, userId, userType);
         } else {
             log.info("{}", action);
+        }
+    }
+
+    /**
+     * 校验企业是否已通过认证，未认证则抛出异常
+     */
+    private void checkCompanyCertified(String userId) {
+        CompanyProfileEntity profile = userManagementRepository.queryCompanyProfileByUserId(userId);
+        if (profile == null || !CertificationStatusEnum.CERTIFIED.getCode().equals(profile.getCertificationStatus())) {
+            throw new AppException(ResponseCode.UN_ERROR.getCode(), "企业未通过资质认证，无法操作项目");
         }
     }
 }

@@ -5,10 +5,12 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @Configurable
 @EnableRabbit
+@EnableScheduling
 @MapperScan("cn.hgy.infrastructure.persistent.dao")
 public class Application {
 

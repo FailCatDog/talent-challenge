@@ -4,7 +4,9 @@ import cn.hgy.infrastructure.persistent.po.Project;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目Mapper接口
@@ -141,6 +143,19 @@ public interface ProjectDao {
      */
     int updateStatus(@Param("projectId") String projectId,
                     @Param("status") String status);
+
+    /**
+     * 查询指定状态且更新时间早于给定时间的项目
+     */
+    List<Project> selectByStatusAndUpdateTimeBefore(@Param("status") String status,
+                                                    @Param("updateTimeBefore") LocalDateTime updateTimeBefore);
+
+    /**
+     * 更新项目状态和提交时间
+     */
+    int updateStatusAndSubmittedAt(@Param("projectId") String projectId,
+                                    @Param("status") String status,
+                                    @Param("submittedAt") java.time.LocalDateTime submittedAt);
     
     /**
      * 统计热门项目（根据浏览量）
@@ -253,4 +268,19 @@ public interface ProjectDao {
      */
     long countByAcceptedTeamIdAndStatus(@Param("teamId") String teamId,
                                        @Param("status") String status);
+
+    /**
+     * 按状态分组统计项目数量
+     */
+    List<Map<String, Object>> countGroupByStatus();
+
+    /**
+     * 统计指定时间之后创建的项目数量
+     */
+    long countByCreateTimeAfter(@Param("startTime") String startTime);
+
+    /**
+     * 按分类分组统计项目数量（关联project_category获取分类名称）
+     */
+    List<Map<String, Object>> countGroupByCategory();
 }

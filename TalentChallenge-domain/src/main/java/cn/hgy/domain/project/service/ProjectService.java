@@ -1,5 +1,7 @@
 package cn.hgy.domain.project.service;
 
+import cn.hgy.domain.audit.model.entity.AuditReviewRecordEntity;
+import cn.hgy.domain.audit.repository.IAuditReviewRepository;
 import cn.hgy.domain.project.model.entity.ProjectCategoryEntity;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
 import cn.hgy.domain.project.model.entity.ProjectMilestoneEntity;
@@ -10,6 +12,7 @@ import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.exception.AppException;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.StrUtil;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,7 @@ public class ProjectService implements IProjectService{
     private final IProjectRepository repository;
     private final IMilestoneTemplateService milestoneTemplateService;
     private final IMilestoneService milestoneService;
+    private final IAuditReviewRepository auditReviewRepository;
 
     @Override
     public boolean createProject(ProjectComment projectComment) {
@@ -238,7 +242,7 @@ public class ProjectService implements IProjectService{
         }
 
         try {
-            repository.updateProjectStatus(projectId, ProjectStatusEnum.PENDING_REVIEW.getStatusCode());
+            repository.updateProjectStatusAndSubmittedAt(projectId, ProjectStatusEnum.PENDING_REVIEW.getStatusCode(), LocalDateTime.now());
         } catch (Exception e) {
             log.error("提交项目审核失败 原因:{}", e.getMessage());
             throw new AppException(ResponseCode.PROJECT_UPDATE_FAIL.getCode(), ResponseCode.PROJECT_UPDATE_FAIL.getInfo());
@@ -288,7 +292,7 @@ public class ProjectService implements IProjectService{
     }
 
     @Override
-    public boolean approveProject(String projectId) {
+    public boolean approveProject(String projectId, String reviewerId) {
         ProjectEntity projectEntity = repository.queryProjectById(projectId);
         if (projectEntity == null) {
             throw new AppException(ResponseCode.PROJECT_NOT_FOUND.getCode(), ResponseCode.PROJECT_NOT_FOUND.getInfo());
@@ -299,11 +303,12 @@ public class ProjectService implements IProjectService{
         }
 
         repository.updateProjectStatusAndReason(projectId, "published", null);
+        saveAuditRecord("project", projectId, "approve", projectEntity.getStatus(), "published", null, reviewerId);
         return true;
     }
 
     @Override
-    public boolean rejectProject(String projectId, String rejectReason) {
+    public boolean rejectProject(String projectId, String rejectReason, String reviewerId) {
         ProjectEntity projectEntity = repository.queryProjectById(projectId);
         if (projectEntity == null) {
             throw new AppException(ResponseCode.PROJECT_NOT_FOUND.getCode(), ResponseCode.PROJECT_NOT_FOUND.getInfo());
@@ -314,6 +319,7 @@ public class ProjectService implements IProjectService{
         }
 
         repository.updateProjectStatusAndReason(projectId, "rejected", rejectReason);
+        saveAuditRecord("project", projectId, "reject", projectEntity.getStatus(), "rejected", rejectReason, reviewerId);
         return true;
     }
 
@@ -453,8 +459,8 @@ public class ProjectService implements IProjectService{
             }
         }
 
-        repository.updateProjectStatus(projectId, ProjectStatusEnum.PUBLISHED.getStatusCode());
-        log.info("企业直接发布项目成功 projectId={} publisherId={}", projectId, publisherId);
+        repository.updateProjectStatusAndSubmittedAt(projectId, ProjectStatusEnum.PENDING_REVIEW.getStatusCode(), LocalDateTime.now());
+        log.info("企业发布项目，进入待审核状态 projectId={} publisherId={}", projectId, publisherId);
         return true;
     }
 
@@ -469,9 +475,76 @@ public class ProjectService implements IProjectService{
         return repository.countProjectsByAcceptedTeamId(teamId, status);
     }
 
+    @Override
+    public boolean closeProject(String projectId, String publisherId) {
+        ProjectEntity existingProject = repository.queryProjectById(projectId);
+        if (existingProject == null) {
+            throw new AppException(ResponseCode.PROJECT_NOT_FOUND.getCode(), ResponseCode.PROJECT_NOT_FOUND.getInfo());
+        }
+
+        if (!existingProject.getPublisherId().equals(publisherId)) {
+            throw new AppException(ResponseCode.PROJECT_PERMISSION_DENIED.getCode(), ResponseCode.PROJECT_PERMISSION_DENIED.getInfo());
+        }
+
+        if (!ProjectStatusEnum.COMPLETED.getStatusCode().equals(existingProject.getStatus())) {
+            throw new AppException(ResponseCode.PROJECT_STATUS_INVALID.getCode(), ResponseCode.PROJECT_STATUS_INVALID.getInfo());
+        }
+
+        repository.updateProjectStatus(projectId, ProjectStatusEnum.CLOSED.getStatusCode());
+        log.info("企业手动完结项目 projectId={} publisherId={}", projectId, publisherId);
+        return true;
+    }
+
+    @Override
+    public int autoCloseCompletedProjects() {
+        LocalDateTime cutoff = LocalDateTime.now().minusWeeks(2);
+        List<ProjectEntity> completedProjects = repository.queryProjectsByStatusUpdatedBefore(
+                ProjectStatusEnum.COMPLETED.getStatusCode(), cutoff);
+
+        int closedCount = 0;
+        for (ProjectEntity project : completedProjects) {
+            repository.updateProjectStatus(project.getProjectId(), ProjectStatusEnum.CLOSED.getStatusCode());
+            closedCount++;
+        }
+
+        if (closedCount > 0) {
+            log.info("自动关闭已完成项目完成 count={} cutoff={}", closedCount, cutoff);
+        }
+        return closedCount;
+    }
+
+    @Override
+    public boolean completeProject(String projectId) {
+        ProjectEntity existingProject = repository.queryProjectById(projectId);
+        if (existingProject == null) {
+            throw new AppException(ResponseCode.PROJECT_NOT_FOUND.getCode(), ResponseCode.PROJECT_NOT_FOUND.getInfo());
+        }
+
+        if (!ProjectStatusEnum.IN_PROGRESS.getStatusCode().equals(existingProject.getStatus())) {
+            return false;
+        }
+
+        repository.updateProjectStatus(projectId, ProjectStatusEnum.COMPLETED.getStatusCode());
+        log.info("项目进入已完成状态 projectId={}", projectId);
+        return true;
+    }
+
     private String generateSerialNumber() {
         String datePart = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
         String randomPart = String.format("%06d", new java.util.Random().nextInt(1000000));
         return "PRJ" + datePart + randomPart;
+    }
+
+    private void saveAuditRecord(String auditType, String targetId, String action,
+                                 String fromStatus, String toStatus, String reason, String reviewerId) {
+        auditReviewRepository.save(AuditReviewRecordEntity.builder()
+                .auditType(auditType)
+                .targetId(targetId)
+                .action(action)
+                .fromStatus(fromStatus)
+                .toStatus(toStatus)
+                .reason(reason)
+                .reviewerId(reviewerId)
+                .build());
     }
 }

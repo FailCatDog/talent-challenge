@@ -19,15 +19,20 @@ public class StaticResourceConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String osName = System.getProperty("os.name", "").toLowerCase();
         boolean isWindows = osName.startsWith(WINDOWS_PREFIX);
-        Path location;
-        if (isWindows) {
-            location = Paths.get(System.getProperty("user.dir"), "data", "milestones");
-        } else {
-            location = Paths.get("/data", "milestones");
-        }
-        String fileLocation = location.toAbsolutePath().toUri().toString();
+
+        // 里程碑文件映射
+        Path milestonesLocation = isWindows
+                ? Paths.get(System.getProperty("user.dir"), "data", "milestones")
+                : Paths.get("/data", "milestones");
         registry.addResourceHandler("/static/milestones/**")
-                .addResourceLocations(fileLocation);
+                .addResourceLocations(milestonesLocation.toAbsolutePath().toUri().toString());
+
+        // 企业资质文件映射
+        Path qualificationsLocation = isWindows
+                ? Paths.get(System.getProperty("user.dir"), "data", "qualifications")
+                : Paths.get("/data", "qualifications");
+        registry.addResourceHandler("/static/qualifications/**")
+                .addResourceLocations(qualificationsLocation.toAbsolutePath().toUri().toString());
     }
 }
 

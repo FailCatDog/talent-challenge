@@ -9,6 +9,9 @@ import cn.hgy.infrastructure.storage.StorageService;
 import cn.hgy.trigger.interceptor.UserContextDynamic;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +30,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/milestone/")
+@RequestMapping("/api/v1/milestone")
 public class MilestoneHttpController implements IMilestoneHttpService {
     
     private final IMilestoneService milestoneService;
@@ -59,7 +62,7 @@ public class MilestoneHttpController implements IMilestoneHttpService {
     
     @GetMapping("{milestoneId}")
     @Override
-    public Response<MilestoneResponseDTO> getMilestoneDetail(@PathVariable String milestoneId, HttpServletRequest request) {
+    public Response<MilestoneResponseDTO> getMilestoneDetail(@PathVariable("milestoneId") String milestoneId, HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
         Integer userType = UserContextDynamic.getUserType();
         log.info("查询里程碑详情 userId={}, userType={}, milestoneId={}", userId, userType, milestoneId);
@@ -74,8 +77,8 @@ public class MilestoneHttpController implements IMilestoneHttpService {
     @GetMapping("project/{projectId}/code/{milestoneCode}")
     @Override
     public Response<MilestoneResponseDTO> getMilestoneByProjectIdAndCode(
-            @PathVariable String projectId, 
-            @PathVariable String milestoneCode, 
+            @PathVariable("projectId") String projectId,
+            @PathVariable("milestoneCode") String milestoneCode, 
             HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
         Integer userType = UserContextDynamic.getUserType();
@@ -92,14 +95,20 @@ public class MilestoneHttpController implements IMilestoneHttpService {
     @Override
     public Response<Boolean> submitMilestoneDeliverable(@RequestBody MilestoneDeliverableRequestDTO dto, HttpServletRequest request) {
         String userId = UserContextDynamic.getUserContextDynamic();
-        log.info("提交里程碑成果 userId={}, milestoneId={}, deliverableUrl={}", userId, dto.getMilestoneId(), dto.getDeliverableUrl());
-        
+        log.info("提交里程碑成果 userId={}, milestoneId={}, fileName={}, deliverableUrl={}",
+                userId, dto.getMilestoneId(), dto.getFileName(), dto.getDeliverableUrl());
+
         if (dto == null || StrUtil.isBlank(dto.getMilestoneId()) || StrUtil.isBlank(dto.getDeliverableUrl())) {
             return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo(), false);
         }
-        
+
         try {
-            boolean result = milestoneService.submitMilestoneDeliverable(dto.getMilestoneId(), dto.getDeliverableUrl());
+            boolean result = milestoneService.submitMilestoneDeliverable(
+                    dto.getMilestoneId(),
+                    dto.getFileName(),
+                    dto.getDeliverableUrl(),
+                    dto.getFileSize()
+            );
             return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
         } catch (Exception e) {
             log.error("提交里程碑成果失败", e);
@@ -133,7 +142,12 @@ public class MilestoneHttpController implements IMilestoneHttpService {
             String url = storageService.storeProposalFile(projectId, milestoneId, file);
 
             // 走原有业务逻辑：提交成果 + 状态流转
-            boolean result = milestoneService.submitMilestoneDeliverable(milestoneId, url);
+            boolean result = milestoneService.submitMilestoneDeliverable(
+                    milestoneId,
+                    file.getOriginalFilename(),
+                    url,
+                    file.getSize()
+            );
             return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
         } catch (Exception e) {
             log.error("上传里程碑成果文件失败", e);
@@ -224,14 +238,120 @@ public class MilestoneHttpController implements IMilestoneHttpService {
         }
         
         try {
-            boolean result = milestoneService.updateMilestoneStatus(dto.getMilestoneId(), "skipped");
+            // 先取出实体，保存 skipReason 和 isSkipped，再整体更新
+            ProjectMilestoneEntity entity = milestoneService.getMilestoneById(dto.getMilestoneId());
+            entity.setStatus("skipped");
+            entity.setIsSkipped(true);
+            entity.setSkipReason(dto.getSkipReason());
+            boolean result = milestoneService.updateMilestone(entity);
             return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), result);
         } catch (Exception e) {
             log.error("跳过里程碑失败", e);
             return new Response<>(ResponseCode.MILESTONE_CREATE_FAIL.getCode(), e.getMessage(), false);
         }
     }
-    
+
+    /**
+     * 学生上传里程碑交付物文件（支持多文件）
+     * Content-Type: multipart/form-data
+     * 参数：milestoneId（表单字段）、file（文件字段）
+     */
+    @PostMapping(value = "deliverable/files/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Response<String> uploadMilestoneDeliverableFile(
+            @RequestParam("milestoneId") String milestoneId,
+            @RequestParam("file") MultipartFile file,
+            HttpServletRequest request) {
+        try {
+            String userId = UserContextDynamic.getUserContextDynamic();
+            ensureLogin(userId);
+
+            if (StrUtil.isBlank(milestoneId)) {
+                return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑ID不能为空", null);
+            }
+
+            ProjectMilestoneEntity milestone = milestoneService.getMilestoneById(milestoneId);
+            if (milestone == null) {
+                return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑不存在", null);
+            }
+
+            String fileUrl = storageService.storeProposalFile(milestone.getProjectId(), milestoneId, file);
+
+            JSONArray fileList;
+            String existingFiles = milestone.getDeliverableFiles();
+            if (StrUtil.isBlank(existingFiles)) {
+                fileList = new JSONArray();
+            } else {
+                fileList = JSON.parseArray(existingFiles);
+            }
+
+            JSONObject fileInfo = new JSONObject();
+            fileInfo.put("fileName", file.getOriginalFilename());
+            fileInfo.put("fileUrl", fileUrl);
+            fileInfo.put("fileSize", file.getSize());
+            fileInfo.put("uploadTime", java.time.LocalDateTime.now().toString());
+            fileList.add(fileInfo);
+
+            milestone.setDeliverableFiles(fileList.toJSONString());
+            milestoneService.updateMilestone(milestone);
+
+            log.info("上传里程碑交付物文件成功 milestoneId={}, fileUrl={}, 当前文件数={}", milestoneId, fileUrl, fileList.size());
+            return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), fileUrl);
+        } catch (Exception e) {
+            log.error("上传里程碑交付物文件失败 milestoneId={}", milestoneId, e);
+            return new Response<>(ResponseCode.UN_ERROR.getCode(), "上传失败：" + e.getMessage(), null);
+        }
+    }
+
+    /**
+     * 企业上传里程碑参考文件（要求文档、规范文件等）
+     * 自动将文件信息追加到里程碑的 referenceFiles 字段
+     */
+    @PostMapping(value = "reference/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Response<String> uploadMilestoneReferenceFile(
+            @RequestParam("milestoneId") String milestoneId,
+            @RequestParam("file") MultipartFile file,
+            HttpServletRequest request) {
+        try {
+            String userId = UserContextDynamic.getUserContextDynamic();
+            ensureLogin(userId);
+
+            if (StrUtil.isBlank(milestoneId)) {
+                return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑ID不能为空", null);
+            }
+
+            ProjectMilestoneEntity milestone = milestoneService.getMilestoneById(milestoneId);
+            if (milestone == null) {
+                return new Response<>(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑不存在", null);
+            }
+
+            String fileUrl = storageService.storeMilestoneReferenceFile(milestone.getProjectId(), milestoneId, file);
+
+            JSONArray fileList;
+            String existingFiles = milestone.getReferenceFiles();
+            if (StrUtil.isBlank(existingFiles)) {
+                fileList = new JSONArray();
+            } else {
+                fileList = JSON.parseArray(existingFiles);
+            }
+
+            JSONObject fileInfo = new JSONObject();
+            fileInfo.put("fileName", file.getOriginalFilename());
+            fileInfo.put("fileUrl", fileUrl);
+            fileInfo.put("fileSize", file.getSize());
+            fileInfo.put("uploadTime", java.time.LocalDateTime.now().toString());
+            fileList.add(fileInfo);
+
+            milestone.setReferenceFiles(fileList.toJSONString());
+            milestoneService.updateMilestone(milestone);
+
+            log.info("上传里程碑参考文件成功 milestoneId={}, fileUrl={}, 当前文件数={}", milestoneId, fileUrl, fileList.size());
+            return new Response<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), fileUrl);
+        } catch (Exception e) {
+            log.error("上传里程碑参考文件失败 milestoneId={}", milestoneId, e);
+            return new Response<>(ResponseCode.UN_ERROR.getCode(), "上传失败：" + e.getMessage(), null);
+        }
+    }
+
     private MilestoneResponseDTO convertToDTO(ProjectMilestoneEntity entity) {
         return MilestoneResponseDTO.builder()
                 .milestoneId(entity.getMilestoneId())
@@ -243,6 +363,8 @@ public class MilestoneHttpController implements IMilestoneHttpService {
                 .status(entity.getStatus())
                 .progressPercent(entity.getProgressPercent())
                 .deliverableUrl(entity.getDeliverableUrl())
+                .deliverableFiles(entity.getDeliverableFiles())
+                .referenceFiles(entity.getReferenceFiles())
                 .approvalStatus(entity.getApprovalStatus())
                 .currentOwnerId(entity.getCurrentOwnerId())
                 .plannedStartTime(entity.getPlannedStartTime())

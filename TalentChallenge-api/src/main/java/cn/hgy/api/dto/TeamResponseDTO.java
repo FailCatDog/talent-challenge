@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -23,5 +24,8 @@ public class TeamResponseDTO {
     private Integer maxMemberCount;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
+
+    /** 成员列表（含昵称、头像、角色） */
+    private List<TeamMemberItemDTO> members;
 }
 

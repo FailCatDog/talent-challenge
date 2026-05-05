@@ -3,16 +3,23 @@ package cn.hgy.domain.project.service;
 import cn.hgy.domain.project.model.entity.ProjectMilestoneEntity;
 import cn.hgy.domain.project.model.valobj.MilestoneApprovalStatusEnum;
 import cn.hgy.domain.project.model.valobj.MilestoneStatusEnum;
+import cn.hgy.domain.project.model.valobj.ProjectStatusEnum;
 import cn.hgy.domain.project.repository.IMilestoneRepository;
+import cn.hgy.domain.project.repository.IProjectRepository;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.exception.AppException;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -27,6 +34,7 @@ public class MilestoneService implements IMilestoneService {
     
 
     private final IMilestoneRepository milestoneRepository;
+    private final IProjectRepository projectRepository;
     private final Snowflake snowflake;
     
     @Override
@@ -166,6 +174,66 @@ public class MilestoneService implements IMilestoneService {
         List<ProjectMilestoneEntity> milestones = milestoneRepository.queryMilestonesByProjectId(projectId);
         return milestones != null ? milestones : new ArrayList<>();
     }
+
+    @Override
+    public ProjectMilestoneEntity getCurrentMilestoneByProjectId(String projectId) {
+        List<ProjectMilestoneEntity> milestones = getMilestonesByProjectId(projectId);
+        if (milestones.isEmpty()) {
+            return null;
+        }
+
+        return milestones.stream()
+                .filter(milestone -> milestone.getSequenceOrder() != null)
+                .min(Comparator.comparingInt(this::resolveMilestonePriority)
+                        .thenComparingInt(ProjectMilestoneEntity::getSequenceOrder))
+                .orElse(null);
+    }
+
+    @Override
+    public boolean startInitialMilestone(String projectId) {
+        if (StrUtil.isBlank(projectId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+
+        List<ProjectMilestoneEntity> allMilestones = milestoneRepository.queryMilestonesByProjectId(projectId);
+        if (allMilestones == null || allMilestones.isEmpty()) {
+            return false;
+        }
+
+        boolean alreadyStarted = allMilestones.stream().anyMatch(this::hasStartedExecution);
+        if (alreadyStarted) {
+            log.info("project milestones already started, skip initial activation projectId={}", projectId);
+            return false;
+        }
+
+        ProjectMilestoneEntity initialMilestone = allMilestones.stream()
+                .filter(milestone -> milestone.getSequenceOrder() != null)
+                .filter(milestone -> MilestoneStatusEnum.PLANNED.getStatusCode().equals(milestone.getStatus()))
+                .min(Comparator.comparingInt(ProjectMilestoneEntity::getSequenceOrder))
+                .orElse(null);
+        if (initialMilestone != null) {
+            activateMilestone(initialMilestone, LocalDateTime.now());
+            log.info("auto activate initial milestone milestoneId={}, projectId={}, sequenceOrder={}",
+                    initialMilestone.getMilestoneId(), projectId, initialMilestone.getSequenceOrder());
+            return true;
+        }
+
+        for (ProjectMilestoneEntity milestone : java.util.Collections.<ProjectMilestoneEntity>emptyList()) {
+            if (milestone.getSequenceOrder() == null) {
+                continue;
+            }
+            if (!MilestoneStatusEnum.PLANNED.getStatusCode().equals(milestone.getStatus())) {
+                continue;
+            }
+
+            activateMilestone(milestone, LocalDateTime.now());
+            log.info("自动启动首个里程碑 milestoneId={}, projectId={}, sequenceOrder={}",
+                    milestone.getMilestoneId(), projectId, milestone.getSequenceOrder());
+            return true;
+        }
+
+        return false;
+    }
     
     @Override
     public ProjectMilestoneEntity getMilestoneByProjectIdAndCode(String projectId, String milestoneCode) {
@@ -198,7 +266,16 @@ public class MilestoneService implements IMilestoneService {
                     String.format("状态流转不合法：%s -> %s", entity.getStatus(), status));
         }
         
-        milestoneRepository.updateMilestoneStatus(milestoneId, status);
+        entity.setStatus(status);
+        // 若转为进行中，记录实际开始时间
+        if (MilestoneStatusEnum.IN_PROGRESS.getStatusCode().equals(status) && entity.getActualStartTime() == null) {
+            entity.setActualStartTime(java.time.LocalDateTime.now());
+        }
+        // 若转为已完成，记录实际结束时间
+        if (MilestoneStatusEnum.COMPLETED.getStatusCode().equals(status) && entity.getActualEndTime() == null) {
+            entity.setActualEndTime(java.time.LocalDateTime.now());
+        }
+        milestoneRepository.updateMilestone(entity);
         log.info("更新里程碑状态成功 milestoneId={}, oldStatus={}, newStatus={}", milestoneId, entity.getStatus(), status);
         return true;
     }
@@ -221,36 +298,59 @@ public class MilestoneService implements IMilestoneService {
     }
     
     @Override
-    public boolean submitMilestoneDeliverable(String milestoneId, String deliverableUrl) {
+    public boolean submitMilestoneDeliverable(String milestoneId, String fileName, String deliverableUrl, Long fileSize) {
         if (StrUtil.isBlank(milestoneId) || StrUtil.isBlank(deliverableUrl)) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
         }
-        
+
         ProjectMilestoneEntity entity = milestoneRepository.queryMilestoneById(milestoneId);
         if (entity == null) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑不存在");
         }
-        
-        // 方案提交里程碑业务：仅允许 proposal_submission 编码的里程碑提交
-        if (!"proposal_submission".equals(entity.getMilestoneCode())) {
-            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "仅方案提交里程碑支持此操作");
-        }
-        
-        // 状态校验：必须是 planned 或 in_progress 状态才能提交
+
+        // 状态校验：允许进行中和已交付状态提交
         String currentStatus = entity.getStatus();
-        if (!MilestoneStatusEnum.PLANNED.getStatusCode().equals(currentStatus) 
-                && !MilestoneStatusEnum.IN_PROGRESS.getStatusCode().equals(currentStatus)
-                && !MilestoneStatusEnum.REJECTED.getStatusCode().equals(currentStatus)) {
-            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), 
+        if (!MilestoneStatusEnum.IN_PROGRESS.getStatusCode().equals(currentStatus)
+                && !MilestoneStatusEnum.DELIVERED.getStatusCode().equals(currentStatus)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     String.format("当前状态 %s 不允许提交成果", currentStatus));
         }
-        
+
+        // 将新的交付物URL追加到deliverableFiles数组（去重）
+        JSONArray fileList;
+        String existingFiles = entity.getDeliverableFiles();
+        if (StrUtil.isBlank(existingFiles)) {
+            fileList = new JSONArray();
+        } else {
+            fileList = JSON.parseArray(existingFiles);
+        }
+
+        // 检查是否已存在相同的fileUrl，避免重复追加
+        boolean fileExists = false;
+        for (int i = 0; i < fileList.size(); i++) {
+            JSONObject existingFile = fileList.getJSONObject(i);
+            if (deliverableUrl.equals(existingFile.getString("fileUrl"))) {
+                fileExists = true;
+                break;
+            }
+        }
+
+        // 只有文件不存在时才追加
+        if (!fileExists) {
+            JSONObject fileInfo = new JSONObject();
+            fileInfo.put("fileName", fileName);
+            fileInfo.put("fileUrl", deliverableUrl);
+            fileInfo.put("fileSize", fileSize);
+            fileInfo.put("uploadTime", java.time.LocalDateTime.now().toString());
+            fileList.add(fileInfo);
+            entity.setDeliverableFiles(fileList.toJSONString());
+        }
+
         // 更新里程碑：设置交付物URL、状态转为delivered、审批状态为pending、进度30%
         entity.setDeliverableUrl(deliverableUrl);
         entity.setStatus(MilestoneStatusEnum.DELIVERED.getStatusCode());
         entity.setApprovalStatus(MilestoneApprovalStatusEnum.PENDING.getStatusCode());
         entity.setProgressPercent(30);
-        entity.setActualStartTime(java.time.LocalDateTime.now());
         
         milestoneRepository.updateMilestone(entity);
         log.info("提交里程碑成果成功 milestoneId={}, deliverableUrl={}", milestoneId, deliverableUrl);
@@ -281,22 +381,151 @@ public class MilestoneService implements IMilestoneService {
             entity.setStatus(MilestoneStatusEnum.COMPLETED.getStatusCode());
             entity.setApprovalStatus(MilestoneApprovalStatusEnum.APPROVED.getStatusCode());
             entity.setProgressPercent(100);
-            entity.setActualEndTime(java.time.LocalDateTime.now());
+            entity.setActualEndTime(LocalDateTime.now());
         } else {
             // 审批拒绝：状态转为rejected，审批状态为rejected
             entity.setStatus(MilestoneStatusEnum.REJECTED.getStatusCode());
             entity.setApprovalStatus(MilestoneApprovalStatusEnum.REJECTED.getStatusCode());
         }
-        
+
         if (StrUtil.isNotBlank(remark)) {
             entity.setRemark(remark);
         }
-        
+
         milestoneRepository.updateMilestone(entity);
         log.info("审批里程碑成功 milestoneId={}, operatorId={}, approved={}", milestoneId, operatorId, approved);
+
+        // 审批通过后，自动启动下一个里程碑
+        if (approved) {
+            boolean nextStarted = startNextMilestone(entity.getProjectId(), entity.getSequenceOrder());
+            if (!nextStarted && isProjectReadyToComplete(entity.getProjectId())) {
+                projectRepository.updateProjectStatus(entity.getProjectId(), ProjectStatusEnum.COMPLETED.getStatusCode());
+                log.info("最后一个里程碑审批通过后自动完成项目 projectId={}", entity.getProjectId());
+            }
+        }
+
         return true;
     }
-    
+
+    /**
+     * 自动启动下一个里程碑
+     * @param projectId 项目ID
+     * @param currentSequenceOrder 当前里程碑的顺序号
+     */
+    private boolean startNextMilestone(String projectId, Integer currentSequenceOrder) {
+        if (StrUtil.isBlank(projectId) || currentSequenceOrder == null) {
+            return false;
+        }
+
+        List<ProjectMilestoneEntity> allMilestones = milestoneRepository.queryMilestonesByProjectId(projectId);
+        if (allMilestones == null || allMilestones.isEmpty()) {
+            return false;
+        }
+
+        ProjectMilestoneEntity nextMilestone = null;
+        for (ProjectMilestoneEntity milestone : allMilestones) {
+            if (milestone.getSequenceOrder() == null) {
+                continue;
+            }
+            if (milestone.getSequenceOrder() <= currentSequenceOrder) {
+                continue;
+            }
+            if (!MilestoneStatusEnum.PLANNED.getStatusCode().equals(milestone.getStatus())) {
+                continue;
+            }
+
+            nextMilestone = milestone;
+            break;
+        }
+
+        if (nextMilestone != null) {
+            activateMilestone(nextMilestone, LocalDateTime.now());
+            log.info("自动启动下一个里程碑 milestoneId={}, projectId={}, sequenceOrder={}",
+                    nextMilestone.getMilestoneId(), projectId, nextMilestone.getSequenceOrder());
+            return true;
+        }
+        return false;
+    }
+
+    private void activateMilestone(ProjectMilestoneEntity milestone, LocalDateTime startTime) {
+        milestone.setStatus(MilestoneStatusEnum.IN_PROGRESS.getStatusCode());
+
+        if (milestone.getProgressPercent() == null) {
+            milestone.setProgressPercent(0);
+        }
+        if (StrUtil.isBlank(milestone.getApprovalStatus())) {
+            milestone.setApprovalStatus(MilestoneApprovalStatusEnum.PENDING.getStatusCode());
+        }
+        if (milestone.getPlannedStartTime() == null) {
+            milestone.setPlannedStartTime(startTime);
+        }
+        if (milestone.getActualStartTime() == null) {
+            milestone.setActualStartTime(startTime);
+        }
+        milestone.setActualEndTime(null);
+
+        milestoneRepository.updateMilestone(milestone);
+    }
+
+    private boolean hasStartedExecution(ProjectMilestoneEntity milestone) {
+        if (milestone == null) {
+            return false;
+        }
+        if (milestone.getActualStartTime() != null) {
+            return true;
+        }
+
+        String status = milestone.getStatus();
+        if (StrUtil.isBlank(status)) {
+            return false;
+        }
+
+        return !MilestoneStatusEnum.PLANNED.getStatusCode().equals(status)
+                && !MilestoneStatusEnum.SKIPPED.getStatusCode().equals(status);
+    }
+
+    private int resolveMilestonePriority(ProjectMilestoneEntity milestone) {
+        if (milestone == null || StrUtil.isBlank(milestone.getStatus())) {
+            return Integer.MAX_VALUE;
+        }
+
+        String status = milestone.getStatus();
+        if (MilestoneStatusEnum.IN_PROGRESS.getStatusCode().equals(status)
+                || MilestoneStatusEnum.DELIVERED.getStatusCode().equals(status)
+                || MilestoneStatusEnum.UNDER_REVIEW.getStatusCode().equals(status)
+                || MilestoneStatusEnum.REJECTED.getStatusCode().equals(status)) {
+            return 0;
+        }
+        if (MilestoneStatusEnum.PLANNED.getStatusCode().equals(status)) {
+            return 1;
+        }
+        if (MilestoneStatusEnum.COMPLETED.getStatusCode().equals(status)) {
+            return 2;
+        }
+        if (MilestoneStatusEnum.EXPIRED.getStatusCode().equals(status)
+                || MilestoneStatusEnum.SKIPPED.getStatusCode().equals(status)) {
+            return 3;
+        }
+        return Integer.MAX_VALUE;
+    }
+
+    private boolean isProjectReadyToComplete(String projectId) {
+        List<ProjectMilestoneEntity> milestones = milestoneRepository.queryMilestonesByProjectId(projectId);
+        if (milestones == null || milestones.isEmpty()) {
+            return false;
+        }
+
+        for (ProjectMilestoneEntity milestone : milestones) {
+            String status = milestone.getStatus();
+            if (!MilestoneStatusEnum.COMPLETED.getStatusCode().equals(status)
+                    && !MilestoneStatusEnum.SKIPPED.getStatusCode().equals(status)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * 校验状态流转是否合法
      * 规则：planned → in_progress → delivered → under_review → completed/rejected

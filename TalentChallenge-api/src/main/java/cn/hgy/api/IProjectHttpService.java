@@ -96,13 +96,22 @@ public interface IProjectHttpService {
     Response<ProjectListResponseDTO> getLatestProjects(Integer limit, HttpServletRequest request);
 
     /**
-     * 管理员获取待审核项目列表
+     * 管理员获取项目列表（默认待审核，可按状态筛选）
+     * @param status 项目状态（可选，为空则查全部）
      * @param pageNum 页码
      * @param pageSize 每页大小
      * @param request HTTP请求对象
      * @return 项目列表
      */
-    Response<ProjectListResponseDTO> getPendingReviewProjects(Integer pageNum, Integer pageSize, HttpServletRequest request);
+    Response<ProjectListResponseDTO> getPendingReviewProjects(String status, Integer pageNum, Integer pageSize, HttpServletRequest request);
+
+    /**
+     * 管理员查看项目审核详情
+     * @param projectId 项目ID
+     * @param request HTTP请求对象
+     * @return 项目详情
+     */
+    Response<ProjectDetailResponseDTO> getProjectReviewDetail(String projectId, HttpServletRequest request);
 
     /**
      * 管理员审核通过项目
@@ -183,4 +192,11 @@ public interface IProjectHttpService {
      * @return 项目列表
      */
     Response<ProjectListResponseDTO> getMyAcceptedProjects(String status, Integer pageNum, Integer pageSize, HttpServletRequest request);
+    /**
+     * 企业手动完结项目
+     * @param projectId 项目ID
+     * @param request HTTP请求
+     * @return 完结结果
+     */
+    Response<Boolean> closeProject(String projectId, HttpServletRequest request);
 }

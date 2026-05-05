@@ -1,14 +1,21 @@
 package cn.hgy.domain.bid.service;
 
+import cn.hgy.api.dto.BidDetailResponseDTO;
+import cn.hgy.api.dto.BidPublicListItemResponseDTO;
+import cn.hgy.api.dto.StudentBidListResponseDTO;
+import cn.hgy.api.dto.TeamMemberItemDTO;
 import cn.hgy.domain.bid.model.entity.BidEntity;
 import cn.hgy.domain.bid.model.valobj.BidStatusEnum;
 import cn.hgy.domain.bid.repository.IBidRepository;
 import cn.hgy.domain.bid.service.IBidEventPublisher;
 import cn.hgy.domain.project.model.entity.ProjectEntity;
+import cn.hgy.domain.project.model.entity.ProjectMilestoneEntity;
 import cn.hgy.domain.project.model.valobj.ProjectStatusEnum;
 import cn.hgy.domain.project.repository.IProjectRepository;
+import cn.hgy.domain.project.service.IMilestoneService;
 import cn.hgy.domain.team.model.entity.TeamEntity;
 import cn.hgy.domain.team.repository.ITeamRepository;
+import cn.hgy.domain.team.service.ITeamService;
 import cn.hgy.types.common.BidCommand;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.event.BidConfirmedEvent;
@@ -31,6 +38,8 @@ public class BidService implements IBidService {
     private final IProjectRepository projectRepository;
     private final IBidEventPublisher bidEventPublisher;
     private final ITeamRepository teamRepository;
+    private final ITeamService teamService;
+    private final IMilestoneService milestoneService;
 
     @Override
     public boolean apply(BidCommand command) {
@@ -155,6 +164,63 @@ public class BidService implements IBidService {
         return bidRepository.countByProject(projectId, status);
     }
 
+    @Override
+    public List<BidPublicListItemResponseDTO> queryPublicBidsByProject(String projectId) {
+        if (StrUtil.isBlank(projectId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        return bidRepository.queryPublicBidsByProject(projectId);
+    }
+
+    @Override
+    public List<StudentBidListResponseDTO> queryStudentBids(String userId) {
+        if (StrUtil.isBlank(userId)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+        List<StudentBidListResponseDTO> bids = bidRepository.queryStudentBids(userId);
+        for (StudentBidListResponseDTO bid : bids) {
+            if (StrUtil.isBlank(bid.getProjectId())) {
+                continue;
+            }
+            ProjectMilestoneEntity currentMilestone = milestoneService.getCurrentMilestoneByProjectId(bid.getProjectId());
+            bid.setCurrentMilestone(currentMilestone != null ? currentMilestone.getName() : null);
+        }
+        return bids;
+    }
+
+    @Override
+    public BidDetailResponseDTO getBidDetail(String bidId, String currentUserId) {
+        BidEntity bid = loadBid(bidId);
+        ProjectEntity project = requireProject(bid.getProjectId());
+        TeamEntity team = teamRepository.queryByTeamId(bid.getTeamId())
+                .orElseThrow(() -> new AppException(ResponseCode.BID_TEAM_NOT_FOUND.getCode(), ResponseCode.BID_TEAM_NOT_FOUND.getInfo()));
+
+        // 判断当前用户在团队中的角色
+        String currentUserRole;
+        if (StrUtil.equals(team.getLeaderId(), currentUserId)) {
+            currentUserRole = "leader";
+        } else if (teamService.isTeamMember(bid.getTeamId(), currentUserId)) {
+            currentUserRole = "member";
+        } else {
+            currentUserRole = "none";
+        }
+
+        return BidDetailResponseDTO.builder()
+                .bidId(bid.getBidId())
+                .status(bid.getStatus() != null ? bid.getStatus().getCode() : null)
+                .content(bid.getContent())
+                .attachmentUrl(bid.getAttachmentUrl())
+                .remark(bid.getRemark())
+                .createdAt(bid.getCreatedAt())
+                .updatedAt(bid.getUpdatedAt())
+                .projectId(project.getProjectId())
+                .projectTitle(project.getTitle())
+                .teamId(team.getTeamId())
+                .teamName(team.getTeamName())
+                .currentUserRole(currentUserRole)
+                .build();
+    }
+
     private BidEntity loadBid(String bidId) {
         if (StrUtil.isBlank(bidId)) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
@@ -182,6 +248,22 @@ public class BidService implements IBidService {
         if (!updated) {
             throw new AppException(ResponseCode.BID_STATUS_INVALID.getCode(), ResponseCode.BID_STATUS_INVALID.getInfo());
         }
+        return true;
+    }
+
+    @Override
+    public BidEntity queryBidById(String bidId) {
+        return loadBid(bidId);
+    }
+
+    @Override
+    public boolean updateBidAttachment(String bidId, String attachmentUrl) {
+        if (StrUtil.isBlank(bidId) || StrUtil.isBlank(attachmentUrl)) {
+            throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                ResponseCode.ILLEGAL_PARAMETER.getInfo());
+        }
+
+        bidRepository.updateBidAttachment(bidId, attachmentUrl);
         return true;
     }
 }

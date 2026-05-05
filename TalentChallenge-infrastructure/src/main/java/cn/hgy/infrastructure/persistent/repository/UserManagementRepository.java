@@ -1,19 +1,34 @@
 package cn.hgy.infrastructure.persistent.repository;
 
+import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
+import cn.hgy.domain.user.model.entity.StudentProfileEntity;
 import cn.hgy.domain.user.model.entity.UserAuthCredentialEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
+import cn.hgy.domain.user.model.valobj.UserStatisticsVO;
+import cn.hgy.domain.user.model.valobj.UserTypeEnum;
 import cn.hgy.domain.user.repository.IUserManagementRepository;
+import cn.hgy.infrastructure.persistent.dao.CompanyProfileDao;
+import cn.hgy.infrastructure.persistent.dao.StudentProfileDao;
 import cn.hgy.infrastructure.persistent.dao.UserAuthCredentialDao;
 import cn.hgy.infrastructure.persistent.dao.UserDao;
+import cn.hgy.infrastructure.persistent.po.CompanyProfile;
+import cn.hgy.infrastructure.persistent.po.StudentProfile;
 import cn.hgy.infrastructure.persistent.po.User;
 import cn.hgy.infrastructure.persistent.po.UserAuthCredential;
+import cn.hgy.types.enums.CertificationStatusEnum;
 import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author: 黄光宇
@@ -27,6 +42,8 @@ public class UserManagementRepository implements IUserManagementRepository {
 
     private final UserDao userDao;
     private final UserAuthCredentialDao userAuthCredentialDao;
+    private final StudentProfileDao studentProfileDao;
+    private final CompanyProfileDao companyProfileDao;
     private final Snowflake snowflake;
 
     @Override
@@ -56,6 +73,19 @@ public class UserManagementRepository implements IUserManagementRepository {
         // 插入数据库
         userDao.insert(user);
         userAuthCredentialDao.insert(userAuthCredential);
+
+        // 根据用户类型创建对应的profile记录
+        if (UserTypeEnum.COMPANY.getCode() == userEntity.getType()) {
+            CompanyProfile companyProfile = new CompanyProfile();
+            companyProfile.setUserId(userId);
+            companyProfileDao.insert(companyProfile);
+            log.info("注册企业用户，创建company_profile记录 userId={}", userId);
+        } else if (UserTypeEnum.STUDENT.getCode() == userEntity.getType()) {
+            StudentProfile studentProfile = new StudentProfile();
+            studentProfile.setUserId(userId);
+            studentProfileDao.insert(studentProfile);
+            log.info("注册学生用户，创建student_profile记录 userId={}", userId);
+        }
     }
 
     @Override
@@ -88,6 +118,9 @@ public class UserManagementRepository implements IUserManagementRepository {
     @Override
     public UserEntity queryUserBaseByUserId(String userId) {
         User user = userDao.queryByUserId(userId);
+        if (user == null) {
+            return null;
+        }
 
         // 转换对象
         return UserEntity.builder()
@@ -120,5 +153,171 @@ public class UserManagementRepository implements IUserManagementRepository {
         user.setTitle(userEntity.getTitle());
 
         userDao.updateProfileByUserId(user);
+    }
+
+    @Override
+    public StudentProfileEntity queryStudentProfileByUserId(String userId) {
+        StudentProfile studentProfile = studentProfileDao.queryByUserId(userId);
+        if (studentProfile == null) {
+            return null;
+        }
+
+        return StudentProfileEntity.builder()
+                .userId(studentProfile.getUserId())
+                .realName(studentProfile.getRealName())
+                .college(studentProfile.getCollege())
+                .major(studentProfile.getMajor())
+                .grade(studentProfile.getGrade())
+                .studentId(studentProfile.getStudentId())
+                .email(studentProfile.getEmail())
+                .phone(studentProfile.getPhone())
+                .techTags(StrUtil.isNotBlank(studentProfile.getTechTags()) ?
+                    JSON.parseArray(studentProfile.getTechTags(), String.class) : null)
+                .techIntro(studentProfile.getTechIntro())
+                .build();
+    }
+
+    @Override
+    public CompanyProfileEntity queryCompanyProfileByUserId(String userId) {
+        CompanyProfile companyProfile = companyProfileDao.queryByUserId(userId);
+        if (companyProfile == null) {
+            return null;
+        }
+
+        return CompanyProfileEntity.builder()
+                .userId(companyProfile.getUserId())
+                .companyIntro(companyProfile.getCompanyIntro())
+                .companyTags(StrUtil.isNotBlank(companyProfile.getCompanyTags()) ?
+                    JSON.parseArray(companyProfile.getCompanyTags(), String.class) : null)
+                .creditCode(companyProfile.getCreditCode())
+                .companyIndustry(companyProfile.getCompanyIndustry())
+                .companyScale(companyProfile.getCompanyScale())
+                .companyRegion(companyProfile.getCompanyRegion())
+                .companyWebsite(companyProfile.getCompanyWebsite())
+                .contactPerson(companyProfile.getContactPerson())
+                .contactPosition(companyProfile.getContactPosition())
+                .contactPhone(companyProfile.getContactPhone())
+                .contactEmail(companyProfile.getContactEmail())
+                .qualificationFiles(companyProfile.getQualificationFiles())
+                .certificationStatus(companyProfile.getCertificationStatus())
+                .rejectReason(companyProfile.getRejectReason())
+                .certifiedAt(companyProfile.getCertifiedAt())
+                .build();
+    }
+
+    @Override
+    public void ensureCompanyProfileExists(String userId) {
+        CompanyProfile existing = companyProfileDao.queryByUserId(userId);
+        if (existing == null) {
+            CompanyProfile profile = new CompanyProfile();
+            profile.setUserId(userId);
+            companyProfileDao.insert(profile);
+            log.info("为企业用户创建company_profile记录 userId={}", userId);
+        }
+    }
+
+    @Override
+    public void updateCompanyQualificationFilesJson(String userId, String qualificationFilesJson) {
+        // 直接保存 JSON 字符串到数据库字段 qualification_files
+        companyProfileDao.updateQualificationFiles(userId, qualificationFilesJson);
+    }
+
+    // 兼容原有的 List<String> 接口，仍然将列表转换为 JSON 字符串后保存
+    @Override
+    public void updateCompanyQualificationFiles(String userId, List<String> fileUrls) {
+        String json = JSON.toJSONString(fileUrls);
+        companyProfileDao.updateQualificationFiles(userId, json);
+    }
+
+    @Override
+    public void updateCompanyCoreFields(String userId, String creditCode, String companyIndustry,
+                                         String companyScale, String contactPerson, String contactPosition,
+                                         String contactPhone, String contactEmail) {
+        companyProfileDao.updateCoreFields(userId, creditCode, companyIndustry, companyScale,
+                contactPerson, contactPosition, contactPhone, contactEmail);
+    }
+
+    @Override
+    public void updateCompanyFreeFields(String userId, String companyIntro, List<String> companyTags,
+                                         String companyWebsite, String companyRegion) {
+        String tagsJson = companyTags != null ? JSON.toJSONString(companyTags) : null;
+        companyProfileDao.updateFreeFields(userId, companyIntro, tagsJson, companyWebsite, companyRegion);
+    }
+
+    @Override
+    public void updateCompanyCertificationStatus(String userId, String status, String rejectReason) {
+        LocalDateTime certifiedAt = CertificationStatusEnum.CERTIFIED.getCode().equals(status)
+                ? LocalDateTime.now() : null;
+        companyProfileDao.updateCertificationStatus(userId, status, rejectReason, certifiedAt);
+    }
+
+    @Override
+    public List<CompanyProfileEntity> queryCompaniesByCertificationStatus(String status, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        List<CompanyProfile> list = companyProfileDao.selectByCertificationStatus(status, offset, pageSize);
+        return list.stream().map(cp -> CompanyProfileEntity.builder()
+                .userId(cp.getUserId())
+                .creditCode(cp.getCreditCode())
+                .qualificationFiles(cp.getQualificationFiles())
+                .certificationStatus(cp.getCertificationStatus())
+                .rejectReason(cp.getRejectReason())
+                .certifiedAt(cp.getCertifiedAt())
+                .updateTime(cp.getUpdateTime())
+                .build()
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public long countCompaniesByCertificationStatus(String status) {
+        return companyProfileDao.countByCertificationStatus(status);
+    }
+
+    @Override
+    public List<Map<String, Object>> queryCompanyList(String status, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        return companyProfileDao.selectCompanyList(status, offset, pageSize);
+    }
+
+    @Override
+    public long countCompanyList(String status) {
+        return companyProfileDao.countCompanyList(status);
+    }
+
+    @Override
+    public UserStatisticsVO getUserStatistics() {
+        // 按用户类型分组统计
+        List<Map<String, Object>> typeList = userDao.countGroupByType();
+        long totalCount = 0;
+        long studentCount = 0;
+        long companyCount = 0;
+        long adminCount = 0;
+        for (Map<String, Object> item : typeList) {
+            int type = ((Number) item.get("type")).intValue();
+            long count = ((Number) item.get("count")).longValue();
+            totalCount += count;
+            switch (type) {
+                case 1 -> studentCount = count;
+                case 2 -> companyCount = count;
+                case 3 -> adminCount = count;
+            }
+        }
+
+        // 按认证状态分组统计
+        List<Map<String, Object>> certList = companyProfileDao.countGroupByCertificationStatus();
+        Map<String, Long> certStatusCount = new HashMap<>();
+        for (Map<String, Object> item : certList) {
+            String certStatus = String.valueOf(item.get("certificationStatus"));
+            long count = ((Number) item.get("count")).longValue();
+            certStatusCount.put(certStatus, count);
+        }
+
+        return UserStatisticsVO.builder()
+                .totalCount(totalCount)
+                .studentCount(studentCount)
+                .companyCount(companyCount)
+                .adminCount(adminCount)
+                .activeCount(null)
+                .certificationStatusCount(certStatusCount)
+                .build();
     }
 }

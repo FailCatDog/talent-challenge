@@ -1,9 +1,16 @@
 package cn.hgy.infrastructure.persistent.repository;
 
+import cn.hgy.api.dto.TeamInviteItemDTO;
+import cn.hgy.api.dto.TeamMemberItemDTO;
 import cn.hgy.domain.team.model.entity.TeamEntity;
+import cn.hgy.domain.team.model.entity.TeamInviteEntity;
 import cn.hgy.domain.team.repository.ITeamRepository;
 import cn.hgy.infrastructure.persistent.dao.TeamDao;
+import cn.hgy.infrastructure.persistent.dao.TeamInviteDao;
+import cn.hgy.infrastructure.persistent.dao.TeamMemberDao;
 import cn.hgy.infrastructure.persistent.po.Team;
+import cn.hgy.infrastructure.persistent.po.TeamInvite;
+import cn.hgy.infrastructure.persistent.po.TeamMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -17,13 +24,26 @@ import java.util.Optional;
 public class TeamRepository implements ITeamRepository {
 
     private final TeamDao teamDao;
+    private final TeamMemberDao teamMemberDao;
+    private final TeamInviteDao teamInviteDao;
 
     @Override
     public boolean save(TeamEntity teamEntity) {
         Team team = convertToPo(teamEntity);
-        team.setCreateTime(LocalDateTime.now());
-        team.setUpdateTime(LocalDateTime.now());
-        return teamDao.insert(team) > 0;
+        LocalDateTime now = LocalDateTime.now();
+        team.setCreateTime(now);
+        team.setUpdateTime(now);
+        boolean saved = teamDao.insert(team) > 0;
+        if (saved) {
+            // 创建团队时同步写入队长的成员记录
+            TeamMember leaderMember = new TeamMember();
+            leaderMember.setTeamId(teamEntity.getTeamId());
+            leaderMember.setUserId(teamEntity.getLeaderId());
+            leaderMember.setRole("leader");
+            leaderMember.setJoinTime(now);
+            teamMemberDao.insert(leaderMember);
+        }
+        return saved;
     }
 
     @Override
@@ -45,6 +65,37 @@ public class TeamRepository implements ITeamRepository {
     @Override
     public Optional<TeamEntity> queryByTeamId(String teamId) {
         Team team = teamDao.selectByTeamId(teamId);
+        if (team == null) {
+            return Optional.empty();
+        }
+        return Optional.of(convertToEntity(team));
+    }
+
+    @Override
+    public Optional<TeamEntity> queryActiveTeamByUserId(String userId) {
+        Team team = teamDao.selectActiveTeamByUserId(userId);
+        if (team == null) {
+            return Optional.empty();
+        }
+        return Optional.of(convertToEntity(team));
+    }
+
+    @Override
+    public List<TeamEntity> queryJoinedTeamsByUserId(String userId) {
+        List<Team> teams = teamDao.selectJoinedTeamsByUserId(userId);
+        if (teams == null || teams.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<TeamEntity> entities = new ArrayList<>();
+        for (Team team : teams) {
+            entities.add(convertToEntity(team));
+        }
+        return entities;
+    }
+
+    @Override
+    public Optional<TeamEntity> queryJoinedTeamByUserIdAndTeamId(String userId, String teamId) {
+        Team team = teamDao.selectJoinedTeamByUserIdAndTeamId(userId, teamId);
         if (team == null) {
             return Optional.empty();
         }
@@ -74,6 +125,60 @@ public class TeamRepository implements ITeamRepository {
         return teamDao.existsByLeaderIdAndStatus(leaderId, status) > 0;
     }
 
+    @Override
+    public List<TeamMemberItemDTO> queryMembersByTeamId(String teamId) {
+        return teamMemberDao.selectMembersByTeamId(teamId);
+    }
+
+    @Override
+    public boolean existsMember(String teamId, String userId) {
+        return teamMemberDao.existsByTeamIdAndUserId(teamId, userId) > 0;
+    }
+
+    @Override
+    public boolean saveInvite(TeamInviteEntity inviteEntity) {
+        return teamInviteDao.insert(convertInviteToPo(inviteEntity)) > 0;
+    }
+
+    @Override
+    public boolean updateInvite(TeamInviteEntity inviteEntity) {
+        return teamInviteDao.update(convertInviteToPo(inviteEntity)) > 0;
+    }
+
+    @Override
+    public Optional<TeamInviteEntity> queryInviteById(String inviteId) {
+        TeamInvite invite = teamInviteDao.selectByInviteId(inviteId);
+        if (invite == null) {
+            return Optional.empty();
+        }
+        return Optional.of(convertInviteToEntity(invite));
+    }
+
+    @Override
+    public boolean existsPendingInvite(String teamId, String invitedUserId) {
+        return teamInviteDao.existsPendingInvite(teamId, invitedUserId) > 0;
+    }
+
+    @Override
+    public List<TeamInviteItemDTO> queryInvitesByInvitedUserId(String invitedUserId, String status) {
+        return teamInviteDao.selectByInvitedUserId(invitedUserId, status);
+    }
+
+    @Override
+    public boolean addMember(String teamId, String userId, String role) {
+        TeamMember member = new TeamMember();
+        member.setTeamId(teamId);
+        member.setUserId(userId);
+        member.setRole(role);
+        member.setJoinTime(LocalDateTime.now());
+        return teamMemberDao.insert(member) > 0;
+    }
+
+    @Override
+    public boolean removeMember(String teamId, String userId) {
+        return teamMemberDao.deleteMember(teamId, userId) > 0;
+    }
+
     private Team convertToPo(TeamEntity entity) {
         Team team = new Team();
         team.setTeamId(entity.getTeamId());
@@ -101,6 +206,30 @@ public class TeamRepository implements ITeamRepository {
                 .maxMemberCount(team.getMaxMemberCount())
                 .createTime(team.getCreateTime())
                 .updateTime(team.getUpdateTime())
+                .build();
+    }
+
+    private TeamInvite convertInviteToPo(TeamInviteEntity entity) {
+        TeamInvite invite = new TeamInvite();
+        invite.setInviteId(entity.getInviteId());
+        invite.setTeamId(entity.getTeamId());
+        invite.setInviterId(entity.getInviterId());
+        invite.setInvitedUserId(entity.getInvitedUserId());
+        invite.setStatus(entity.getStatus());
+        invite.setCreateTime(entity.getCreateTime());
+        invite.setHandleTime(entity.getHandleTime());
+        return invite;
+    }
+
+    private TeamInviteEntity convertInviteToEntity(TeamInvite invite) {
+        return TeamInviteEntity.builder()
+                .inviteId(invite.getInviteId())
+                .teamId(invite.getTeamId())
+                .inviterId(invite.getInviterId())
+                .invitedUserId(invite.getInvitedUserId())
+                .status(invite.getStatus())
+                .createTime(invite.getCreateTime())
+                .handleTime(invite.getHandleTime())
                 .build();
     }
 }

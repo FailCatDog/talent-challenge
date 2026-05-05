@@ -1,11 +1,17 @@
 package cn.hgy.domain.user.service;
 
+import cn.hgy.api.dto.UserProfileResponseDTO;
+import cn.hgy.domain.audit.model.entity.AuditReviewRecordEntity;
+import cn.hgy.domain.audit.repository.IAuditReviewRepository;
+import cn.hgy.domain.user.model.entity.CompanyProfileEntity;
+import cn.hgy.domain.user.model.entity.StudentProfileEntity;
 import cn.hgy.domain.user.model.entity.UserAuthCredentialEntity;
 import cn.hgy.domain.user.model.entity.UserEntity;
 import cn.hgy.domain.user.model.entity.UserLoginEntity;
 import cn.hgy.domain.user.model.valobj.UserStatusEnum;
 import cn.hgy.domain.user.model.valobj.UserTypeEnum;
 import cn.hgy.domain.user.repository.IUserManagementRepository;
+import cn.hgy.types.enums.CertificationStatusEnum;
 import cn.hgy.types.enums.ResponseCode;
 import cn.hgy.types.exception.AppException;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,6 +34,7 @@ public class UserManagementServiceImpl implements IUserManagementService{
 
     private final IUserManagementRepository repository;
     private final IJWTService jwtService;
+    private final IAuditReviewRepository auditReviewRepository;
 
     @Override
     public Boolean userRegister(String nickname, String type, String identityType, String identifier, String credential) {
@@ -192,5 +200,140 @@ public class UserManagementServiceImpl implements IUserManagementService{
         repository.updateUserProfile(userEntity);
 
         return repository.queryUserBaseByUserId(userId);
+    }
+
+    @Override
+    public UserProfileResponseDTO getUserProfile(String userId) {
+        // 查询用户基础信息
+        UserEntity userEntity = repository.queryUserBaseByUserId(userId);
+        if (userEntity == null) {
+            throw new AppException(ResponseCode.USER_IS_NOT_EXIST.getCode(), ResponseCode.USER_IS_NOT_EXIST.getInfo());
+        }
+
+        // 构建基础DTO
+        UserProfileResponseDTO dto = UserProfileResponseDTO.builder()
+                .userId(userEntity.getUserId())
+                .type(userEntity.getType())
+                .nickname(userEntity.getNickname())
+                .avatarUrl(userEntity.getAvatarUrl())
+                .bio(userEntity.getBio())
+                .gender(userEntity.getGender())
+                .birthday(userEntity.getBirthday())
+                .regionCode(userEntity.getRegionCode())
+                .industry(userEntity.getIndustry())
+                .title(userEntity.getTitle())
+                .lastLoginTime(userEntity.getLastLoginTime())
+                .build();
+
+        // 根据用户类型查询扩展信息
+        if (UserTypeEnum.STUDENT.getCode() == userEntity.getType()) {
+            // 学生用户
+            StudentProfileEntity studentProfile = repository.queryStudentProfileByUserId(userId);
+            if (studentProfile != null) {
+                dto.setRealName(studentProfile.getRealName());
+                dto.setCollege(studentProfile.getCollege());
+                dto.setMajor(studentProfile.getMajor());
+                dto.setGrade(studentProfile.getGrade());
+                dto.setStudentId(studentProfile.getStudentId());
+                dto.setEmail(studentProfile.getEmail());
+                dto.setPhone(studentProfile.getPhone());
+                dto.setTechTags(studentProfile.getTechTags());
+                dto.setTechIntro(studentProfile.getTechIntro());
+            }
+        } else if (UserTypeEnum.COMPANY.getCode() == userEntity.getType()) {
+            // 企业用户
+            CompanyProfileEntity companyProfile = repository.queryCompanyProfileByUserId(userId);
+            if (companyProfile != null) {
+                dto.setCompanyIntro(companyProfile.getCompanyIntro());
+                dto.setCompanyTags(companyProfile.getCompanyTags());
+                dto.setCreditCode(companyProfile.getCreditCode());
+                dto.setCompanyIndustry(companyProfile.getCompanyIndustry());
+                dto.setCompanyScale(companyProfile.getCompanyScale());
+                dto.setCompanyRegion(companyProfile.getCompanyRegion());
+                dto.setCompanyWebsite(companyProfile.getCompanyWebsite());
+                dto.setContactPerson(companyProfile.getContactPerson());
+                dto.setContactPosition(companyProfile.getContactPosition());
+                dto.setContactPhone(companyProfile.getContactPhone());
+                dto.setContactEmail(companyProfile.getContactEmail());
+                dto.setQualificationFiles(companyProfile.getQualificationFiles());
+                dto.setCertificationStatus(companyProfile.getCertificationStatus());
+                dto.setRejectReason(companyProfile.getRejectReason());
+                dto.setCertifiedAt(companyProfile.getCertifiedAt());
+            }
+        }
+
+        return dto;
+    }
+
+    @Override
+    public void submitCompanyQualification(String userId, List<String> fileUrls,
+                                            String creditCode, String companyIndustry, String companyScale,
+                                            String contactPerson, String contactPosition,
+                                            String contactPhone, String contactEmail) {
+        // 确保企业资料记录存在（兜底：注册时未创建的情况）
+        repository.ensureCompanyProfileExists(userId);
+
+        // 检查当前认证状态，已认证则拒绝修改核心字段
+        CompanyProfileEntity profile = repository.queryCompanyProfileByUserId(userId);
+        if (profile != null && CertificationStatusEnum.CERTIFIED.getCode().equals(profile.getCertificationStatus())) {
+            throw new AppException(ResponseCode.UN_ERROR.getCode(), "企业已认证，核心信息不可修改");
+        }
+
+        // 更新核心字段
+        repository.updateCompanyCoreFields(userId, creditCode, companyIndustry, companyScale,
+                contactPerson, contactPosition, contactPhone, contactEmail);
+        // 更新资质文件
+        repository.updateCompanyQualificationFiles(userId, fileUrls);
+        // 状态变为待审核
+        repository.updateCompanyCertificationStatus(userId, CertificationStatusEnum.PENDING_REVIEW.getCode(), null);
+        log.info("企业提交资质审核 userId={}", userId);
+    }
+
+    @Override
+    public void updateCompanyFreeFields(String userId, String companyIntro, List<String> companyTags,
+                                         String companyWebsite, String companyRegion) {
+        repository.updateCompanyFreeFields(userId, companyIntro, companyTags, companyWebsite, companyRegion);
+        log.info("企业更新自由字段 userId={}", userId);
+    }
+
+    @Override
+    public void approveCompanyCertification(String targetUserId, String reviewerId) {
+        CompanyProfileEntity profile = repository.queryCompanyProfileByUserId(targetUserId);
+        String fromStatus = profile != null ? profile.getCertificationStatus() : null;
+        repository.updateCompanyCertificationStatus(targetUserId, CertificationStatusEnum.CERTIFIED.getCode(), null);
+        saveAuditRecord(targetUserId, "approve", fromStatus, CertificationStatusEnum.CERTIFIED.getCode(), null, reviewerId);
+        log.info("管理员通过企业认证 targetUserId={}", targetUserId);
+    }
+
+    @Override
+    public void rejectCompanyCertification(String targetUserId, String reason, String reviewerId) {
+        CompanyProfileEntity profile = repository.queryCompanyProfileByUserId(targetUserId);
+        String fromStatus = profile != null ? profile.getCertificationStatus() : null;
+        repository.updateCompanyCertificationStatus(targetUserId, CertificationStatusEnum.REJECTED.getCode(), reason);
+        saveAuditRecord(targetUserId, "reject", fromStatus, CertificationStatusEnum.REJECTED.getCode(), reason, reviewerId);
+        log.info("管理员拒绝企业认证 targetUserId={}, reason={}", targetUserId, reason);
+    }
+
+    @Override
+    public List<CompanyProfileEntity> queryCompaniesByCertificationStatus(String status, int page, int pageSize) {
+        return repository.queryCompaniesByCertificationStatus(status, page, pageSize);
+    }
+
+    @Override
+    public long countCompaniesByCertificationStatus(String status) {
+        return repository.countCompaniesByCertificationStatus(status);
+    }
+
+    private void saveAuditRecord(String targetUserId, String action, String fromStatus,
+                                 String toStatus, String reason, String reviewerId) {
+        auditReviewRepository.save(AuditReviewRecordEntity.builder()
+                .auditType("company")
+                .targetId(targetUserId)
+                .action(action)
+                .fromStatus(fromStatus)
+                .toStatus(toStatus)
+                .reason(reason)
+                .reviewerId(reviewerId)
+                .build());
     }
 }

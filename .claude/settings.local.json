@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(mysql:*)",
+      "Bash(mvn:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)",
+      "Bash(find /e/Code/产教融合项目/揭榜挂帅后端/talent-challenge/TalentChallenge-api/src/main/java/cn/hgy/api/dto -type f -name \"*.java\" 2>/dev/null | head -20)",
+      "Bash(git -C /e/Code/产教融合项目/揭榜挂帅后端/talent-challenge status --porcelain | grep -E \"api/src.*dto.*\\\\.java\")",
+      "Bash(git -C /e/Code/产教融合项目/揭榜挂帅后端/talent-challenge status --porcelain | grep -E \"domain.*\\\\.java\")",
+      "Bash(javac -version 2>&1)",
+      "Bash(echo $JAVA_HOME)",
+      "Bash(ls -1 /e/Code/产教融合项目/揭榜挂帅后端/talent-challenge/TalentChallenge-api/src/main/java/cn/hgy/api/dto/*.java | wc -l)",
+      "Bash(/tmp/add_submitted_at.sql:*)",
+      "Read(//tmp/**)",
+      "Bash(find \"E:\\\\Code\\\\产教融合项目\\\\揭榜挂帅后端\\\\talent-challenge/TalentChallenge-infrastructure/src/main/java/cn/hgy/infrastructure/storage\" -type f -name \"*.java\" 2>/dev/null | head -20)",
+      "Bash(ls -la TalentChallenge-app/src/main/resources/application*.yml)"
+    ]
+  }
+}

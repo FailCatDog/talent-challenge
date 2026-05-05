@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @Author: 黄光宇
@@ -22,8 +24,14 @@ public class ProjectListItemResponseDTO {
     private String title;
     private Integer applicationCount;
     private String acceptedTeamId;
+    private String acceptedTeamName;
     private String status;
     private BigDecimal budgetAmount;
     private String currency;
+    private String publisherName;
+    private Integer viewCount;
+    private String currentMilestone;
+    private LocalDate expectedEndDate;
+    private LocalDateTime submittedAt;
 }
 
