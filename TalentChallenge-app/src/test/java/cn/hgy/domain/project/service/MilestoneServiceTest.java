@@ -268,6 +268,47 @@ class MilestoneServiceTest {
     }
 
     @Test
+    void shouldStartNextWhenCompletingViaUpdateStatusFromUnderReview() {
+        ProjectMilestoneEntity currentMilestone = ProjectMilestoneEntity.builder()
+                .milestoneId("m1")
+                .projectId("p1")
+                .sequenceOrder(1)
+                .status(MilestoneStatusEnum.UNDER_REVIEW.getStatusCode())
+                .approvalStatus(MilestoneApprovalStatusEnum.PENDING.getStatusCode())
+                .progressPercent(30)
+                .build();
+        ProjectMilestoneEntity nextMilestone = ProjectMilestoneEntity.builder()
+                .milestoneId("m2")
+                .projectId("p1")
+                .sequenceOrder(2)
+                .status(MilestoneStatusEnum.PLANNED.getStatusCode())
+                .build();
+
+        when(milestoneRepository.queryMilestoneById("m1")).thenReturn(currentMilestone);
+        when(milestoneRepository.queryMilestonesByProjectId("p1"))
+                .thenReturn(List.of(currentMilestone, nextMilestone));
+
+        boolean result = milestoneService.updateMilestoneStatus("m1", MilestoneStatusEnum.COMPLETED.getStatusCode());
+
+        assertThat(result).isTrue();
+
+        ArgumentCaptor<ProjectMilestoneEntity> captor = ArgumentCaptor.forClass(ProjectMilestoneEntity.class);
+        verify(milestoneRepository, times(2)).updateMilestone(captor.capture());
+
+        List<ProjectMilestoneEntity> updatedEntities = captor.getAllValues();
+        ProjectMilestoneEntity updatedCurrent = updatedEntities.get(0);
+        ProjectMilestoneEntity updatedNext = updatedEntities.get(1);
+
+        assertThat(updatedCurrent.getStatus()).isEqualTo(MilestoneStatusEnum.COMPLETED.getStatusCode());
+        assertThat(updatedCurrent.getApprovalStatus()).isEqualTo(MilestoneApprovalStatusEnum.APPROVED.getStatusCode());
+        assertThat(updatedCurrent.getProgressPercent()).isEqualTo(100);
+        assertThat(updatedCurrent.getActualEndTime()).isNotNull();
+
+        assertThat(updatedNext.getMilestoneId()).isEqualTo("m2");
+        assertThat(updatedNext.getStatus()).isEqualTo(MilestoneStatusEnum.IN_PROGRESS.getStatusCode());
+    }
+
+    @Test
     void shouldCompleteProjectWhenLastMilestoneApprovalPasses() {
         ProjectMilestoneEntity lastMilestone = ProjectMilestoneEntity.builder()
                 .milestoneId("m2")

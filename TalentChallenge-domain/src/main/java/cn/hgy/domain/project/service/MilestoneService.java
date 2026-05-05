@@ -259,11 +259,12 @@ public class MilestoneService implements IMilestoneService {
         if (entity == null) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), "里程碑不存在");
         }
-        
+
+        String oldStatus = entity.getStatus();
         // 状态流转校验
-        if (!isValidStatusTransition(entity.getStatus(), status)) {
+        if (!isValidStatusTransition(oldStatus, status)) {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), 
-                    String.format("状态流转不合法：%s -> %s", entity.getStatus(), status));
+                    String.format("状态流转不合法：%s -> %s", oldStatus, status));
         }
         
         entity.setStatus(status);
@@ -271,12 +272,21 @@ public class MilestoneService implements IMilestoneService {
         if (MilestoneStatusEnum.IN_PROGRESS.getStatusCode().equals(status) && entity.getActualStartTime() == null) {
             entity.setActualStartTime(java.time.LocalDateTime.now());
         }
-        // 若转为已完成，记录实际结束时间
-        if (MilestoneStatusEnum.COMPLETED.getStatusCode().equals(status) && entity.getActualEndTime() == null) {
-            entity.setActualEndTime(java.time.LocalDateTime.now());
+        // 若转为已完成，记录实际结束时间，并与审批通过路径对齐（避免前端误用 status 接口导致下一节点不启动）
+        if (MilestoneStatusEnum.COMPLETED.getStatusCode().equals(status)) {
+            if (entity.getActualEndTime() == null) {
+                entity.setActualEndTime(java.time.LocalDateTime.now());
+            }
+            entity.setApprovalStatus(MilestoneApprovalStatusEnum.APPROVED.getStatusCode());
+            entity.setProgressPercent(100);
         }
         milestoneRepository.updateMilestone(entity);
-        log.info("更新里程碑状态成功 milestoneId={}, oldStatus={}, newStatus={}", milestoneId, entity.getStatus(), status);
+        log.info("更新里程碑状态成功 milestoneId={}, oldStatus={}, newStatus={}", milestoneId, oldStatus, status);
+
+        // 与 approveMilestone 一致：达成 completed 后尝试启动下一节点 / 完结项目
+        if (MilestoneStatusEnum.COMPLETED.getStatusCode().equals(status)) {
+            tryAdvanceWorkflowAfterMilestoneCompleted(entity);
+        }
         return true;
     }
     
@@ -395,27 +405,39 @@ public class MilestoneService implements IMilestoneService {
         milestoneRepository.updateMilestone(entity);
         log.info("审批里程碑成功 milestoneId={}, operatorId={}, approved={}", milestoneId, operatorId, approved);
 
-        // 审批通过后，自动启动下一个里程碑
+        // 审批通过后，自动启动下一个里程碑（逻辑与 updateMilestoneStatus→completed 共用）
         if (approved) {
-            boolean nextStarted = startNextMilestone(entity.getProjectId(), entity.getSequenceOrder());
-            if (!nextStarted && isProjectReadyToComplete(entity.getProjectId())) {
-                projectRepository.updateProjectStatus(entity.getProjectId(), ProjectStatusEnum.COMPLETED.getStatusCode());
-                log.info("最后一个里程碑审批通过后自动完成项目 projectId={}", entity.getProjectId());
-            }
+            tryAdvanceWorkflowAfterMilestoneCompleted(entity);
         }
 
         return true;
     }
 
     /**
-     * 自动启动下一个里程碑
-     * @param projectId 项目ID
-     * @param currentSequenceOrder 当前里程碑的顺序号
+     * 当前里程碑已处于已完成状态时：尝试启动下一顺序节点；若无下一节点且全部里程碑已结束则完结项目。
      */
-    private boolean startNextMilestone(String projectId, Integer currentSequenceOrder) {
-        if (StrUtil.isBlank(projectId) || currentSequenceOrder == null) {
+    private void tryAdvanceWorkflowAfterMilestoneCompleted(ProjectMilestoneEntity completedEntity) {
+        if (completedEntity == null || StrUtil.isBlank(completedEntity.getProjectId())) {
+            return;
+        }
+        boolean nextStarted = startNextMilestone(completedEntity);
+        if (!nextStarted && isProjectReadyToComplete(completedEntity.getProjectId())) {
+            projectRepository.updateProjectStatus(completedEntity.getProjectId(), ProjectStatusEnum.COMPLETED.getStatusCode());
+            log.info("全部里程碑已完成，自动将项目置为已完成 projectId={}", completedEntity.getProjectId());
+        }
+    }
+
+    /**
+     * 自动启动下一个里程碑（顺序大于当前且仍为 planned 的第一项；列表已按 sequence_order 排序）
+     *
+     * @param completedMilestone 刚完成的里程碑（用于 projectId、sequenceOrder；sequenceOrder 为空时按列表位置推断下一项）
+     */
+    private boolean startNextMilestone(ProjectMilestoneEntity completedMilestone) {
+        if (completedMilestone == null || StrUtil.isBlank(completedMilestone.getProjectId())) {
             return false;
         }
+        String projectId = completedMilestone.getProjectId();
+        Integer currentSequenceOrder = completedMilestone.getSequenceOrder();
 
         List<ProjectMilestoneEntity> allMilestones = milestoneRepository.queryMilestonesByProjectId(projectId);
         if (allMilestones == null || allMilestones.isEmpty()) {
@@ -423,19 +445,36 @@ public class MilestoneService implements IMilestoneService {
         }
 
         ProjectMilestoneEntity nextMilestone = null;
-        for (ProjectMilestoneEntity milestone : allMilestones) {
-            if (milestone.getSequenceOrder() == null) {
-                continue;
-            }
-            if (milestone.getSequenceOrder() <= currentSequenceOrder) {
-                continue;
-            }
-            if (!MilestoneStatusEnum.PLANNED.getStatusCode().equals(milestone.getStatus())) {
-                continue;
-            }
+        if (currentSequenceOrder != null) {
+            for (ProjectMilestoneEntity milestone : allMilestones) {
+                if (milestone.getSequenceOrder() == null) {
+                    continue;
+                }
+                if (milestone.getSequenceOrder() <= currentSequenceOrder) {
+                    continue;
+                }
+                if (!MilestoneStatusEnum.PLANNED.getStatusCode().equals(milestone.getStatus())) {
+                    continue;
+                }
 
-            nextMilestone = milestone;
-            break;
+                nextMilestone = milestone;
+                break;
+            }
+        } else {
+            // 顺序号缺失时：依赖仓储返回的顺序，在完成项之后寻找首个仍待启动的节点
+            boolean passedCompleted = false;
+            for (ProjectMilestoneEntity milestone : allMilestones) {
+                if (!passedCompleted) {
+                    if (completedMilestone.getMilestoneId().equals(milestone.getMilestoneId())) {
+                        passedCompleted = true;
+                    }
+                    continue;
+                }
+                if (MilestoneStatusEnum.PLANNED.getStatusCode().equals(milestone.getStatus())) {
+                    nextMilestone = milestone;
+                    break;
+                }
+            }
         }
 
         if (nextMilestone != null) {
